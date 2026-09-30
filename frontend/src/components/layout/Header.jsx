@@ -40,10 +40,6 @@ const Header = () => {
               <Nav.Link href="#services">Services</Nav.Link>
               <Nav.Link href="#contact">Contact Us</Nav.Link>
             </Nav>
-            <Nav className="d-flex gap-2 align-items-center">
-              <Button as={Link} to="/login" variant="outline-green" className="px-4">Login</Button>
-              <Button as={Link} to="/register" variant="primary-green" className="px-4">Register</Button>
-            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>

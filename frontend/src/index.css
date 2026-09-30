@@ -1,11 +1,11 @@
 :root {
-  --primary-green: #145c2c;
-  --secondary-green: #2e7d32;
-  --light-green: #e8f5e9;
-  --accent-green: #4caf50;
-  --text-dark: #333333;
-  --text-light: #666666;
-  --bg-light: #f8fcf9;
+  --primary-blue: #0B1B3D;
+  --secondary-blue: #0d6efd;
+  --light-blue: #F4F7F6;
+  --accent-blue: #0dcaf0;
+  --text-dark: #212529;
+  --text-light: #6c757d;
+  --bg-light: #F8F9FA;
 }
 
 body {
@@ -19,14 +19,14 @@ body {
 }
 
 /* Utilities */
-.text-primary-green { color: var(--primary-green) !important; }
-.text-secondary-green { color: var(--secondary-green) !important; }
-.bg-primary-green { background-color: var(--primary-green) !important; }
-.bg-light-green { background-color: var(--light-green) !important; }
+.text-primary-blue { color: var(--primary-blue) !important; }
+.text-secondary-blue { color: var(--secondary-blue) !important; }
+.bg-primary-blue { background-color: var(--primary-blue) !important; }
+.bg-light-blue { background-color: var(--light-blue) !important; }
 
 /* Top Header */
 .top-header {
-  background-color: var(--primary-green);
+  background-color: var(--primary-blue);
   color: white;
   font-size: 0.85rem;
 }
@@ -43,7 +43,7 @@ body {
 }
 
 .navbar-brand {
-  color: var(--primary-green) !important;
+  color: var(--primary-blue) !important;
   font-weight: 700;
   font-size: 1.5rem;
   display: flex;
@@ -59,7 +59,7 @@ body {
 }
 
 .nav-link:hover, .nav-link.active {
-  color: var(--primary-green) !important;
+  color: var(--primary-blue) !important;
 }
 
 .nav-link.active::after {
@@ -69,34 +69,34 @@ body {
   left: 10%;
   width: 80%;
   height: 2px;
-  background-color: var(--primary-green);
+  background-color: var(--primary-blue);
 }
 
 /* Buttons */
-.btn-primary-green {
-  background-color: var(--primary-green);
+.btn-primary-blue {
+  background-color: var(--secondary-blue);
   color: white;
-  border: 1px solid var(--primary-green);
+  border: 1px solid var(--secondary-blue);
   font-weight: 500;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
 }
-.btn-primary-green:hover {
-  background-color: var(--secondary-green);
+.btn-primary-blue:hover {
+  background-color: var(--primary-blue);
   color: white;
 }
 
-.btn-outline-green {
+.btn-outline-blue {
   background-color: transparent;
-  color: var(--primary-green);
-  border: 1px solid var(--primary-green);
+  color: var(--secondary-blue);
+  border: 1px solid var(--secondary-blue);
   font-weight: 500;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
 }
-.btn-outline-green:hover {
-  background-color: var(--light-green);
-  color: var(--primary-green);
+.btn-outline-blue:hover {
+  background-color: var(--light-blue);
+  color: var(--primary-blue);
 }
 
 /* Hero Section */
@@ -106,7 +106,7 @@ body {
 }
 
 .hero-title {
-  color: var(--primary-green);
+  color: var(--primary-blue);
   font-weight: 800;
   font-size: 3.5rem;
   line-height: 1.2;
@@ -135,7 +135,7 @@ body {
 
 /* Feature Section */
 .features-section {
-  background-color: var(--primary-green);
+  background-color: var(--primary-blue);
   color: white;
   padding: 50px 0;
 }
@@ -177,7 +177,7 @@ body {
 }
 
 .section-title {
-  color: var(--primary-green);
+  color: var(--primary-blue);
   font-weight: 700;
   text-align: center;
   margin-bottom: 50px;
@@ -188,7 +188,7 @@ body {
   display: block;
   width: 50px;
   height: 3px;
-  background-color: var(--accent-green);
+  background-color: var(--accent-blue);
   margin: 10px auto 0;
 }
 
@@ -205,8 +205,8 @@ body {
 .step-icon-wrapper {
   width: 60px;
   height: 60px;
-  background-color: var(--light-green);
-  color: var(--primary-green);
+  background-color: var(--light-blue);
+  color: var(--primary-blue);
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -216,7 +216,7 @@ body {
 }
 
 .step-number {
-  color: var(--accent-green);
+  color: var(--accent-blue);
   font-weight: 700;
   font-size: 1.5rem;
   margin-right: 10px;
@@ -240,7 +240,7 @@ body {
 
 /* Footer */
 .footer-section {
-  background-color: var(--text-dark);
+  background-color: #1a202c;
   color: white;
   padding: 60px 0 20px;
 }
@@ -256,7 +256,7 @@ body {
   margin-bottom: 10px;
 }
 .footer-link:hover {
-  color: var(--accent-green);
+  color: var(--accent-blue);
 }
 .footer-text {
   color: #bbbbbb;
@@ -269,4 +269,9 @@ body {
   text-align: center;
   color: #888;
   font-size: 0.85rem;
+}
+
+.hover-white:hover {
+  color: white !important;
+  text-decoration: underline !important;
 }
