@@ -24,6 +24,51 @@ body {
 .bg-primary-blue { background-color: var(--primary-blue) !important; }
 .bg-light-blue { background-color: var(--light-blue) !important; }
 
+/* Custom Typography */
+.fs-main-heading { font-size: clamp(30px, 4vw, 34px); font-weight: bold; }
+.fs-section-heading { font-size: clamp(20px, 3vw, 23px); font-weight: bold; }
+.fs-card-heading { font-size: clamp(17px, 2vw, 19px); font-weight: bold; }
+.fs-body-text { font-size: clamp(14px, 1.5vw, 16px); }
+.fs-form-label { font-size: 14px; }
+
+/* Glass Cards */
+.glass-card {
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  box-shadow: 0 4px 20px 0 rgba(0, 0, 0, 0.15) !important;
+  border-radius: 12px !important;
+  transition: transform 0.3s ease, background 0.3s ease;
+  color: white !important;
+}
+.glass-card:hover {
+  background: rgba(255, 255, 255, 0.25) !important;
+  transform: translateY(-5px);
+}
+.glass-card-dark-text {
+  color: white !important;
+}
+.glass-card-dark-text p, .glass-card-dark-text div, .glass-card-dark-text h3, .glass-card-dark-text h4, .glass-card-dark-text h5 {
+  color: white !important;
+}
+
+/* Glass Inputs */
+.glass-input {
+  background: rgba(255, 255, 255, 0.1) !important;
+  border: 1px solid rgba(255, 255, 255, 0.3) !important;
+  color: white !important;
+}
+.glass-input::placeholder {
+  color: rgba(255, 255, 255, 0.6) !important;
+}
+.glass-input:focus {
+  background: rgba(255, 255, 255, 0.2) !important;
+  border-color: rgba(255, 255, 255, 0.6) !important;
+  color: white !important;
+  box-shadow: 0 0 0 0.25rem rgba(255, 255, 255, 0.1) !important;
+}
+
 /* Top Header */
 .top-header {
   background-color: var(--primary-blue);
@@ -56,6 +101,7 @@ body {
   font-weight: 500;
   margin: 0 10px;
   position: relative;
+  font-size: 15px;
 }
 
 .nav-link:hover, .nav-link.active {

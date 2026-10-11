@@ -1,7 +1,7 @@
 import React from 'react';
 import { Nav } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
-import { FaTachometerAlt, FaSignOutAlt, FaHardHat } from 'react-icons/fa';
+import { FaTachometerAlt, FaList, FaUser, FaSignOutAlt, FaHardHat } from 'react-icons/fa';
 
 const Sidebar = () => {
   const location = useLocation();
@@ -17,14 +17,13 @@ const Sidebar = () => {
     navigate('/');
   };
 
-  const isActive = (path) => currentPath === path;
-  const isDashboardActive = currentPath === '/dashboard/department_staff' || currentPath.includes('/dashboard/department_staff/complaints');
+  const isActive = (path) => currentPath === path || (path !== '/dashboard/department_staff' && currentPath.startsWith(path));
 
   return (
     <div className="d-flex flex-column" style={{ minHeight: '100vh', width: '260px', backgroundColor: '#0B1B3D' }}>
       <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
         <h5 className="mb-0 text-white d-flex align-items-center">
-          <FaHardHat className="me-2" /> Staff Portal
+          <FaHardHat className="me-2" /> CivicConnect
         </h5>
         <small className="text-light opacity-75">Department Tasks</small>
       </div>
@@ -33,11 +32,31 @@ const Sidebar = () => {
         <Nav.Link 
           as={Link} 
           to="/dashboard/department_staff" 
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isDashboardActive ? 'bg-primary fw-bold' : ''}`}
+          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${currentPath === '/dashboard/department_staff' ? 'bg-primary fw-bold' : ''}`}
           style={{ color: '#FFFFFF' }}
         >
           <FaTachometerAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
+          <span style={{ color: '#FFFFFF' }}>Dashboard</span>
+        </Nav.Link>
+        
+        <Nav.Link 
+          as={Link} 
+          to="/dashboard/department_staff/complaints" 
+          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${currentPath.includes('/dashboard/department_staff/complaints') ? 'bg-primary fw-bold' : ''}`}
+          style={{ color: '#FFFFFF' }}
+        >
+          <FaList className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
           <span style={{ color: '#FFFFFF' }}>Assigned Complaints</span>
+        </Nav.Link>
+        
+        <Nav.Link 
+          as={Link} 
+          to="/dashboard/department_staff/profile" 
+          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${currentPath === '/dashboard/department_staff/profile' ? 'bg-primary fw-bold' : ''}`}
+          style={{ color: '#FFFFFF' }}
+        >
+          <FaUser className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
+          <span style={{ color: '#FFFFFF' }}>Profile</span>
         </Nav.Link>
         
         <Nav.Link 

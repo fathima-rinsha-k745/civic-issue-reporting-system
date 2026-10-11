@@ -36,9 +36,9 @@ const Header = () => {
           <Navbar.Collapse id="basic-navbar-nav">
             <Nav className="mx-auto">
               <Nav.Link as={Link} to="/" className={currentPath === '/' ? 'active' : ''}>Home</Nav.Link>
-              <Nav.Link href="#about">About Us</Nav.Link>
-              <Nav.Link href="#services">Services</Nav.Link>
-              <Nav.Link href="#contact">Contact Us</Nav.Link>
+              <Nav.Link as={Link} to="/about" className={currentPath === '/about' ? 'active' : ''}>About Us</Nav.Link>
+              <Nav.Link as={Link} to="/services" className={currentPath === '/services' ? 'active' : ''}>Services</Nav.Link>
+              <Nav.Link as={Link} to="/contact" className={currentPath === '/contact' ? 'active' : ''}>Contact Us</Nav.Link>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -46,7 +46,8 @@ const SubmitComplaint = () => {
       setSubmittedComplaint(result);
       setSuccess(true);
     } catch (err) {
-      setError('Failed to submit complaint. Please try again.');
+      console.error(err);
+      setError(err.message || 'Failed to submit complaint. Please try again.');
     } finally {
       setLoading(false);
     }

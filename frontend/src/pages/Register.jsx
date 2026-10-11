@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const Register = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -14,6 +14,8 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [validationErrors, setValidationErrors] = useState({});
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -193,28 +195,46 @@ const Register = () => {
 
                   <Form.Group className="mb-3" controlId="password">
                     <Form.Label className="text-white">Password</Form.Label>
-                    <Form.Control 
-                      type="password" 
-                      placeholder="Password" 
-                      value={formData.password}
-                      onChange={handleChange}
-                      isInvalid={!!validationErrors.password}
-                      className="bg-light border-0 shadow-none"
-                    />
-                    <Form.Control.Feedback type="invalid">{validationErrors.password}</Form.Control.Feedback>
+                    <InputGroup hasValidation>
+                      <Form.Control 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Password" 
+                        value={formData.password}
+                        onChange={handleChange}
+                        isInvalid={!!validationErrors.password}
+                        className="bg-light border-0 shadow-none"
+                      />
+                      <Button 
+                        variant="light" 
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ border: 'none', background: '#f8f9fa', color: '#6c757d' }}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                      <Form.Control.Feedback type="invalid">{validationErrors.password}</Form.Control.Feedback>
+                    </InputGroup>
                   </Form.Group>
 
                   <Form.Group className="mb-4" controlId="confirmPassword">
                     <Form.Label className="text-white">Confirm Password</Form.Label>
-                    <Form.Control 
-                      type="password" 
-                      placeholder="Confirm Password" 
-                      value={formData.confirmPassword}
-                      onChange={handleChange}
-                      isInvalid={!!validationErrors.confirmPassword}
-                      className="bg-light border-0 shadow-none"
-                    />
-                    <Form.Control.Feedback type="invalid">{validationErrors.confirmPassword}</Form.Control.Feedback>
+                    <InputGroup hasValidation>
+                      <Form.Control 
+                        type={showConfirmPassword ? "text" : "password"} 
+                        placeholder="Confirm Password" 
+                        value={formData.confirmPassword}
+                        onChange={handleChange}
+                        isInvalid={!!validationErrors.confirmPassword}
+                        className="bg-light border-0 shadow-none"
+                      />
+                      <Button 
+                        variant="light" 
+                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                        style={{ border: 'none', background: '#f8f9fa', color: '#6c757d' }}
+                      >
+                        {showConfirmPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                      <Form.Control.Feedback type="invalid">{validationErrors.confirmPassword}</Form.Control.Feedback>
+                    </InputGroup>
                   </Form.Group>
 
                   <Button 

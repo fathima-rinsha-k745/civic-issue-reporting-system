@@ -24,7 +24,7 @@ const Sidebar = () => {
     <div className="d-flex flex-column" style={{ minHeight: '100vh', width: '260px', backgroundColor: '#0B1B3D' }}>
       <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
         <h5 className="mb-0 text-white d-flex align-items-center">
-          <FaLandmark className="me-2" /> Civic Portal
+          <FaLandmark className="me-2" /> CivicConnect
         </h5>
         <small className="text-light opacity-75">Citizen Dashboard</small>
       </div>

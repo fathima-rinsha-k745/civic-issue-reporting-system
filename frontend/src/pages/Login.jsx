@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert } from 'react-bootstrap';
+import { Container, Row, Col, Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
 import { useNavigate, Link } from 'react-router-dom';
-
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 const Login = ({ expectedRole, title }) => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
@@ -10,6 +10,7 @@ const Login = ({ expectedRole, title }) => {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -125,13 +126,22 @@ const Login = ({ expectedRole, title }) => {
 
                   <Form.Group className="mb-4" controlId="password">
                     <Form.Label className="text-white">Password</Form.Label>
-                    <Form.Control 
-                      type="password" 
-                      placeholder="Password" 
-                      value={formData.password}
-                      onChange={handleChange}
-                      className="bg-light border-0 shadow-none"
-                    />
+                    <InputGroup>
+                      <Form.Control 
+                        type={showPassword ? "text" : "password"} 
+                        placeholder="Password" 
+                        value={formData.password}
+                        onChange={handleChange}
+                        className="bg-light border-0 shadow-none"
+                      />
+                      <Button 
+                        variant="light" 
+                        onClick={() => setShowPassword(!showPassword)}
+                        style={{ border: 'none', background: '#f8f9fa', color: '#6c757d' }}
+                      >
+                        {showPassword ? <FaEyeSlash /> : <FaEye />}
+                      </Button>
+                    </InputGroup>
                   </Form.Group>
 
                   <Button 

@@ -100,23 +100,23 @@ const ComplaintDetails = () => {
         <Card.Body className="p-0">
           <Row className="g-0">
             {/* Left side: Photo */}
-            <Col md={5} className="bg-light p-4 d-flex align-items-center justify-content-center border-end">
+            <Col md={4} className="bg-light p-4 d-flex align-items-start justify-content-center border-end">
               {complaint.photo ? (
                 <img 
                   src={complaint.photo.startsWith('http') ? complaint.photo : `http://127.0.0.1:8000${complaint.photo}`} 
                   alt="Complaint Evidence" 
-                  className="img-fluid rounded shadow-sm"
-                  style={{ width: '100%', maxHeight: '400px', objectFit: 'contain' }}
+                  className="img-thumbnail rounded shadow-sm"
+                  style={{ width: '200px', height: 'auto', objectFit: 'cover' }}
                 />
               ) : (
-                <div className="text-muted text-center p-5 border rounded bg-white w-100 d-flex align-items-center justify-content-center" style={{ minHeight: '300px' }}>
-                  No photo uploaded
+                <div className="text-muted text-center border rounded bg-white d-flex align-items-center justify-content-center" style={{ width: '200px', height: '150px' }}>
+                  No photo available
                 </div>
               )}
             </Col>
             
             {/* Right side: Details & Form */}
-            <Col md={7} className="p-4 p-md-5 d-flex flex-column">
+            <Col md={8} className="p-4 p-md-5 d-flex flex-column">
               <div className="mb-4">
                 <Row className="mb-3">
                   <Col sm={4} className="text-muted fw-semibold">Complaint ID</Col>

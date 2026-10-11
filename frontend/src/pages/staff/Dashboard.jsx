@@ -7,8 +7,6 @@ import { api } from '../../services/api';
 const StaffDashboard = () => {
   const [complaints, setComplaints] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [statusFilter, setStatusFilter] = useState('All');
 
   useEffect(() => {
     const fetchComplaints = async () => {
@@ -37,60 +35,67 @@ const StaffDashboard = () => {
     }
   };
 
-  // Filter complaints
-  const filteredComplaints = complaints.filter(c => {
-    const matchesSearch = 
-      String(c.id).toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (c.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
-      (c.location || '').toLowerCase().includes(searchTerm.toLowerCase());
-      
-    const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
-    
-    return matchesSearch && matchesStatus;
-  });
+  // Recent complaints
+  const recentComplaints = complaints.slice(0, 5);
+
+  const total = complaints.length;
+  const pending = complaints.filter(c => c.status === 'Pending').length;
+  const inProgress = complaints.filter(c => c.status === 'In Progress').length;
+  const resolved = complaints.filter(c => c.status === 'Resolved').length;
 
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0 text-dark fw-bold">Assigned Complaints</h2>
+        <h2 className="mb-0 text-dark fw-bold">Dashboard</h2>
+      </div>
+
+      <Row className="g-3 mb-4">
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm text-center py-3 bg-white">
+            <h5 className="text-muted mb-2">Total Assigned</h5>
+            <h2 className="fw-bold mb-0 text-primary">{total}</h2>
+          </Card>
+        </Col>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm text-center py-3 bg-white">
+            <h5 className="text-muted mb-2">Pending</h5>
+            <h2 className="fw-bold mb-0 text-warning">{pending}</h2>
+          </Card>
+        </Col>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm text-center py-3 bg-white">
+            <h5 className="text-muted mb-2">In Progress</h5>
+            <h2 className="fw-bold mb-0 text-info">{inProgress}</h2>
+          </Card>
+        </Col>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm text-center py-3 bg-white">
+            <h5 className="text-muted mb-2">Resolved</h5>
+            <h2 className="fw-bold mb-0 text-success">{resolved}</h2>
+          </Card>
+        </Col>
+      </Row>
+
+      <div className="d-flex justify-content-between align-items-center mb-4">
+        <h3 className="mb-0 text-dark fw-bold">Recent Assigned Complaints</h3>
+        <Button 
+          as={Link} 
+          to="/dashboard/department_staff/complaints" 
+          variant="outline-primary"
+        >
+          View All Complaints
+        </Button>
       </div>
 
       <Card className="border-0 shadow-sm mb-4">
         <Card.Body className="p-4">
-          <Row className="g-3 mb-4">
-            <Col md={8}>
-              <InputGroup>
-                <InputGroup.Text className="bg-white border-end-0">
-                  <FaSearch className="text-muted" />
-                </InputGroup.Text>
-                <Form.Control
-                  placeholder="Search assigned tasks by ID, description, or location..."
-                  className="border-start-0 ps-0"
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                />
-              </InputGroup>
-            </Col>
-            <Col md={4}>
-              <Form.Select 
-                value={statusFilter}
-                onChange={(e) => setStatusFilter(e.target.value)}
-              >
-                <option value="All">All Statuses</option>
-                <option value="In Progress">In Progress</option>
-                <option value="Resolved">Resolved</option>
-                <option value="Rejected">Rejected</option>
-              </Form.Select>
-            </Col>
-          </Row>
-
           {loading ? (
             <div className="text-center py-5">
               <Spinner animation="border" variant="primary" />
             </div>
-          ) : filteredComplaints.length === 0 ? (
+          ) : recentComplaints.length === 0 ? (
             <div className="text-center py-5 text-muted bg-light rounded">
-              <p className="mb-0">No assigned complaints found matching your criteria.</p>
+              <p className="mb-0">No assigned complaints found.</p>
             </div>
           ) : (
             <div className="d-none d-md-block">
@@ -108,7 +113,7 @@ const StaffDashboard = () => {
                     </tr>
                   </thead>
                   <tbody>
-                    {filteredComplaints.map((c) => (
+                    {recentComplaints.map((c) => (
                       <tr key={c.id}>
                         <td className="fw-medium">{c.id}</td>
                         <td>
@@ -140,7 +145,7 @@ const StaffDashboard = () => {
 
           {/* Mobile Card View */}
           <div className="d-block d-md-none">
-            {filteredComplaints.map((c) => (
+            {recentComplaints.map((c) => (
               <Card key={c.id} className="mb-3 shadow-sm border-0">
                 <Card.Body>
                   <div className="d-flex justify-content-between align-items-center mb-2">

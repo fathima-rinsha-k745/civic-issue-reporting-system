@@ -39,9 +39,9 @@ const MyComplaints = () => {
   // Filter complaints
   const filteredComplaints = complaints.filter(c => {
     const matchesSearch = 
-      c.id.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.description.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      c.location.toLowerCase().includes(searchTerm.toLowerCase());
+      String(c.id).toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (c.description && c.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
+      (c.location && c.location.toLowerCase().includes(searchTerm.toLowerCase()));
       
     const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
     

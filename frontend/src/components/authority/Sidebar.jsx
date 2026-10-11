@@ -23,6 +23,12 @@ const Sidebar = () => {
 
   return (
     <div className="d-flex flex-column" style={{ minHeight: '100vh', width: '260px', backgroundColor: '#0B1B3D' }}>
+      <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
+        <h5 className="mb-0 text-white d-flex align-items-center">
+          <FaBuilding className="me-2" /> CivicConnect
+        </h5>
+        <small className="text-light opacity-75">Municipal Authority</small>
+      </div>
       <Nav className="flex-column mt-4 px-3">
         <Nav.Link 
           as={Link} 

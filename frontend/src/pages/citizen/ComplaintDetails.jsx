@@ -114,12 +114,24 @@ const ComplaintDetails = () => {
                 </Col>
               </Row>
 
-              {complaint.photo && (
-                <div className="mt-5">
-                  <h5 className="border-bottom pb-2 mb-4">Photo</h5>
-                  <img src={complaint.photo} alt="Issue" className="img-fluid rounded border" />
-                </div>
-              )}
+              <div className="mt-5">
+                <h5 className="border-bottom pb-2 mb-4">Photo</h5>
+                {complaint.photo ? (
+                  <img 
+                    src={complaint.photo.startsWith('http') ? complaint.photo : `http://127.0.0.1:8000${complaint.photo}`} 
+                    alt="Issue" 
+                    className="img-thumbnail rounded border shadow-sm"
+                    style={{ width: '200px', height: 'auto', objectFit: 'cover' }}
+                  />
+                ) : (
+                  <div 
+                    className="text-muted d-flex align-items-center justify-content-center border rounded bg-light"
+                    style={{ width: '200px', height: '150px' }}
+                  >
+                    No photo available
+                  </div>
+                )}
+              </div>
             </Card.Body>
           </Card>
         </Col>

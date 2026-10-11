@@ -14,10 +14,18 @@ class ProfileView(APIView):
             role = user.userprofile.role
         except:
             role = 'CITIZEN'
+        department_name = None
+        if role == 'DEPARTMENT_STAFF':
+            try:
+                department_name = user.departmentstaff.department.name
+            except:
+                pass
+
         return Response({
             "email": user.email,
             "full_name": user.get_full_name() or user.email,
-            "role": role
+            "role": role,
+            "department": department_name
         })
 
     def patch(self, request):
@@ -49,9 +57,17 @@ class ProfileView(APIView):
         except:
             role = 'CITIZEN'
 
+        department_name = None
+        if role == 'DEPARTMENT_STAFF':
+            try:
+                department_name = user.departmentstaff.department.name
+            except:
+                pass
+
         return Response({
             "email": user.email,
             "full_name": user.get_full_name() or user.email,
             "role": role,
+            "department": department_name,
             "message": "Profile updated successfully."
         })

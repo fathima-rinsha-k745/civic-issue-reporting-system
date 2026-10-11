@@ -35,7 +35,7 @@ const AuthorityLayout = () => {
         <header className="bg-white shadow-sm px-4 py-3 d-flex justify-content-between align-items-center" style={{ zIndex: 10 }}>
           <div className="d-flex align-items-center text-truncate">
             <FaLandmark size={24} className="me-3 flex-shrink-0" style={{ color: '#0B1B3D' }} />
-            <h5 className="mb-0 fw-bold text-truncate" style={{ color: '#0B1B3D' }}>Civic Issue Reporting System</h5>
+            <h5 className="mb-0 fw-bold text-truncate" style={{ color: '#0B1B3D' }}>Civic Issue Reporting and Management System</h5>
           </div>
           <div className="d-flex align-items-center border-start ps-4 ms-3 flex-shrink-0">
             <FaUserCircle className="text-secondary me-3" size={36} />

@@ -2,6 +2,9 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Layout from './components/layout/Layout';
 import Home from './pages/Home';
+import About from './pages/About';
+import Services from './pages/Services';
+import Contact from './pages/Contact';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -25,7 +28,9 @@ import AuthorityStaff from './pages/authority/Staff';
 
 import StaffLayout from './components/layout/StaffLayout';
 import StaffDashboard from './pages/staff/Dashboard';
+import StaffAssignedComplaints from './pages/staff/AssignedComplaints';
 import StaffComplaintDetails from './pages/staff/ComplaintDetails';
+import StaffProfile from './pages/staff/Profile';
 
 function App() {
   return (
@@ -34,6 +39,9 @@ function App() {
         {/* Public Routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
+          <Route path="about" element={<About />} />
+          <Route path="services" element={<Services />} />
+          <Route path="contact" element={<Contact />} />
           <Route path="citizen/login" element={<Login expectedRole="CITIZEN" title="Citizen Login" />} />
           <Route path="authority/login" element={<Login expectedRole="MUNICIPAL_AUTHORITY" title="Municipal Authority Login" />} />
           <Route path="staff/login" element={<Login expectedRole="DEPARTMENT_STAFF" title="Department Staff Login" />} />
@@ -62,7 +70,9 @@ function App() {
         {/* Department Staff Protected Routes */}
         <Route path="/dashboard/department_staff" element={<StaffLayout />}>
           <Route index element={<StaffDashboard />} />
+          <Route path="complaints" element={<StaffAssignedComplaints />} />
           <Route path="complaints/:id" element={<StaffComplaintDetails />} />
+          <Route path="profile" element={<StaffProfile />} />
         </Route>
         
       </Routes>

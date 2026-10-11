@@ -1,5 +1,6 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
+import { Link } from 'react-router-dom';
 import { FaLandmark, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
 
 const Footer = () => {
@@ -13,7 +14,7 @@ const Footer = () => {
               <h4 className="mb-0 text-white font-weight-bold">CivicConnect</h4>
             </div>
             <p className="footer-text mb-4">
-              A collaborative platform for citizens and municipal authorities to report, track, and manage civic issues efficiently and build a better community for everyone.
+              Report Issues. Track Progress. Build Better Communities.
             </p>
             <div className="d-flex gap-3">
               <a href="#!" className="text-white bg-secondary bg-opacity-25 p-2 rounded-circle d-flex align-items-center justify-content-center" style={{width: '35px', height: '35px'}}>
@@ -34,20 +35,20 @@ const Footer = () => {
           <Col lg={2} md={6} className="offset-lg-1">
             <h5 className="footer-heading">Quick Links</h5>
             <ul className="list-unstyled">
-              <li><a href="/" className="footer-link">Home</a></li>
-              <li><a href="#about" className="footer-link">About Us</a></li>
-              <li><a href="#services" className="footer-link">Services</a></li>
-              <li><a href="#contact" className="footer-link">Contact</a></li>
+              <li><Link to="/" className="footer-link">Home</Link></li>
+              <li><Link to="/about" className="footer-link">About Us</Link></li>
+              <li><Link to="/services" className="footer-link">Services</Link></li>
+              <li><Link to="/contact" className="footer-link">Contact Us</Link></li>
             </ul>
           </Col>
 
           <Col lg={2} md={6}>
             <h5 className="footer-heading">Services</h5>
             <ul className="list-unstyled">
-              <li><a href="/register" className="footer-link">Report Issue</a></li>
-              <li><a href="/login" className="footer-link">Track Status</a></li>
-              <li><a href="#feedback" className="footer-link">Give Feedback</a></li>
-              <li><a href="#help" className="footer-link">Help Center</a></li>
+              <li><Link to="/citizen/login" className="footer-link">Report Issue</Link></li>
+              <li><Link to="/citizen/login" className="footer-link">Track Status</Link></li>
+              <li><Link to="/authority/login" className="footer-link">Authority Portal</Link></li>
+              <li><Link to="/staff/login" className="footer-link">Staff Portal</Link></li>
             </ul>
           </Col>
 
