@@ -30,6 +30,7 @@ const MyComplaints = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
@@ -51,13 +52,13 @@ const MyComplaints = () => {
   return (
     <div>
       <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0">My Complaints</h2>
+        <h2 className="mb-0 fs-3 fs-sm-2 fw-bold">My Complaints</h2>
       </div>
 
       <Card className="border-0 shadow-sm mb-4">
-        <Card.Body className="p-4">
-          <Row className="g-3 mb-4">
-            <Col md={8}>
+        <Card.Body className="p-3 p-sm-4">
+          <Row className="g-2 g-sm-3 mb-4">
+            <Col xs={12} md={8}>
               <InputGroup>
                 <InputGroup.Text className="bg-white border-end-0">
                   <FaSearch className="text-muted" />
@@ -70,7 +71,7 @@ const MyComplaints = () => {
                 />
               </InputGroup>
             </Col>
-            <Col md={4}>
+            <Col xs={12} md={4}>
               <Form.Select 
                 value={statusFilter}
                 onChange={(e) => setStatusFilter(e.target.value)}
@@ -78,6 +79,7 @@ const MyComplaints = () => {
                 <option value="All">All Statuses</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
+                <option value="Awaiting Citizen Confirmation">Awaiting Citizen Confirmation</option>
                 <option value="Resolved">Resolved</option>
                 <option value="Rejected">Rejected</option>
               </Form.Select>
@@ -93,77 +95,80 @@ const MyComplaints = () => {
               <p className="mb-0">No complaints found matching your criteria.</p>
             </div>
           ) : (
-            <div className="d-none d-md-block">
+            <>
               {/* Desktop Table View */}
-              <div className="table-responsive">
-                <Table hover className="align-middle border">
-                  <thead className="table-light">
-                    <tr>
-                      <th>Complaint ID</th>
-                      <th>Description</th>
-                      <th>Location</th>
-                      <th>Status</th>
-                      <th>Date</th>
-                      <th>Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {filteredComplaints.map((c) => (
-                      <tr key={c.id}>
-                        <td className="fw-medium">{c.id}</td>
-                        <td>
-                          <div className="text-truncate" style={{ maxWidth: '250px' }}>
-                            {c.description}
-                          </div>
-                        </td>
-                        <td>{c.location}</td>
-                        <td>{getStatusBadge(c.status)}</td>
-                        <td>{c.submittedDate}</td>
-                        <td>
-                          <Button 
-                            as={Link} 
-                            to={`/dashboard/citizen/complaints/${c.id}`}
-                            variant="outline-blue" 
-                            size="sm"
-                            className="d-flex align-items-center"
-                          >
-                            <FaEye className="me-1" /> View
-                          </Button>
-                        </td>
+              <div className="d-none d-md-block">
+                <div className="table-responsive">
+                  <Table hover className="align-middle border">
+                    <thead className="table-light">
+                      <tr>
+                        <th>Complaint ID</th>
+                        <th>Description</th>
+                        <th>Location</th>
+                        <th>Status</th>
+                        <th>Date</th>
+                        <th>Action</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </Table>
+                    </thead>
+                    <tbody>
+                      {filteredComplaints.map((c) => (
+                        <tr key={c.id}>
+                          <td className="fw-medium">{c.id}</td>
+                          <td>
+                            <div className="text-truncate" style={{ maxWidth: '250px' }}>
+                              {c.description}
+                            </div>
+                          </td>
+                          <td>{c.location}</td>
+                          <td>{getStatusBadge(c.status)}</td>
+                          <td>{c.submittedDate}</td>
+                          <td>
+                            <Button 
+                              as={Link} 
+                              to={`/dashboard/citizen/complaints/${c.id}`}
+                              variant="outline-blue" 
+                              size="sm"
+                              className="d-flex align-items-center"
+                            >
+                              <FaEye className="me-1" /> View
+                            </Button>
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </Table>
+                </div>
               </div>
-            </div>
-          )}
 
-          {/* Mobile Card View */}
-          <div className="d-block d-md-none">
-            {filteredComplaints.map((c) => (
-              <Card key={c.id} className="mb-3 shadow-sm border-0">
-                <Card.Body>
-                  <div className="d-flex justify-content-between align-items-center mb-2">
-                    <span className="fw-bold">{c.id}</span>
-                    {getStatusBadge(c.status)}
-                  </div>
-                  <p className="mb-1 text-truncate">{c.description}</p>
-                  <p className="mb-2 text-muted small"><i className="bi bi-geo-alt me-1"></i>{c.location}</p>
-                  <div className="d-flex justify-content-between align-items-center mt-3 pt-3 border-top">
-                    <small className="text-muted">{c.submittedDate}</small>
-                    <Button 
-                      as={Link} 
-                      to={`/dashboard/citizen/complaints/${c.id}`}
-                      variant="outline-blue" 
-                      size="sm"
-                    >
-                      View Details
-                    </Button>
-                  </div>
-                </Card.Body>
-              </Card>
-            ))}
-          </div>
+              {/* Mobile Card View */}
+              <div className="d-block d-md-none">
+                {filteredComplaints.map((c) => (
+                  <Card key={c.id} className="mb-3 shadow-sm border">
+                    <Card.Body className="p-3">
+                      <div className="d-flex justify-content-between align-items-start mb-2 gap-2">
+                        <span className="fw-bold text-dark">#{c.id}</span>
+                        {getStatusBadge(c.status)}
+                      </div>
+                      <p className="mb-2 text-dark small text-truncate" style={{ maxHeight: '48px' }}>{c.description}</p>
+                      <p className="mb-2 text-muted small"><i className="bi bi-geo-alt me-1"></i>{c.location}</p>
+                      <div className="d-flex justify-content-between align-items-center mt-3 pt-2 border-top">
+                        <small className="text-muted">{c.submittedDate}</small>
+                        <Button 
+                          as={Link} 
+                          to={`/dashboard/citizen/complaints/${c.id}`}
+                          variant="outline-blue" 
+                          size="sm"
+                          className="px-3"
+                        >
+                          View Details
+                        </Button>
+                      </div>
+                    </Card.Body>
+                  </Card>
+                ))}
+              </div>
+            </>
+          )}
 
         </Card.Body>
       </Card>

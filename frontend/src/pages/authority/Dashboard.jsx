@@ -63,48 +63,48 @@ const Dashboard = () => {
 
   return (
     <div>
-      <h2 className="mb-4 text-dark fw-bold">Dashboard Summary</h2>
+      <h2 className="mb-3 mb-sm-4 text-dark fw-bold fs-3 fs-sm-2">Dashboard Summary</h2>
       
       {/* Summary Cards */}
-      <Row className="g-4 mb-4">
+      <Row className="g-2 g-sm-3 g-md-4 mb-4">
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3">
-            <h1 className="display-5 fw-bold text-dark mb-0">{stats.total}</h1>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1">
+            <h1 className="fw-bold text-dark mb-0 fs-2 fs-sm-1">{stats.total}</h1>
             <span className="text-muted small fw-semibold">Total Complaints</span>
           </Card>
         </Col>
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3" style={{ borderBottom: '4px solid #ffc107' }}>
-            <FaInbox className="text-warning mb-2 mx-auto" size={24} />
-            <h3 className="fw-bold text-dark mb-0">{stats.pending}</h3>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1" style={{ borderBottom: '4px solid #ffc107' }}>
+            <FaInbox className="text-warning mb-2 mx-auto" size={22} />
+            <h3 className="fw-bold text-dark mb-0 fs-4 fs-sm-3">{stats.pending}</h3>
             <span className="text-muted small fw-semibold">Pending</span>
           </Card>
         </Col>
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3" style={{ borderBottom: '4px solid #0dcaf0' }}>
-            <FaSpinner className="text-info mb-2 mx-auto" size={24} />
-            <h3 className="fw-bold text-dark mb-0">{stats.inProgress}</h3>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1" style={{ borderBottom: '4px solid #0dcaf0' }}>
+            <FaSpinner className="text-info mb-2 mx-auto" size={22} />
+            <h3 className="fw-bold text-dark mb-0 fs-4 fs-sm-3">{stats.inProgress}</h3>
             <span className="text-muted small fw-semibold">In Progress</span>
           </Card>
         </Col>
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3" style={{ borderBottom: '4px solid #198754' }}>
-            <FaCheckCircle className="text-success mb-2 mx-auto" size={24} />
-            <h3 className="fw-bold text-dark mb-0">{stats.resolved}</h3>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1" style={{ borderBottom: '4px solid #198754' }}>
+            <FaCheckCircle className="text-success mb-2 mx-auto" size={22} />
+            <h3 className="fw-bold text-dark mb-0 fs-4 fs-sm-3">{stats.resolved}</h3>
             <span className="text-muted small fw-semibold">Resolved</span>
           </Card>
         </Col>
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3" style={{ borderBottom: '4px solid #dc3545' }}>
-            <FaTimesCircle className="text-danger mb-2 mx-auto" size={24} />
-            <h3 className="fw-bold text-dark mb-0">{stats.rejected}</h3>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1" style={{ borderBottom: '4px solid #dc3545' }}>
+            <FaTimesCircle className="text-danger mb-2 mx-auto" size={22} />
+            <h3 className="fw-bold text-dark mb-0 fs-4 fs-sm-3">{stats.rejected}</h3>
             <span className="text-muted small fw-semibold">Rejected</span>
           </Card>
         </Col>
         <Col md={4} lg={2} xs={6}>
-          <Card className="border-0 shadow-sm text-center h-100 py-3" style={{ borderBottom: '4px solid #6c757d' }}>
-            <FaUserSlash className="text-secondary mb-2 mx-auto" size={24} />
-            <h3 className="fw-bold text-dark mb-0">{stats.unassigned}</h3>
+          <Card className="border-0 shadow-sm text-center h-100 py-2 py-sm-3 px-1" style={{ borderBottom: '4px solid #6c757d' }}>
+            <FaUserSlash className="text-secondary mb-2 mx-auto" size={22} />
+            <h3 className="fw-bold text-dark mb-0 fs-4 fs-sm-3">{stats.unassigned}</h3>
             <span className="text-muted small fw-semibold">Unassigned</span>
           </Card>
         </Col>

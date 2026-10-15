@@ -2,12 +2,16 @@ import React, { useState } from 'react';
 import { Card, Form, Button, Alert, Spinner, Container } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { api } from '../../services/api';
+import LocationPicker from '../../components/citizen/LocationPicker';
+import { FaExternalLinkAlt, FaMapMarkerAlt } from 'react-icons/fa';
 
 const SubmitComplaint = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     description: '',
     location: '',
+    latitude: null,
+    longitude: null,
     photo: null
   });
   const [loading, setLoading] = useState(false);
@@ -20,8 +24,16 @@ const SubmitComplaint = () => {
     setFormData(prev => ({ ...prev, [id]: value }));
   };
 
+  const handleLocationSelect = ({ latitude, longitude, address }) => {
+    setFormData(prev => ({
+      ...prev,
+      latitude,
+      longitude,
+      ...(address ? { location: address } : {})
+    }));
+  };
+
   const handleFileChange = (e) => {
-    // In a real app, this would upload the file or create an object URL
     setFormData(prev => ({ ...prev, photo: e.target.files[0] }));
   };
 
@@ -35,7 +47,7 @@ const SubmitComplaint = () => {
     }
     
     if (!formData.location.trim()) {
-      setError('Location is required.');
+      setError('Location / Address is required.');
       return;
     }
 
@@ -65,10 +77,40 @@ const SubmitComplaint = () => {
             </div>
             <h3 className="mb-3">Complaint submitted successfully.</h3>
             <p className="text-muted mb-2">Complaint ID: <strong>{submittedComplaint.id}</strong></p>
-            <p className="text-muted mb-4">Current Status: <strong className="text-warning">{submittedComplaint.status}</strong></p>
+            <p className="text-muted mb-2">Current Status: <strong className="text-warning">{submittedComplaint.status}</strong></p>
+            <p className="text-muted mb-3">Location: <strong>{submittedComplaint.location}</strong></p>
+            
+            {submittedComplaint.latitude && submittedComplaint.longitude && (
+              <div className="bg-light p-3 rounded mb-4 d-inline-block text-start border">
+                <small className="text-muted d-block fw-bold text-uppercase">Recorded Coordinates:</small>
+                <div className="font-monospace small text-dark mb-2">
+                  Latitude: {Number(submittedComplaint.latitude).toFixed(6)}, Longitude: {Number(submittedComplaint.longitude).toFixed(6)}
+                </div>
+                <a
+                  href={`https://www.openstreetmap.org/?mlat=${submittedComplaint.latitude}&mlon=${submittedComplaint.longitude}#map=18/${submittedComplaint.latitude}/${submittedComplaint.longitude}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="btn btn-sm btn-outline-primary d-inline-flex align-items-center"
+                >
+                  <FaExternalLinkAlt className="me-1" /> View on OpenStreetMap
+                </a>
+              </div>
+            )}
             
             <div className="d-flex justify-content-center gap-3">
-              <Button onClick={() => {setSuccess(false); setFormData({description: '', location: '', photo: null})}} variant="outline-blue">
+              <Button 
+                onClick={() => {
+                  setSuccess(false); 
+                  setFormData({
+                    description: '', 
+                    location: '', 
+                    latitude: null, 
+                    longitude: null, 
+                    photo: null
+                  });
+                }} 
+                variant="outline-blue"
+              >
                 Submit Another
               </Button>
               <Button onClick={() => navigate('/dashboard/citizen/complaints')} variant="primary-blue">
@@ -82,11 +124,11 @@ const SubmitComplaint = () => {
   }
 
   return (
-    <Container className="py-2" style={{ maxWidth: '800px', marginLeft: 0 }}>
-      <h2 className="mb-4 text-dark fw-bold">Report a Civic Issue</h2>
+    <Container className="py-2 px-0 px-sm-2" style={{ maxWidth: '840px', marginLeft: 0 }}>
+      <h2 className="mb-3 mb-sm-4 text-dark fw-bold fs-3 fs-sm-2">Report a Civic Issue</h2>
       
       <Card className="border-0 shadow-sm">
-        <Card.Body className="p-4 p-md-5">
+        <Card.Body className="p-3 p-sm-4 p-md-5">
           {error && <Alert variant="danger">{error}</Alert>}
           
           <Form onSubmit={handleSubmit}>
@@ -105,16 +147,29 @@ const SubmitComplaint = () => {
               </Form.Text>
             </Form.Group>
 
-            <Form.Group className="mb-4" controlId="location">
-              <Form.Label className="fw-medium">Location <span className="text-danger">*</span></Form.Label>
+            <Form.Group className="mb-3" controlId="location">
+              <Form.Label className="fw-medium">Location Address / Landmark <span className="text-danger">*</span></Form.Label>
               <Form.Control 
                 type="text" 
-                placeholder="Enter exact location or landmark..." 
+                placeholder="Enter exact location, street, or landmark..." 
                 value={formData.location}
                 onChange={handleChange}
                 disabled={loading}
               />
+              <Form.Text className="text-muted">
+                You can describe the location and also pin the exact spot on the map below.
+              </Form.Text>
             </Form.Group>
+
+            {/* Free Interactive Map Location Picker */}
+            <div className="mb-4">
+              <LocationPicker
+                latitude={formData.latitude}
+                longitude={formData.longitude}
+                onLocationSelect={handleLocationSelect}
+                initialAddress={formData.location}
+              />
+            </div>
 
             <Form.Group className="mb-4" controlId="photo">
               <Form.Label className="fw-medium">Upload Photo <span className="text-muted fw-normal">(Optional)</span></Form.Label>
@@ -129,7 +184,6 @@ const SubmitComplaint = () => {
               </Form.Text>
             </Form.Group>
 
-            {/* Note: NO Category selection as requested */}
             <div className="alert alert-light border mb-4">
               <small className="text-muted">
                 <i className="bi bi-info-circle me-1"></i>
@@ -140,7 +194,7 @@ const SubmitComplaint = () => {
             <Button 
               variant="primary-blue" 
               type="submit" 
-              className="px-4 py-2"
+              className="px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
               disabled={loading}
             >
               {loading ? (

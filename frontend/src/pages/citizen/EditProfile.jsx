@@ -74,11 +74,11 @@ const EditProfile = () => {
   }
 
   return (
-    <Container className="py-4" style={{ maxWidth: '700px', marginLeft: 0 }}>
-      <h2 className="mb-4 text-dark fw-bold">Edit Profile</h2>
+    <Container className="py-2 px-0 px-sm-2" style={{ maxWidth: '700px', marginLeft: 0 }}>
+      <h2 className="mb-3 mb-sm-4 text-dark fw-bold fs-3 fs-sm-2">Edit Profile</h2>
       
       <Card className="border-0 shadow-sm">
-        <Card.Body className="p-4 p-md-5">
+        <Card.Body className="p-3 p-sm-4 p-md-5">
           {error && <Alert variant="danger">{error}</Alert>}
 
           <Form onSubmit={handleSubmit}>
@@ -93,7 +93,7 @@ const EditProfile = () => {
               />
             </Form.Group>
 
-            <Form.Group className="mb-5" controlId="email">
+            <Form.Group className="mb-4 mb-sm-5" controlId="email">
               <Form.Label className="fw-medium text-dark">Email Address <span className="text-danger">*</span></Form.Label>
               <Form.Control 
                 type="email" 
@@ -104,11 +104,11 @@ const EditProfile = () => {
               />
             </Form.Group>
 
-            <div className="d-flex gap-3">
+            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3">
               <Button 
                 variant="primary-blue" 
                 type="submit" 
-                className="px-4 py-2"
+                className="px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
                 disabled={saving}
               >
                 {saving ? (
@@ -119,7 +119,7 @@ const EditProfile = () => {
               </Button>
               <Button 
                 variant="outline-secondary" 
-                className="px-4 py-2"
+                className="px-4 py-2 w-100 w-sm-auto"
                 onClick={() => navigate('/dashboard/citizen/profile')}
                 disabled={saving}
               >

@@ -58,7 +58,8 @@ const Login = ({ expectedRole, title }) => {
       const userDetails = {
         role: data.role,
         full_name: data.full_name,
-        email: formData.email
+        email: data.email || formData.email,
+        department: data.department || null,
       };
       localStorage.setItem('user', JSON.stringify(userDetails));
       
@@ -90,7 +91,7 @@ const Login = ({ expectedRole, title }) => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      padding: '40px 0'
+      padding: '24px 12px'
     }}>
       <Container className="position-relative" style={{ zIndex: 1 }}>
         <Row className="justify-content-center">
@@ -107,8 +108,8 @@ const Login = ({ expectedRole, title }) => {
               border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '16px',
             }}>
-              <Card.Body className="p-4 p-md-5">
-                <h2 className="text-center mb-4 text-white fw-bold">{title || 'Login'}</h2>
+              <Card.Body className="p-3 p-sm-4 p-md-5">
+                <h2 className="text-center mb-4 text-white fw-bold fs-3 fs-sm-2">{title || 'Login'}</h2>
                 
                 {error && <Alert variant="danger">{error}</Alert>}
 

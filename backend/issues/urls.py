@@ -3,7 +3,10 @@ from .views import (
     RegisterView, LoginView, LogoutView, 
     ComplaintListCreateView, ComplaintDetailView, 
     DepartmentListCreateView, DepartmentDetailView,
-    StaffListCreateView, StaffDetailView
+    StaffListCreateView, StaffDetailView,
+    ComplaintCompleteView, ComplaintCitizenConfirmView,
+    ComplaintRejectView, ComplaintStartWorkView,
+    NotificationListView, NotificationMarkReadView, NotificationUnreadCountView
 )
 from .profile_view import ProfileView
 
@@ -14,8 +17,16 @@ urlpatterns = [
     path('profile/', ProfileView.as_view(), name='profile'),
     path('complaints/', ComplaintListCreateView.as_view(), name='complaints-list'),
     path('complaints/<int:pk>/', ComplaintDetailView.as_view(), name='complaints-detail'),
+    path('complaints/<int:pk>/reject/', ComplaintRejectView.as_view(), name='complaints-reject'),
+    path('complaints/<int:pk>/start-work/', ComplaintStartWorkView.as_view(), name='complaints-start-work'),
+    path('complaints/<int:pk>/complete/', ComplaintCompleteView.as_view(), name='complaints-complete'),
+    path('complaints/<int:pk>/citizen-confirm/', ComplaintCitizenConfirmView.as_view(), name='complaints-citizen-confirm'),
     path('departments/', DepartmentListCreateView.as_view(), name='departments-list'),
     path('departments/<int:pk>/', DepartmentDetailView.as_view(), name='departments-detail'),
     path('staff/', StaffListCreateView.as_view(), name='staff-list'),
     path('staff/<int:pk>/', StaffDetailView.as_view(), name='staff-detail'),
+    path('notifications/', NotificationListView.as_view(), name='notifications-list'),
+    path('notifications/<int:pk>/read/', NotificationMarkReadView.as_view(), name='notifications-mark-read'),
+    path('notifications/read-all/', NotificationMarkReadView.as_view(), name='notifications-mark-all-read'),
+    path('notifications/unread-count/', NotificationUnreadCountView.as_view(), name='notifications-unread-count'),
 ]

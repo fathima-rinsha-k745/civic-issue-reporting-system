@@ -36,6 +36,7 @@ const Dashboard = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
@@ -52,51 +53,51 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
+      <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-          <h2 className="mb-0">Welcome, {user.fullName}</h2>
-          <p className="text-muted">Here is an overview of your civic issue reports.</p>
+          <h2 className="mb-1 fs-3 fs-sm-2">Welcome, {user.fullName}</h2>
+          <p className="text-muted mb-0 small">Here is an overview of your civic issue reports.</p>
         </div>
-        <Button as={Link} to="/dashboard/citizen/report" variant="primary-blue" className="d-flex align-items-center">
+        <Button as={Link} to="/dashboard/citizen/report" variant="primary-blue" className="d-inline-flex align-items-center text-nowrap flex-shrink-0">
           <FaPlus className="me-2" /> Report a Civic Issue
         </Button>
       </div>
 
       {/* Summary Cards */}
-      <Row className="mb-5 g-4">
-        <Col md={3} sm={6}>
-          <Card className="border-0 shadow-sm h-100 text-center py-3">
-            <Card.Body>
-              <FaClipboardList size={30} className="text-primary-blue mb-2" />
-              <h3 className="fw-bold mb-0">{stats.total}</h3>
-              <p className="text-muted mb-0">Total Complaints</p>
+      <Row className="mb-4 mb-md-5 g-2 g-sm-3 g-md-4">
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
+            <Card.Body className="p-2 p-sm-3">
+              <FaClipboardList size={26} className="text-primary-blue mb-2" />
+              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.total}</h3>
+              <p className="text-muted mb-0 small">Total Complaints</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} sm={6}>
-          <Card className="border-0 shadow-sm h-100 text-center py-3">
-            <Card.Body>
-              <FaHourglassHalf size={30} className="text-warning mb-2" />
-              <h3 className="fw-bold mb-0">{stats.pending}</h3>
-              <p className="text-muted mb-0">Pending</p>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
+            <Card.Body className="p-2 p-sm-3">
+              <FaHourglassHalf size={26} className="text-warning mb-2" />
+              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.pending}</h3>
+              <p className="text-muted mb-0 small">Pending</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} sm={6}>
-          <Card className="border-0 shadow-sm h-100 text-center py-3">
-            <Card.Body>
-              <FaTools size={30} className="text-info mb-2" />
-              <h3 className="fw-bold mb-0">{stats.inProgress}</h3>
-              <p className="text-muted mb-0">In Progress</p>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
+            <Card.Body className="p-2 p-sm-3">
+              <FaTools size={26} className="text-info mb-2" />
+              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.inProgress}</h3>
+              <p className="text-muted mb-0 small">In Progress</p>
             </Card.Body>
           </Card>
         </Col>
-        <Col md={3} sm={6}>
-          <Card className="border-0 shadow-sm h-100 text-center py-3">
-            <Card.Body>
-              <FaCheckCircle size={30} className="text-success mb-2" />
-              <h3 className="fw-bold mb-0">{stats.resolved}</h3>
-              <p className="text-muted mb-0">Resolved</p>
+        <Col xs={6} md={3}>
+          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
+            <Card.Body className="p-2 p-sm-3">
+              <FaCheckCircle size={26} className="text-success mb-2" />
+              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.resolved}</h3>
+              <p className="text-muted mb-0 small">Resolved</p>
             </Card.Body>
           </Card>
         </Col>

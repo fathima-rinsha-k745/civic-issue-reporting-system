@@ -17,11 +17,8 @@ def recreate_data():
 
     # Recreate departments
     departments = [
-        "Sanitation",
-        "Roads",
-        "Parks & Rec",
         "Sanitation Department",
-        "Public Works Department",
+        "Roads / Public Works",
         "Water Supply Department",
         "Electrical Department",
         "Drainage Department",

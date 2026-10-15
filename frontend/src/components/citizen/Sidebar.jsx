@@ -3,13 +3,18 @@ import { Nav } from 'react-bootstrap';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { FaTachometerAlt, FaPlusCircle, FaListUl, FaUser, FaSignOutAlt, FaLandmark } from 'react-icons/fa';
 
-const Sidebar = () => {
+const Sidebar = ({ onNavigate }) => {
   const location = useLocation();
   const navigate = useNavigate();
   const currentPath = location.pathname;
 
+  const handleLinkClick = () => {
+    if (onNavigate) onNavigate();
+  };
+
   const handleLogout = async (e) => {
     e.preventDefault();
+    if (onNavigate) onNavigate();
     try {
       await fetch('/api/logout/', { method: 'POST' });
     } catch (e) {}
@@ -21,7 +26,7 @@ const Sidebar = () => {
   const isComplaintsActive = currentPath.includes('/dashboard/citizen/complaints');
 
   return (
-    <div className="d-flex flex-column" style={{ minHeight: '100vh', width: '260px', backgroundColor: '#0B1B3D' }}>
+    <div className="d-flex flex-column h-100" style={{ minHeight: '100%', width: '100%', backgroundColor: '#0B1B3D' }}>
       <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
         <h5 className="mb-0 text-white d-flex align-items-center">
           <FaLandmark className="me-2" /> CivicConnect
@@ -29,10 +34,11 @@ const Sidebar = () => {
         <small className="text-light opacity-75">Citizen Dashboard</small>
       </div>
 
-      <Nav className="flex-column mt-4 px-3">
+      <Nav className="flex-column mt-4 px-3 flex-grow-1">
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen" 
+          onClick={handleLinkClick}
           className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/citizen') ? 'bg-primary fw-bold' : ''}`}
           style={{ color: '#FFFFFF' }}
         >
@@ -43,6 +49,7 @@ const Sidebar = () => {
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/report" 
+          onClick={handleLinkClick}
           className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/citizen/report') ? 'bg-primary fw-bold' : ''}`}
           style={{ color: '#FFFFFF' }}
         >
@@ -53,6 +60,7 @@ const Sidebar = () => {
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/complaints" 
+          onClick={handleLinkClick}
           className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isComplaintsActive ? 'bg-primary fw-bold' : ''}`}
           style={{ color: '#FFFFFF' }}
         >
@@ -63,6 +71,7 @@ const Sidebar = () => {
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/profile" 
+          onClick={handleLinkClick}
           className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${currentPath.includes('/dashboard/citizen/profile') ? 'bg-primary fw-bold' : ''}`}
           style={{ color: '#FFFFFF' }}
         >
@@ -72,7 +81,7 @@ const Sidebar = () => {
         
         <Nav.Link 
           onClick={handleLogout}
-          className="px-4 py-3 mb-2 rounded d-flex align-items-center"
+          className="px-4 py-3 mb-2 rounded d-flex align-items-center mt-auto"
           style={{ cursor: 'pointer', color: '#FFFFFF' }}
         >
           <FaSignOutAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
@@ -84,3 +93,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+

@@ -106,16 +106,25 @@ const Staff = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-3">
-        <h2 className="mb-0 text-dark fw-bold">Manage Staff</h2>
-        <div className="d-flex gap-3">
-          <Form.Select value={deptFilter} onChange={(e) => setDeptFilter(e.target.value)} style={{ width: '200px' }}>
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
+        <h2 className="mb-0 text-dark fw-bold fs-3 fs-sm-2">Manage Staff</h2>
+        <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3 w-100 w-sm-auto">
+          <Form.Select 
+            value={deptFilter} 
+            onChange={(e) => setDeptFilter(e.target.value)} 
+            className="w-100 w-sm-auto"
+            style={{ minWidth: '180px' }}
+          >
             <option value="All">All Departments</option>
             {departments.map(d => (
               <option key={d.id} value={d.id}>{d.name}</option>
             ))}
           </Form.Select>
-          <Button variant="primary" onClick={() => handleOpenModal()} className="d-flex align-items-center flex-shrink-0">
+          <Button 
+            variant="primary" 
+            onClick={() => handleOpenModal()} 
+            className="d-inline-flex align-items-center justify-content-center w-100 w-sm-auto flex-shrink-0"
+          >
             <FaPlus className="me-2" /> Add Staff
           </Button>
         </div>

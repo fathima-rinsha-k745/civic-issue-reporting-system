@@ -6,13 +6,31 @@ const fetch = (url, options = {}) => {
   return originalFetch(url, { ...options, credentials: 'include' });
 };
 
-const mapComplaint = (c) => ({
-  ...c,
-  submittedDate: c.created_at ? c.created_at.split('T')[0] : 'N/A',
-  lastUpdated: c.updated_at ? c.updated_at.split('T')[0] : 'N/A',
-  photo: c.image,
-  department: c.department_name || 'Unassigned',
-});
+const mapComplaint = (c) => {
+  const mappedHistory = (c.status_history || []).map(h => ({
+    ...h,
+    date: h.date || (h.updated_at ? h.updated_at.split('T')[0] : 'N/A'),
+    updated_by_name: h.updated_by_name || 'System',
+    updated_by_role: h.updated_by_role || null,
+    action_label: h.action_label || null
+  }));
+  return {
+    ...c,
+    submittedDate: c.created_at ? c.created_at.split('T')[0] : 'N/A',
+    lastUpdated: c.updated_at ? c.updated_at.split('T')[0] : 'N/A',
+    photo: c.image,
+    department: c.department_name || (typeof c.department === 'string' ? c.department : 'Unassigned'),
+    assigned_staff_members: c.assigned_staff_members || [],
+    assigned_staff_ids: c.assigned_staff_ids || [],
+    latest_completion: c.latest_completion || null,
+    completions: c.completions || [],
+    status_history: mappedHistory,
+    history: mappedHistory,
+    rejection_reason: c.rejection_reason || null,
+    rejected_by_name: c.rejected_by_name || null,
+    rejected_at_formatted: c.rejected_at_formatted || null
+  };
+};
 
 export const api = {
   // Get dashboard summary
@@ -63,10 +81,20 @@ export const api = {
     if (!response.ok) throw new Error('Complaint not found');
     const data = await response.json();
     
-    // We should also fetch history if available, but for now just mock or use from data
     return {
        ...mapComplaint(data),
-       history: data.status_history || [{ status: data.status, remarks: 'Status update', date: mapComplaint(data).lastUpdated }]
+       history: (data.status_history && data.status_history.length > 0)
+         ? data.status_history.map(h => ({
+             ...h,
+             status: h.status,
+             remarks: h.remarks,
+             date: h.date || (h.updated_at ? h.updated_at.split('T')[0] : 'N/A'),
+             updated_at: h.updated_at,
+             updated_by_name: h.updated_by_name || 'System',
+             updated_by_role: h.updated_by_role || null,
+             action_label: h.action_label || null
+           }))
+         : [{ status: data.status, remarks: 'Status update', date: mapComplaint(data).lastUpdated, updated_by_name: 'System', updated_by_role: null, action_label: 'Status update' }]
     };
   },
 
@@ -76,6 +104,12 @@ export const api = {
     formData.append('description', data.description);
     formData.append('location', data.location);
     formData.append('category', 'Other'); // Required by model
+    if (data.latitude !== undefined && data.latitude !== null && data.latitude !== '') {
+      formData.append('latitude', data.latitude);
+    }
+    if (data.longitude !== undefined && data.longitude !== null && data.longitude !== '') {
+      formData.append('longitude', data.longitude);
+    }
     if (data.photo) {
       formData.append('image', data.photo);
     }
@@ -129,7 +163,8 @@ export const api = {
     return {
       fullName: user.full_name || 'User',
       email: user.email || 'user@example.com',
-      role: user.role || 'CITIZEN'
+      role: user.role || 'CITIZEN',
+      department: user.department || null
     };
   },
 
@@ -202,7 +237,19 @@ export const api = {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to add staff');
+    if (!response.ok) {
+      let errMsg = 'Failed to add staff';
+      try {
+        const errData = await response.json();
+        if (typeof errData === 'string') errMsg = errData;
+        else if (Array.isArray(errData)) errMsg = errData.join(', ');
+        else if (errData && typeof errData === 'object') {
+          const keys = Object.keys(errData);
+          errMsg = Array.isArray(errData[keys[0]]) ? errData[keys[0]].join(', ') : errData[keys[0]];
+        }
+      } catch (_e) {}
+      throw new Error(errMsg);
+    }
     return await response.json();
   },
   updateStaff: async (id, data) => {
@@ -229,9 +276,140 @@ export const api = {
       },
       body: JSON.stringify(data),
     });
-    if (!response.ok) throw new Error('Failed to update complaint');
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to update complaint');
+    }
     const respData = await response.json();
     return mapComplaint(respData);
+  },
+
+  // Authority reject complaint
+  rejectComplaint: async (id, rejection_reason) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/reject/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ rejection_reason }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to reject complaint');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : mapComplaint(respData);
+  },
+
+  // Staff start work on assigned complaint
+  startWork: async (id) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/start-work/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to start work on complaint');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : mapComplaint(respData);
+  },
+
+  // Staff mark work as completed
+  submitCompletion: async (id, data) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/complete/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to submit completion remarks');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : respData;
+  },
+
+  // Citizen confirm resolution
+  citizenConfirmResolution: async (id, data = {}) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/citizen-confirm/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'confirm', ...data }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to confirm resolution');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : respData;
+  },
+
+  // Citizen report not fixed
+  citizenRejectResolution: async (id, data = {}) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/citizen-confirm/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ action: 'reject', ...data }),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to report issue as not fixed');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : respData;
+  },
+
+  // Notifications
+  getNotifications: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/notifications/`);
+      if (!response.ok) return [];
+      return await response.json();
+    } catch (e) {
+      return [];
+    }
+  },
+
+  markNotificationRead: async (id) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/notifications/${id}/read/`, {
+        method: 'POST',
+      });
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  markAllNotificationsRead: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/notifications/read-all/`, {
+        method: 'POST',
+      });
+      return response.ok;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  getUnreadNotificationCount: async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/notifications/unread-count/`);
+      if (!response.ok) return 0;
+      const data = await response.json();
+      return data.unread_count || 0;
+    } catch (e) {
+      return 0;
+    }
   }
 };
 

@@ -321,3 +321,157 @@ body {
   color: white !important;
   text-decoration: underline !important;
 }
+
+/* ==========================================================================
+   Comprehensive Mobile Responsive Enhancements
+   ========================================================================== */
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  -webkit-text-size-adjust: 100%;
+}
+
+#root {
+  overflow-x: hidden;
+  width: 100%;
+  min-height: 100vh;
+}
+
+/* Responsive Width Utilities */
+@media (min-width: 576px) {
+  .w-sm-auto {
+    width: auto !important;
+  }
+}
+
+@media (min-width: 768px) {
+  .w-md-auto {
+    width: auto !important;
+  }
+}
+
+/* Responsive Table Styling */
+.table-responsive {
+  -webkit-overflow-scrolling: touch;
+  margin-bottom: 1rem;
+}
+
+.table-responsive::-webkit-scrollbar {
+  height: 6px;
+}
+
+.table-responsive::-webkit-scrollbar-thumb {
+  background-color: rgba(11, 27, 61, 0.2);
+  border-radius: 4px;
+}
+
+/* Mobile Offcanvas Drawer for Sidebar Navigation */
+.mobile-sidebar-offcanvas {
+  background-color: var(--primary-blue) !important;
+  width: 280px !important;
+  max-width: 85vw !important;
+}
+
+.mobile-sidebar-offcanvas .offcanvas-header {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 1rem 1.25rem;
+}
+
+.mobile-sidebar-offcanvas .btn-close {
+  filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+.mobile-sidebar-offcanvas .offcanvas-body {
+  padding: 0;
+  overflow-y: auto;
+}
+
+/* Leaflet Map Responsive Styling */
+.leaflet-container {
+  max-width: 100% !important;
+  z-index: 1 !important;
+}
+
+.map-wrapper {
+  transition: height 0.2s ease;
+}
+
+@media (max-width: 575.98px) {
+  .map-wrapper {
+    height: 270px !important;
+  }
+}
+
+/* Mobile-Friendly Touch Targets and Spacing */
+@media (max-width: 767.98px) {
+  .hero-title, .hero-subtitle {
+    font-size: 2.2rem !important;
+  }
+  
+  .display-4 {
+    font-size: 2rem !important;
+  }
+  
+  .display-5 {
+    font-size: 1.8rem !important;
+  }
+
+  /* Form controls touch target */
+  .btn, .form-control, .form-select {
+    min-height: 42px;
+  }
+
+  .btn-sm {
+    min-height: 32px;
+  }
+
+  /* Compact padding on small screens (except when explicitly p-0) */
+  .card-body:not(.p-0) {
+    padding: 1.15rem !important;
+  }
+
+  .footer-section {
+    padding: 36px 0 16px;
+  }
+
+  .footer-bottom {
+    margin-top: 24px;
+    padding-top: 16px;
+  }
+  
+  /* Timeline spacing on small screens */
+  .timeline-entry, .timeline-item {
+    padding-left: 1.75rem !important;
+  }
+
+  /* Notification Bell Dropdown on Mobile */
+  .notification-dropdown-menu {
+    width: calc(100vw - 32px) !important;
+    max-width: 340px !important;
+    right: -10px !important;
+  }
+}
+
+/* Extra small devices (<= 375px) */
+@media (max-width: 375px) {
+  .hero-title, .hero-subtitle {
+    font-size: 1.75rem !important;
+  }
+
+  .display-4 {
+    font-size: 1.6rem !important;
+  }
+
+  .card-body:not(.p-0) {
+    padding: 0.95rem !important;
+  }
+
+  /* Adjust badge font size for ultra-small screens */
+  .badge {
+    font-size: 0.72rem !important;
+    padding: 0.3em 0.55em !important;
+  }
+}
+

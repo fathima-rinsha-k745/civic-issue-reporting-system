@@ -143,7 +143,7 @@ const Register = () => {
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
-      padding: '40px 0'
+      padding: '24px 12px'
     }}>
       <Container className="position-relative" style={{ zIndex: 1 }}>
         <Row className="justify-content-center">
@@ -160,8 +160,8 @@ const Register = () => {
               border: '1px solid rgba(255, 255, 255, 0.3)',
               borderRadius: '16px',
             }}>
-              <Card.Body className="p-4 p-md-5">
-                <h2 className="text-center mb-4 text-white fw-bold">Register</h2>
+              <Card.Body className="p-3 p-sm-4 p-md-5">
+                <h2 className="text-center mb-4 text-white fw-bold fs-3 fs-sm-2">Register</h2>
                 
                 {error && <Alert variant="danger">{error}</Alert>}
                 {success && <Alert variant="success">{success}</Alert>}

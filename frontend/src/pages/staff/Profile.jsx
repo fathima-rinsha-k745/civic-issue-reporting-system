@@ -41,11 +41,11 @@ const Profile = () => {
   }
 
   return (
-    <Container className="py-4" style={{ maxWidth: '700px', marginLeft: 0 }}>
-      <h2 className="mb-4">My Profile</h2>
+    <Container className="py-2 px-0 px-sm-2" style={{ maxWidth: '700px', marginLeft: 0 }}>
+      <h2 className="mb-3 mb-sm-4 text-dark fw-bold fs-3 fs-sm-2">My Profile</h2>
       
       <Card className="border-0 shadow-sm">
-        <Card.Body className="p-4 p-md-5">
+        <Card.Body className="p-3 p-sm-4 p-md-5">
           {successMessage && <div className="alert alert-success mb-4">{successMessage}</div>}
           <div className="text-center mb-5">
             <FaUserCircle className="text-secondary opacity-50 mb-3" size={80} />

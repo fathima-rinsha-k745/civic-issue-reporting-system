@@ -81,9 +81,9 @@ const Departments = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0 text-dark fw-bold">Manage Departments</h2>
-        <Button variant="primary" onClick={() => handleOpenModal()} className="d-flex align-items-center">
+      <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-3 mb-4">
+        <h2 className="mb-0 text-dark fw-bold fs-3 fs-sm-2">Manage Departments</h2>
+        <Button variant="primary" onClick={() => handleOpenModal()} className="d-inline-flex align-items-center justify-content-center w-100 w-sm-auto">
           <FaPlus className="me-2" /> Add Department
         </Button>
       </div>
