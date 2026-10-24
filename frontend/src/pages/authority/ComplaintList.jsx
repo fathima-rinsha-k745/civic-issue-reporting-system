@@ -109,11 +109,9 @@ const Dashboard = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <div>
-          <h2 className="mb-1 text-dark fw-bold">View Complaints</h2>
-          <p className="text-muted fs-6 mb-0">Review submitted complaints, assign department teams, or reject invalid requests.</p>
-        </div>
+      <div className="mb-4">
+        <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Manage Complaints</h2>
+        <p className="text-secondary mb-0">Review, filter, and manage submitted civic complaints.</p>
       </div>
 
       {actionSuccess && (

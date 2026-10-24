@@ -83,10 +83,10 @@ const NotificationBell = ({ userRole = 'CITIZEN' }) => {
         style={{ cursor: 'pointer', outline: 'none' }}
         aria-label="Notifications"
       >
-        <FaBell size={22} className="text-secondary" />
+        <FaBell size={20} className="text-white opacity-75" />
         {unreadCount > 0 && (
           <span 
-            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger"
+            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger border border-dark"
             style={{ fontSize: '0.65rem', padding: '0.25em 0.5em' }}
           >
             {unreadCount > 99 ? '99+' : unreadCount}
@@ -98,11 +98,14 @@ const NotificationBell = ({ userRole = 'CITIZEN' }) => {
         className="shadow-lg border-0 p-0 notification-dropdown-menu"
         style={{ width: 'min(340px, calc(100vw - 24px))', maxHeight: '460px', overflowY: 'auto', zIndex: 1050 }}
       >
-        <div className="p-3 bg-light border-bottom d-flex justify-content-between align-items-center">
-          <span className="fw-bold text-dark mb-0 d-flex align-items-center">
+        <div 
+          className="p-3 border-bottom border-white border-opacity-10 d-flex justify-content-between align-items-center"
+          style={{ background: 'rgba(10, 22, 46, 0.9)' }}
+        >
+          <span className="fw-bold text-white mb-0 d-flex align-items-center small">
             Notifications
             {unreadCount > 0 && (
-              <Badge bg="primary" pill className="ms-2" style={{ fontSize: '0.75rem' }}>
+              <Badge bg="primary" pill className="ms-2" style={{ fontSize: '0.72rem' }}>
                 {unreadCount} new
               </Badge>
             )}
@@ -111,7 +114,7 @@ const NotificationBell = ({ userRole = 'CITIZEN' }) => {
             <Button
               variant="link"
               size="sm"
-              className="p-0 text-decoration-none small text-primary"
+              className="p-0 text-decoration-none small text-info"
               onClick={handleMarkAllRead}
             >
               <FaCheckDouble className="me-1" /> Mark all read
@@ -120,7 +123,7 @@ const NotificationBell = ({ userRole = 'CITIZEN' }) => {
         </div>
 
         {notifications.length === 0 ? (
-          <div className="text-center py-4 text-muted small">
+          <div className="text-center py-4 text-white-50 small">
             No notifications yet
           </div>
         ) : (
@@ -129,28 +132,30 @@ const NotificationBell = ({ userRole = 'CITIZEN' }) => {
               <button
                 key={n.id}
                 type="button"
-                className={`list-group-item list-group-item-action text-start p-3 border-bottom ${
-                  !n.is_read ? 'bg-light-blue fw-medium' : 'bg-white'
-                }`}
+                className="list-group-item list-group-item-action text-start p-3 border-bottom border-white border-opacity-10"
                 onClick={() => handleNotificationClick(n)}
-                style={{ cursor: 'pointer' }}
+                style={{ 
+                  cursor: 'pointer', 
+                  background: !n.is_read ? 'rgba(37, 99, 235, 0.22)' : 'transparent',
+                  color: '#ffffff'
+                }}
               >
                 <div className="d-flex justify-content-between align-items-start mb-1">
-                  <span className={`small ${!n.is_read ? 'fw-bold text-primary' : 'text-dark'}`}>
+                  <span className={`small ${!n.is_read ? 'fw-bold text-info' : 'text-white'}`}>
                     {n.title}
                   </span>
                   {!n.is_read && (
                     <span 
-                      className="badge rounded-circle bg-primary p-1 ms-1" 
+                      className="badge rounded-circle bg-info p-1 ms-1" 
                       style={{ width: '8px', height: '8px' }}
                     ></span>
                   )}
                 </div>
-                <p className="small text-muted mb-1 lh-sm" style={{ fontSize: '0.82rem' }}>
+                <p className="small text-white-50 mb-1 lh-sm" style={{ fontSize: '0.82rem' }}>
                   {n.message}
                 </p>
                 {n.created_at_formatted && (
-                  <div className="text-secondary" style={{ fontSize: '0.7rem' }}>
+                  <div className="text-white-50" style={{ fontSize: '0.7rem' }}>
                     {n.created_at_formatted}
                   </div>
                 )}

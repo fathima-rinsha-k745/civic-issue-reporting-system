@@ -107,7 +107,10 @@ const Staff = () => {
   return (
     <div>
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center mb-4 gap-3">
-        <h2 className="mb-0 text-dark fw-bold fs-3 fs-sm-2">Manage Staff</h2>
+        <div>
+          <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Staff Management</h2>
+          <p className="text-secondary mb-0">Manage department staff and assignments.</p>
+        </div>
         <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3 w-100 w-sm-auto">
           <Form.Select 
             value={deptFilter} 

@@ -33,6 +33,20 @@ const mapComplaint = (c) => {
 };
 
 export const api = {
+  // Get Municipal Authority Analytics
+  getAnalytics: async (days = 7) => {
+    const response = await fetch(`${API_BASE_URL}/api/analytics/?days=${days}`);
+    if (!response.ok) {
+      let errorMsg = 'Failed to fetch analytics data';
+      try {
+        const err = await response.json();
+        if (err.error) errorMsg = err.error;
+      } catch (_e) {}
+      throw new Error(errorMsg);
+    }
+    return await response.json();
+  },
+
   // Get dashboard summary
   getDashboardStats: async () => {
     try {

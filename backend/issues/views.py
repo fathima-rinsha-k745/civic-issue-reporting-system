@@ -8,7 +8,9 @@ from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
 from django.db import transaction
 from django.db.models import Count, Q
+from django.db.models.functions import TruncDate
 from django.utils import timezone
+from datetime import timedelta
 from rest_framework.exceptions import ValidationError
 
 from .serializers import (
@@ -824,4 +826,122 @@ class NotificationUnreadCountView(APIView):
     def get(self, request):
         count = Notification.objects.filter(user=request.user, is_read=False).count()
         return Response({"unread_count": count})
+
+
+class AnalyticsView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request):
+        role = getattr(getattr(request.user, 'userprofile', None), 'role', 'CITIZEN')
+        if role != 'MUNICIPAL_AUTHORITY':
+            return Response(
+                {"error": "Only authorized Municipal Authority users can access analytics."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # 1. Complaints by Status (Bar Chart)
+        # Display the total number of complaints for each status:
+        # - Pending
+        # - In Progress
+        # - Awaiting Citizen Confirmation
+        # - Resolved
+        # - Rejected
+        status_categories = [
+            'Pending',
+            'In Progress',
+            'Awaiting Citizen Confirmation',
+            'Resolved',
+            'Rejected'
+        ]
+        status_map = {s: 0 for s in status_categories}
+        for item in Complaint.objects.values('status').annotate(count=Count('id')):
+            st = item['status']
+            if st in status_map:
+                status_map[st] = item['count']
+            else:
+                status_map[st] = item['count']
+
+        by_status = [
+            {"status": s, "count": status_map.get(s, 0)}
+            for s in status_categories
+        ]
+
+        # 2. Daily Complaints Trend (Bar Chart)
+        # Display the number of newly submitted complaints for each date.
+        # Include Last 7 Days and Last 30 Days filters.
+        # Use the complaint creation date to calculate daily counts.
+        days_param = request.query_params.get('days', '7')
+        try:
+            days = int(days_param)
+            if days not in [7, 30]:
+                days = 7 if days < 15 else 30
+        except (ValueError, TypeError):
+            days = 7
+
+        today = timezone.localdate() if hasattr(timezone, 'localdate') else timezone.now().date()
+
+        start_date_30 = today - timedelta(days=29)
+        start_date_7 = today - timedelta(days=6)
+
+        daily_qs = (
+            Complaint.objects.filter(
+                created_at__date__gte=start_date_30,
+                created_at__date__lte=today
+            )
+            .annotate(date=TruncDate('created_at'))
+            .values('date')
+            .annotate(count=Count('id'))
+            .order_by('date')
+        )
+        daily_map = {item['date']: item['count'] for item in daily_qs}
+
+        daily_trend_7 = [
+            {
+                "date": (start_date_7 + timedelta(days=i)).strftime('%Y-%m-%d'),
+                "formatted_date": (start_date_7 + timedelta(days=i)).strftime('%b %d'),
+                "count": daily_map.get(start_date_7 + timedelta(days=i), 0)
+            }
+            for i in range(7)
+        ]
+
+        daily_trend_30 = [
+            {
+                "date": (start_date_30 + timedelta(days=i)).strftime('%Y-%m-%d'),
+                "formatted_date": (start_date_30 + timedelta(days=i)).strftime('%b %d'),
+                "count": daily_map.get(start_date_30 + timedelta(days=i), 0)
+            }
+            for i in range(30)
+        ]
+
+        selected_trend = daily_trend_30 if days == 30 else daily_trend_7
+
+        # 3. Department-wise Complaints (Bar Chart)
+        # Display number of complaints assigned to each department based on the departments that actually exist in the database.
+        # Real department names and complaint counts from PostgreSQL.
+        # Count complaints according to their assigned department.
+        depts_qs = (
+            Department.objects
+            .annotate(complaint_count=Count('complaints'))
+            .order_by('-complaint_count', 'name')
+        )
+        by_department = [
+            {
+                "id": dept.id,
+                "name": dept.name,
+                "count": dept.complaint_count
+            }
+            for dept in depts_qs
+        ]
+
+        return Response({
+            "by_status": by_status,
+            "daily_trend": selected_trend,
+            "trend_days": days,
+            "daily_trend_7": daily_trend_7,
+            "daily_trend_30": daily_trend_30,
+            "by_department": by_department,
+            "total_complaints": Complaint.objects.count()
+        }, status=status.HTTP_200_OK)
+
 

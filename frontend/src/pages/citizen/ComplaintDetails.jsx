@@ -139,7 +139,10 @@ const ComplaintDetails = () => {
           <FaArrowLeft className="me-2" /> Back to list
         </Button>
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <h2 className="mb-0 fs-3 fs-sm-2 fw-bold">Complaint #{complaint.id}</h2>
+          <div>
+            <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Complaint Details #{complaint.id}</h2>
+            <p className="text-secondary mb-0">View timeline, assigned department updates, and resolution status.</p>
+          </div>
           <div>{getStatusBadge(complaint.status)}</div>
         </div>
       </div>

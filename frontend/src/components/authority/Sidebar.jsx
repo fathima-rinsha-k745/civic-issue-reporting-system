@@ -27,68 +27,83 @@ const Sidebar = ({ onNavigate }) => {
   const isDashboardActive = currentPath === '/dashboard/municipal_authority';
 
   return (
-    <div className="d-flex flex-column h-100" style={{ minHeight: '100%', width: '100%', backgroundColor: '#0B1B3D' }}>
-      <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-        <h5 className="mb-0 text-white d-flex align-items-center">
-          <FaBuilding className="me-2" /> CivicConnect
-        </h5>
-        <small className="text-light opacity-75">Municipal Authority</small>
+    <div className="d-flex flex-column h-100 civic-dashboard-sidebar">
+      {/* Brand Header */}
+      <div className="p-4 border-bottom border-white border-opacity-10">
+        <div className="d-flex align-items-center mb-1">
+          <div className="civic-brand-icon-box me-2 d-flex align-items-center justify-content-center">
+            <FaBuilding size={18} className="text-white" />
+          </div>
+          <span className="civic-brand-text fs-5">
+            Civic<span className="civic-brand-accent">Connect</span>
+          </span>
+        </div>
+        <span 
+          className="badge rounded-pill" 
+          style={{ 
+            background: 'rgba(13, 148, 136, 0.25)', 
+            color: '#2DD4BF', 
+            border: '1px solid rgba(13, 148, 136, 0.4)', 
+            fontSize: '0.72rem',
+            letterSpacing: '0.5px' 
+          }}
+        >
+          MUNICIPAL AUTHORITY
+        </span>
       </div>
-      <Nav className="flex-column mt-4 px-3 flex-grow-1">
+
+      {/* Nav Menu */}
+      <Nav className="flex-column mt-3 px-3 flex-grow-1">
         <Nav.Link 
           as={Link} 
           to="/dashboard/municipal_authority" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isDashboardActive ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isDashboardActive ? 'active' : ''}`}
         >
-          <FaTachometerAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Dashboard</span>
+          <FaTachometerAlt className="me-3 fs-5" /> 
+          <span>Dashboard</span>
         </Nav.Link>
         
         <Nav.Link 
           as={Link} 
           to="/dashboard/municipal_authority/complaints" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isComplaintsActive ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isComplaintsActive ? 'active' : ''}`}
         >
-          <FaListUl className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>View Complaints</span>
+          <FaListUl className="me-3 fs-5" /> 
+          <span>View Complaints</span>
         </Nav.Link>
 
         <Nav.Link 
           as={Link} 
           to="/dashboard/municipal_authority/departments" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/municipal_authority/departments') ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isActive('/dashboard/municipal_authority/departments') ? 'active' : ''}`}
         >
-          <FaBuilding className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Manage Departments</span>
+          <FaBuilding className="me-3 fs-5" /> 
+          <span>Departments</span>
         </Nav.Link>
 
         <Nav.Link 
           as={Link} 
           to="/dashboard/municipal_authority/staff" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/municipal_authority/staff') ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isActive('/dashboard/municipal_authority/staff') ? 'active' : ''}`}
         >
-          <FaUsers className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Manage Staff</span>
+          <FaUsers className="me-3 fs-5" /> 
+          <span>Manage Staff</span>
         </Nav.Link>
         
         <Nav.Link 
           onClick={handleLogout} 
-          className="px-4 py-3 mb-2 rounded d-flex align-items-center mt-auto" 
-          style={{ cursor: 'pointer', color: '#FFFFFF' }}
+          className="civic-sidebar-logout"
         >
-          <FaSignOutAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Logout</span>
+          <FaSignOutAlt className="me-3 fs-5" /> 
+          <span>Logout</span>
         </Nav.Link>
       </Nav>
     </div>
   );
 };
+
 export default Sidebar;

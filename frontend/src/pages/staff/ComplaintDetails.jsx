@@ -99,29 +99,14 @@ const ComplaintDetails = () => {
 
   // Helper for consistent status badges
   const getStatusBadge = (status) => {
-    const styles = {
-      'Pending': { bg: '#FFF3CD', color: '#856404', border: '#FFE69C' },
-      'In Progress': { bg: '#CFE2FF', color: '#084298', border: '#B6D4FE' },
-      'Awaiting Citizen Confirmation': { bg: '#E2D9F3', color: '#59359A', border: '#D3C6ED' },
-      'Resolved': { bg: '#D1E7DD', color: '#0F5132', border: '#BADBCC' },
-      'Rejected': { bg: '#F8D7DA', color: '#842029', border: '#F5C2C7' }
-    };
-
-    const style = styles[status] || { bg: '#E9ECEF', color: '#495057', border: '#DEE2E6' };
-
-    return (
-      <span 
-        className="px-3 py-1 rounded-pill fw-semibold text-nowrap d-inline-block"
-        style={{
-          backgroundColor: style.bg,
-          color: style.color,
-          border: `1px solid ${style.border}`,
-          fontSize: '0.85rem'
-        }}
-      >
-        {status}
-      </span>
-    );
+    switch(status) {
+      case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
+      case 'In Progress': return <Badge bg="info">In Progress</Badge>;
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
+      case 'Resolved': return <Badge bg="success">Resolved</Badge>;
+      case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
+      default: return <Badge bg="secondary">{status}</Badge>;
+    }
   };
 
   // Helper for timeline dot color
@@ -293,8 +278,8 @@ const ComplaintDetails = () => {
         </Button>
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
-            <h3 className="fw-bold mb-1 text-dark fs-3 fs-sm-2">Complaint Task Details</h3>
-            <p className="text-muted fs-6 mb-0">Review task details and submit work completion for citizen verification.</p>
+            <h2 className="fw-bold mb-1 text-white fs-3 fs-sm-2">Complaint Task Details</h2>
+            <p className="text-secondary mb-0">Review task details and submit work completion for citizen verification.</p>
           </div>
           <div>{getStatusBadge(complaint.status)}</div>
         </div>

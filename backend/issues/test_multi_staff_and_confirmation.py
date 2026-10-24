@@ -353,7 +353,7 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
         self.assertEqual(completion.citizen_remarks, dispute_text)
 
         # Check status history logs the rejection reason
-        latest_hist = ComplaintStatusHistory.objects.filter(complaint=self.complaint).order_by('-updated_at').first()
+        latest_hist = ComplaintStatusHistory.objects.filter(complaint=self.complaint).order_by('-updated_at', '-id').first()
         self.assertEqual(latest_hist.status, 'In Progress')
         self.assertIn(dispute_text, latest_hist.remarks)
 

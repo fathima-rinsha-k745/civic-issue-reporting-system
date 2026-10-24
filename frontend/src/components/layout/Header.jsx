@@ -1,50 +1,206 @@
-import React from 'react';
-import { Navbar, Nav, Container, Button } from 'react-bootstrap';
+import React, { useState, useEffect, useRef } from 'react';
+import { Container } from 'react-bootstrap';
 import { Link, useLocation } from 'react-router-dom';
-import { FaPhoneAlt, FaEnvelope, FaFacebookF, FaTwitter, FaInstagram, FaYoutube, FaLandmark } from 'react-icons/fa';
+import { FaLandmark, FaBars, FaTimes, FaChevronDown, FaHardHat } from 'react-icons/fa';
 
 const Header = () => {
   const location = useLocation();
   const currentPath = location.pathname;
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [loginDropdownOpen, setLoginDropdownOpen] = useState(false);
+  const dropdownRef = useRef(null);
+
+  const navLinks = [
+    { name: 'Home', path: '/' },
+    { name: 'About Us', path: '/about' },
+    { name: 'Services', path: '/services' },
+    { name: 'Contact Us', path: '/contact' },
+  ];
+
+  const handleLinkClick = () => {
+    setMobileMenuOpen(false);
+    setLoginDropdownOpen(false);
+  };
+
+  // Close dropdown on outside click
+  useEffect(() => {
+    const handleOutsideClick = (e) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target)) {
+        setLoginDropdownOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleOutsideClick);
+    return () => document.removeEventListener('mousedown', handleOutsideClick);
+  }, []);
+
+  // Close on Escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape') {
+        setLoginDropdownOpen(false);
+        setMobileMenuOpen(false);
+      }
+    };
+    document.addEventListener('keydown', handleKeyDown);
+    return () => document.removeEventListener('keydown', handleKeyDown);
+  }, []);
+
+  const isLoginActive = ['/authority/login', '/staff/login'].includes(currentPath);
 
   return (
-    <>
-      {/* Top Header */}
-      <div className="top-header py-2 d-none d-sm-block">
-        <Container className="d-flex justify-content-between align-items-center flex-wrap gap-2">
-          <div className="d-flex gap-3 gap-md-4 flex-wrap">
-            <span><FaPhoneAlt className="me-2" /> +91 98765 43210</span>
-            <span className="d-none d-md-inline"><FaEnvelope className="me-2" /> support@civicportal.in</span>
-          </div>
-          <div className="d-flex gap-3">
-            <a href="#!" aria-label="Facebook"><FaFacebookF /></a>
-            <a href="#!" aria-label="Twitter"><FaTwitter /></a>
-            <a href="#!" aria-label="Instagram"><FaInstagram /></a>
-            <a href="#!" aria-label="YouTube"><FaYoutube /></a>
-          </div>
-        </Container>
-      </div>
+    <header className="civic-header-wrapper" role="banner">
+      <Container className="civic-header-container">
+        <nav 
+          className="civic-glass-navbar d-flex align-items-center justify-content-between" 
+          aria-label="Main Navigation"
+        >
+          {/* Left: CivicConnect Logo & Brand */}
+          <Link 
+            to="/" 
+            className="civic-glass-brand text-decoration-none d-flex align-items-center gap-2" 
+            onClick={handleLinkClick}
+          >
+            <div className="civic-brand-icon-box d-flex align-items-center justify-content-center">
+              <FaLandmark size={20} className="civic-brand-icon" />
+            </div>
+            <span className="civic-brand-text">
+              Civic<span className="civic-brand-accent">Connect</span>
+            </span>
+          </Link>
 
-      {/* Main Navbar */}
-      <Navbar bg="white" expand="lg" collapseOnSelect className="py-2 py-md-3 sticky-top">
-        <Container>
-          <Navbar.Brand as={Link} to="/" className="d-flex align-items-center">
-            <FaLandmark size={26} className="me-2" />
-            <span className="fw-bold">CivicConnect</span>
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="basic-navbar-nav" />
-          <Navbar.Collapse id="basic-navbar-nav">
-            <Nav className="mx-auto text-center mt-3 mt-lg-0">
-              <Nav.Link as={Link} to="/" className={currentPath === '/' ? 'active py-2' : 'py-2'}>Home</Nav.Link>
-              <Nav.Link as={Link} to="/about" className={currentPath === '/about' ? 'active py-2' : 'py-2'}>About Us</Nav.Link>
-              <Nav.Link as={Link} to="/services" className={currentPath === '/services' ? 'active py-2' : 'py-2'}>Services</Nav.Link>
-              <Nav.Link as={Link} to="/contact" className={currentPath === '/contact' ? 'active py-2' : 'py-2'}>Contact Us</Nav.Link>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar>
-    </>
+          {/* Desktop Navigation Links + Login Dropdown */}
+          <div className="d-none d-lg-flex align-items-center gap-1 civic-desktop-nav">
+            {navLinks.map((link) => {
+              const isActive = currentPath === link.path;
+              return (
+                <Link
+                  key={link.name}
+                  to={link.path}
+                  className={`civic-glass-nav-link text-decoration-none ${isActive ? 'active' : ''}`}
+                >
+                  {link.name}
+                </Link>
+              );
+            })}
+
+            {/* Login Dropdown for Municipal Authority and Department Staff */}
+            <div className="position-relative" ref={dropdownRef}>
+              <button
+                type="button"
+                className={`civic-glass-nav-link civic-login-dropdown-btn border-0 bg-transparent text-decoration-none d-inline-flex align-items-center gap-1 ${isLoginActive || loginDropdownOpen ? 'active' : ''}`}
+                onClick={() => setLoginDropdownOpen(prev => !prev)}
+                aria-expanded={loginDropdownOpen}
+                aria-haspopup="true"
+              >
+                <span>Login</span>
+                <FaChevronDown 
+                  size={10} 
+                  className={`civic-dropdown-chevron ${loginDropdownOpen ? 'open' : ''}`} 
+                />
+              </button>
+
+              {/* Dropdown Menu styled with the action cards glass styling */}
+              {loginDropdownOpen && (
+                <div className="civic-glass-dropdown-menu" role="menu">
+                  <div className="civic-dropdown-label">
+                    Portal Login
+                  </div>
+                  
+                  {/* Municipal Authority */}
+                  <Link
+                    to="/authority/login"
+                    className="civic-dropdown-item d-flex align-items-center gap-3 text-decoration-none"
+                    onClick={handleLinkClick}
+                    role="menuitem"
+                  >
+                    <div className="civic-dropdown-icon-box municipal-dropdown-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                      <FaLandmark size={15} className="text-white" />
+                    </div>
+                    <div>
+                      <div className="civic-dropdown-title">Municipal Authority</div>
+                      <div className="civic-dropdown-desc">Review & assign complaints</div>
+                    </div>
+                  </Link>
+
+                  {/* Department Staff */}
+                  <Link
+                    to="/staff/login"
+                    className="civic-dropdown-item d-flex align-items-center gap-3 text-decoration-none"
+                    onClick={handleLinkClick}
+                    role="menuitem"
+                  >
+                    <div className="civic-dropdown-icon-box staff-dropdown-icon d-flex align-items-center justify-content-center flex-shrink-0">
+                      <FaHardHat size={15} className="text-white" />
+                    </div>
+                    <div>
+                      <div className="civic-dropdown-title">Department Staff</div>
+                      <div className="civic-dropdown-desc">Field tasks & resolution</div>
+                    </div>
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* Mobile Hamburger Toggle */}
+          <button
+            type="button"
+            className="civic-mobile-toggle d-lg-none d-flex align-items-center justify-content-center border-0 bg-transparent"
+            onClick={() => setMobileMenuOpen(prev => !prev)}
+            aria-expanded={mobileMenuOpen}
+            aria-label="Toggle navigation menu"
+          >
+            {mobileMenuOpen ? <FaTimes size={18} /> : <FaBars size={18} />}
+          </button>
+        </nav>
+
+        {/* Mobile Dropdown Nav Menu */}
+        {mobileMenuOpen && (
+          <div className="civic-glass-mobile-menu d-lg-none mt-2 p-2">
+            <div className="d-flex flex-column gap-1">
+              {navLinks.map((link) => {
+                const isActive = currentPath === link.path;
+                return (
+                  <Link
+                    key={link.name}
+                    to={link.path}
+                    onClick={handleLinkClick}
+                    className={`civic-glass-nav-link-mobile text-decoration-none ${isActive ? 'active' : ''}`}
+                  >
+                    {link.name}
+                  </Link>
+                );
+              })}
+
+              <div className="civic-mobile-dropdown-section pt-2 mt-2 border-top border-white border-opacity-10">
+                <div className="px-3 py-1 text-white-50 text-uppercase" style={{ fontSize: '0.72rem', letterSpacing: '1.2px', fontWeight: 600 }}>
+                  Portal Login
+                </div>
+                <Link
+                  to="/authority/login"
+                  onClick={handleLinkClick}
+                  className="civic-glass-nav-link-mobile d-flex align-items-center gap-2 text-decoration-none"
+                >
+                  <FaLandmark size={14} style={{ color: '#2DD4BF' }} />
+                  <span>Municipal Authority</span>
+                </Link>
+                <Link
+                  to="/staff/login"
+                  onClick={handleLinkClick}
+                  className="civic-glass-nav-link-mobile d-flex align-items-center gap-2 text-decoration-none"
+                >
+                  <FaHardHat size={14} style={{ color: '#FBBF24' }} />
+                  <span>Department Staff</span>
+                </Link>
+              </div>
+            </div>
+          </div>
+        )}
+      </Container>
+    </header>
   );
 };
 
 export default Header;
+
+

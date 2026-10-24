@@ -24,68 +24,82 @@ const Sidebar = ({ onNavigate }) => {
 
   const isActive = (path) => currentPath === path;
   const isComplaintsActive = currentPath.includes('/dashboard/citizen/complaints');
+  const isProfileActive = currentPath.includes('/dashboard/citizen/profile');
 
   return (
-    <div className="d-flex flex-column h-100" style={{ minHeight: '100%', width: '100%', backgroundColor: '#0B1B3D' }}>
-      <div className="p-4 border-bottom" style={{ borderColor: 'rgba(255,255,255,0.1)' }}>
-        <h5 className="mb-0 text-white d-flex align-items-center">
-          <FaLandmark className="me-2" /> CivicConnect
-        </h5>
-        <small className="text-light opacity-75">Citizen Dashboard</small>
+    <div className="d-flex flex-column h-100 civic-dashboard-sidebar">
+      {/* Brand Header */}
+      <div className="p-4 border-bottom border-white border-opacity-10">
+        <div className="d-flex align-items-center mb-1">
+          <div className="civic-brand-icon-box me-2 d-flex align-items-center justify-content-center">
+            <FaLandmark size={18} className="text-white" />
+          </div>
+          <span className="civic-brand-text fs-5">
+            Civic<span className="civic-brand-accent">Connect</span>
+          </span>
+        </div>
+        <span 
+          className="badge rounded-pill" 
+          style={{ 
+            background: 'rgba(37, 99, 235, 0.25)', 
+            color: '#60A5FA', 
+            border: '1px solid rgba(37, 99, 235, 0.4)', 
+            fontSize: '0.72rem',
+            letterSpacing: '0.5px' 
+          }}
+        >
+          CITIZEN PORTAL
+        </span>
       </div>
 
-      <Nav className="flex-column mt-4 px-3 flex-grow-1">
+      {/* Nav Menu */}
+      <Nav className="flex-column mt-3 px-3 flex-grow-1">
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/citizen') ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isActive('/dashboard/citizen') ? 'active' : ''}`}
         >
-          <FaTachometerAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Dashboard</span>
+          <FaTachometerAlt className="me-3 fs-5" /> 
+          <span>Dashboard</span>
         </Nav.Link>
         
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/report" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isActive('/dashboard/citizen/report') ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isActive('/dashboard/citizen/report') ? 'active' : ''}`}
         >
-          <FaPlusCircle className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Report an Issue</span>
+          <FaPlusCircle className="me-3 fs-5" /> 
+          <span>Report an Issue</span>
         </Nav.Link>
         
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/complaints" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${isComplaintsActive ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isComplaintsActive ? 'active' : ''}`}
         >
-          <FaListUl className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>My Complaints</span>
+          <FaListUl className="me-3 fs-5" /> 
+          <span>My Complaints</span>
         </Nav.Link>
         
         <Nav.Link 
           as={Link} 
           to="/dashboard/citizen/profile" 
           onClick={handleLinkClick}
-          className={`px-4 py-3 mb-2 rounded d-flex align-items-center ${currentPath.includes('/dashboard/citizen/profile') ? 'bg-primary fw-bold' : ''}`}
-          style={{ color: '#FFFFFF' }}
+          className={`civic-sidebar-link ${isProfileActive ? 'active' : ''}`}
         >
-          <FaUser className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Profile</span>
+          <FaUser className="me-3 fs-5" /> 
+          <span>Profile</span>
         </Nav.Link>
         
         <Nav.Link 
           onClick={handleLogout}
-          className="px-4 py-3 mb-2 rounded d-flex align-items-center mt-auto"
-          style={{ cursor: 'pointer', color: '#FFFFFF' }}
+          className="civic-sidebar-logout"
         >
-          <FaSignOutAlt className="me-3 fs-5" style={{ color: '#FFFFFF' }} /> 
-          <span style={{ color: '#FFFFFF' }}>Logout</span>
+          <FaSignOutAlt className="me-3 fs-5" /> 
+          <span>Logout</span>
         </Nav.Link>
       </Nav>
     </div>
@@ -93,4 +107,3 @@ const Sidebar = ({ onNavigate }) => {
 };
 
 export default Sidebar;
-

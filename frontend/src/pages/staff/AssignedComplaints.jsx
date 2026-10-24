@@ -63,8 +63,9 @@ const StaffAssignedComplaints = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0 text-dark fw-bold fs-3 fs-sm-2">Assigned Complaints</h2>
+      <div className="mb-4">
+        <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Assigned Complaints</h2>
+        <p className="text-secondary mb-0">View assigned complaints, verify locations, and update resolution progress.</p>
       </div>
 
       <Card className="border-0 shadow-sm mb-4">

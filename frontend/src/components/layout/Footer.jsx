@@ -1,70 +1,107 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import { FaLandmark, FaFacebookF, FaTwitter, FaInstagram, FaLinkedinIn } from 'react-icons/fa';
+import { FaLandmark, FaFacebookF, FaInstagram, FaYoutube, FaLinkedinIn } from 'react-icons/fa';
 
 const Footer = () => {
   return (
     <footer className="footer-section">
       <Container>
-        <Row className="gy-4">
+        <Row className="gy-4 align-items-start">
+          {/* Brand & Tagline */}
           <Col lg={4} md={6}>
-            <div className="d-flex align-items-center mb-3">
-              <FaLandmark size={24} className="me-2 text-white" />
-              <h4 className="mb-0 text-white font-weight-bold">CivicConnect</h4>
+            <div className="d-flex align-items-center mb-2">
+              <div className="civic-brand-icon-box me-2 d-flex align-items-center justify-content-center">
+                <FaLandmark size={20} className="text-white" />
+              </div>
+              <span className="civic-brand-text fs-4">
+                Civic<span className="civic-brand-accent">Connect</span>
+              </span>
             </div>
-            <p className="footer-text mb-4">
-              Report Issues. Track Progress. Build Better Communities.
+            <p className="footer-text mb-0" style={{ fontSize: '0.88rem', color: 'rgba(255, 255, 255, 0.65)' }}>
+              Together for a Cleaner, Greener and Healthier City.
             </p>
-            <div className="d-flex gap-3">
-              <a href="#!" className="text-white bg-secondary bg-opacity-25 p-2 rounded-circle d-flex align-items-center justify-content-center" style={{width: '35px', height: '35px'}}>
-                <FaFacebookF size={14} />
-              </a>
-              <a href="#!" className="text-white bg-secondary bg-opacity-25 p-2 rounded-circle d-flex align-items-center justify-content-center" style={{width: '35px', height: '35px'}}>
-                <FaTwitter size={14} />
-              </a>
-              <a href="#!" className="text-white bg-secondary bg-opacity-25 p-2 rounded-circle d-flex align-items-center justify-content-center" style={{width: '35px', height: '35px'}}>
-                <FaInstagram size={14} />
-              </a>
-              <a href="#!" className="text-white bg-secondary bg-opacity-25 p-2 rounded-circle d-flex align-items-center justify-content-center" style={{width: '35px', height: '35px'}}>
-                <FaLinkedinIn size={14} />
-              </a>
+          </Col>
+
+          {/* Quick Links */}
+          <Col lg={3} sm={6} xs={6} className="offset-lg-0">
+            <h5 className="footer-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '14px' }}>
+              Quick Links
+            </h5>
+            <div className="row g-2">
+              <div className="col-6">
+                <ul className="list-unstyled mb-0 d-flex flex-column gap-2" style={{ fontSize: '0.88rem' }}>
+                  <li><Link to="/" className="footer-link">Home</Link></li>
+                  <li><Link to="/about" className="footer-link">About Us</Link></li>
+                </ul>
+              </div>
+              <div className="col-6">
+                <ul className="list-unstyled mb-0 d-flex flex-column gap-2" style={{ fontSize: '0.88rem' }}>
+                  <li><Link to="/services" className="footer-link">Services</Link></li>
+                  <li><Link to="/contact" className="footer-link">Contact Us</Link></li>
+                </ul>
+              </div>
             </div>
           </Col>
-          
-          <Col lg={2} md={6} className="offset-lg-1">
-            <h5 className="footer-heading">Quick Links</h5>
-            <ul className="list-unstyled">
-              <li><Link to="/" className="footer-link">Home</Link></li>
-              <li><Link to="/about" className="footer-link">About Us</Link></li>
-              <li><Link to="/services" className="footer-link">Services</Link></li>
-              <li><Link to="/contact" className="footer-link">Contact Us</Link></li>
-            </ul>
+
+          {/* Our Services */}
+          <Col lg={3} sm={6} xs={6}>
+            <h5 className="footer-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '14px' }}>
+              Our Services
+            </h5>
+            <div className="row g-2">
+              <div className="col-6">
+                <ul className="list-unstyled mb-0 d-flex flex-column gap-2" style={{ fontSize: '0.88rem' }}>
+                  <li><Link to="/citizen/login" state={{ redirectTo: '/dashboard/citizen/report' }} className="footer-link">Report an Issue</Link></li>
+                  <li><Link to="/citizen/login" state={{ redirectTo: '/dashboard/citizen/complaints' }} className="footer-link">Track My Issue</Link></li>
+                </ul>
+              </div>
+              <div className="col-6">
+                <ul className="list-unstyled mb-0 d-flex flex-column gap-2" style={{ fontSize: '0.88rem' }}>
+                  <li><Link to="/authority/login" className="footer-link">Municipal Authority</Link></li>
+                  <li><Link to="/staff/login" className="footer-link">Department Staff</Link></li>
+                </ul>
+              </div>
+            </div>
           </Col>
 
+          {/* Follow Us */}
           <Col lg={2} md={6}>
-            <h5 className="footer-heading">Services</h5>
-            <ul className="list-unstyled">
-              <li><Link to="/citizen/login" className="footer-link">Report Issue</Link></li>
-              <li><Link to="/citizen/login" className="footer-link">Track Status</Link></li>
-              <li><Link to="/authority/login" className="footer-link">Authority Portal</Link></li>
-              <li><Link to="/staff/login" className="footer-link">Staff Portal</Link></li>
-            </ul>
-          </Col>
-
-          <Col lg={3} md={6}>
-            <h5 className="footer-heading">Contact Info</h5>
-            <ul className="list-unstyled footer-text">
-              <li className="mb-2"><strong>Address:</strong><br />123 Civic Center Drive,<br />Municipal Building, City 40001</li>
-              <li className="mb-2"><strong>Phone:</strong><br />+91 98765 43210</li>
-              <li className="mb-2"><strong>Email:</strong><br />support@civicportal.in</li>
-            </ul>
+            <h5 className="footer-heading" style={{ fontSize: '0.95rem', fontWeight: 600, color: '#ffffff', marginBottom: '14px' }}>
+              Follow Us
+            </h5>
+            <div className="d-flex gap-2">
+              <a
+                href="#!"
+                aria-label="Facebook"
+                className="civic-social-btn text-white text-decoration-none d-flex align-items-center justify-content-center"
+              >
+                <FaFacebookF size={13} />
+              </a>
+              <a
+                href="#!"
+                aria-label="Instagram"
+                className="civic-social-btn text-white text-decoration-none d-flex align-items-center justify-content-center"
+              >
+                <FaInstagram size={13} />
+              </a>
+              <a
+                href="#!"
+                aria-label="YouTube"
+                className="civic-social-btn text-white text-decoration-none d-flex align-items-center justify-content-center"
+              >
+                <FaYoutube size={13} />
+              </a>
+              <a
+                href="#!"
+                aria-label="LinkedIn"
+                className="civic-social-btn text-white text-decoration-none d-flex align-items-center justify-content-center"
+              >
+                <FaLinkedinIn size={13} />
+              </a>
+            </div>
           </Col>
         </Row>
-        
-        <div className="footer-bottom">
-          <p className="mb-0">&copy; {new Date().getFullYear()} CivicConnect Platform. All Rights Reserved.</p>
-        </div>
       </Container>
     </footer>
   );

@@ -75,7 +75,10 @@ const EditProfile = () => {
 
   return (
     <Container className="py-2 px-0 px-sm-2" style={{ maxWidth: '700px', marginLeft: 0 }}>
-      <h2 className="mb-3 mb-sm-4 text-dark fw-bold fs-3 fs-sm-2">Edit Profile</h2>
+      <div className="mb-4">
+        <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Edit Profile</h2>
+        <p className="text-secondary mb-0">Update your personal details and contact information.</p>
+      </div>
       
       <Card className="border-0 shadow-sm">
         <Card.Body className="p-3 p-sm-4 p-md-5">

@@ -51,8 +51,9 @@ const MyComplaints = () => {
 
   return (
     <div>
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h2 className="mb-0 fs-3 fs-sm-2 fw-bold">My Complaints</h2>
+      <div className="mb-4">
+        <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">My Complaints</h2>
+        <p className="text-secondary mb-0">Track your submitted complaints and stay updated on their progress.</p>
       </div>
 
       <Card className="border-0 shadow-sm mb-4">

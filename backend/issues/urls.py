@@ -6,7 +6,8 @@ from .views import (
     StaffListCreateView, StaffDetailView,
     ComplaintCompleteView, ComplaintCitizenConfirmView,
     ComplaintRejectView, ComplaintStartWorkView,
-    NotificationListView, NotificationMarkReadView, NotificationUnreadCountView
+    NotificationListView, NotificationMarkReadView, NotificationUnreadCountView,
+    AnalyticsView
 )
 from .profile_view import ProfileView
 
@@ -29,4 +30,5 @@ urlpatterns = [
     path('notifications/<int:pk>/read/', NotificationMarkReadView.as_view(), name='notifications-mark-read'),
     path('notifications/read-all/', NotificationMarkReadView.as_view(), name='notifications-mark-all-read'),
     path('notifications/unread-count/', NotificationUnreadCountView.as_view(), name='notifications-unread-count'),
+    path('analytics/', AnalyticsView.as_view(), name='analytics'),
 ]

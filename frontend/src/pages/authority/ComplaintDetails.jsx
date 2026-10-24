@@ -15,7 +15,7 @@ const ComplaintDetails = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
-  
+
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedStaffIds, setSelectedStaffIds] = useState([]);
 
@@ -49,7 +49,7 @@ const ComplaintDetails = () => {
         setLoading(false);
       }
     };
-    
+
     fetchData();
   }, [id]);
 
@@ -72,8 +72,8 @@ const ComplaintDetails = () => {
     });
   };
 
-  const availableStaff = allStaff.filter(s => 
-    String(s.department) === String(selectedDepartment) && 
+  const availableStaff = allStaff.filter(s =>
+    String(s.department) === String(selectedDepartment) &&
     s.is_active &&
     !s.is_generic &&
     !(s.full_name && s.full_name.toLowerCase().includes('department staff')) &&
@@ -86,15 +86,15 @@ const ComplaintDetails = () => {
       setError('Please select a department.');
       return;
     }
-    
+
     setSaving(true);
     setError('');
     setSuccess('');
-    
+
     try {
       const dept = departments.find(d => String(d.id) === String(selectedDepartment));
       const deptId = dept ? dept.id : parseInt(selectedDepartment, 10);
-      
+
       const updated = await api.updateComplaint(id, {
         department: deptId,
         assigned_staff_ids: selectedStaffIds,
@@ -154,8 +154,8 @@ const ComplaintDetails = () => {
   }
 
   // An authority can only reject complaints that are Pending and unassigned
-  const isEligibleForRejection = complaint.status === 'Pending' && 
-    (!complaint.department || complaint.department === 'Unassigned') && 
+  const isEligibleForRejection = complaint.status === 'Pending' &&
+    (!complaint.department || complaint.department === 'Unassigned') &&
     (!complaint.assigned_staff_members || complaint.assigned_staff_members.length === 0) &&
     (!complaint.assigned_staff_ids || complaint.assigned_staff_ids.length === 0);
 
@@ -165,16 +165,16 @@ const ComplaintDetails = () => {
   const getStatusBadgeStyle = (status) => {
     switch (status) {
       case 'Resolved':
-        return { bg: '#d1e7dd', color: '#0f5132' };
+        return { bg: 'rgba(34, 197, 94, 0.18)', color: '#4ADE80', border: 'rgba(34, 197, 94, 0.45)' };
       case 'In Progress':
-        return { bg: '#cfe2ff', color: '#084298' };
+        return { bg: 'rgba(6, 182, 212, 0.18)', color: '#38BDF8', border: 'rgba(6, 182, 212, 0.45)' };
       case 'Awaiting Citizen Confirmation':
-        return { bg: '#e2d9f3', color: '#59359a' };
+        return { bg: 'rgba(139, 92, 246, 0.2)', color: '#C4B5FD', border: 'rgba(139, 92, 246, 0.45)' };
       case 'Rejected':
-        return { bg: '#f8d7da', color: '#842029' };
+        return { bg: 'rgba(239, 68, 68, 0.18)', color: '#F87171', border: 'rgba(239, 68, 68, 0.45)' };
       case 'Pending':
       default:
-        return { bg: '#fff3cd', color: '#856404' };
+        return { bg: 'rgba(245, 158, 11, 0.18)', color: '#FBBF24', border: 'rgba(245, 158, 11, 0.45)' };
     }
   };
 
@@ -183,16 +183,16 @@ const ComplaintDetails = () => {
   return (
     <div className="mx-auto" style={{ maxWidth: '1000px' }}>
       <div className="mb-4">
-        <Button 
-          as={Link} 
-          to="/dashboard/municipal_authority/complaints" 
-          variant="link" 
+        <Button
+          as={Link}
+          to="/dashboard/municipal_authority/complaints"
+          variant="link"
           className="text-decoration-none text-muted px-0 mb-2 d-inline-flex align-items-center"
         >
           <FaArrowLeft className="me-2" /> Back to list
         </Button>
-        <h3 className="fw-bold mb-1 text-dark">Complaint Review & Assignment</h3>
-        <p className="text-muted fs-6">Review complaint details, verify location, and allocate to department staff.</p>
+        <h2 className="fw-bold mb-1 text-white fs-3 fs-sm-2">Complaint Details</h2>
+        <p className="text-secondary mb-0">Review complete complaint information, assign department and staff, and manage status.</p>
       </div>
 
       {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
@@ -238,9 +238,9 @@ const ComplaintDetails = () => {
             {/* Left side: Photo */}
             <Col md={4} className="bg-light p-3 p-sm-4 d-flex align-items-center justify-content-center border-bottom border-md-bottom-0 border-md-end">
               {complaint.photo ? (
-                <img 
-                  src={complaint.photo.startsWith('http') ? complaint.photo : `http://127.0.0.1:8000${complaint.photo}`} 
-                  alt="Complaint Evidence" 
+                <img
+                  src={complaint.photo.startsWith('http') ? complaint.photo : `http://127.0.0.1:8000${complaint.photo}`}
+                  alt="Complaint Evidence"
                   className="img-fluid rounded shadow-sm"
                   style={{ maxWidth: '100%', maxHeight: '280px', objectFit: 'cover' }}
                 />
@@ -250,7 +250,7 @@ const ComplaintDetails = () => {
                 </div>
               )}
             </Col>
-            
+
             {/* Right side: Details & Form */}
             <Col md={8} className="p-3 p-sm-4 p-md-5 d-flex flex-column">
               <div className="mb-4">
@@ -265,11 +265,11 @@ const ComplaintDetails = () => {
                 <Row className="mb-3">
                   <Col sm={4} className="text-muted fw-semibold">Location</Col>
                   <Col sm={8}>
-                    <LocationDisplay 
-                      location={complaint.location} 
-                      latitude={complaint.latitude} 
-                      longitude={complaint.longitude} 
-                      inline={true} 
+                    <LocationDisplay
+                      location={complaint.location}
+                      latitude={complaint.latitude}
+                      longitude={complaint.longitude}
+                      inline={true}
                     />
                   </Col>
                 </Row>
@@ -277,11 +277,12 @@ const ComplaintDetails = () => {
                   <Col sm={4} className="text-muted fw-semibold">Status</Col>
                   <Col sm={8}>
                     : <span className="ms-1 px-3 py-1 rounded-pill" style={{
-                          backgroundColor: badgeStyle.bg,
-                          color: badgeStyle.color,
-                          fontSize: '0.9rem',
-                          fontWeight: '600'
-                      }}>
+                      backgroundColor: badgeStyle.bg,
+                      color: badgeStyle.color,
+                      border: `1px solid ${badgeStyle.border}`,
+                      fontSize: '0.9rem',
+                      fontWeight: '600'
+                    }}>
                       {complaint.status}
                     </span>
                   </Col>
@@ -354,7 +355,7 @@ const ComplaintDetails = () => {
                 <Form onSubmit={handleUpdate} className="mt-auto pt-3">
                   <Form.Group className="mb-3">
                     <Form.Label className="fw-bold text-dark">1. Select Department *</Form.Label>
-                    <Form.Select 
+                    <Form.Select
                       size="md"
                       value={selectedDepartment}
                       onChange={(e) => handleDepartmentChange(e.target.value)}
@@ -388,7 +389,7 @@ const ComplaintDetails = () => {
                           {availableStaff.map(s => {
                             const isChecked = selectedStaffIds.includes(s.id);
                             return (
-                              <Form.Check 
+                              <Form.Check
                                 key={s.id}
                                 type="checkbox"
                                 id={`staff-chk-${s.id}`}
@@ -409,9 +410,9 @@ const ComplaintDetails = () => {
                   )}
 
                   <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3 align-items-stretch align-items-sm-center">
-                    <Button 
-                      variant="primary" 
-                      type="submit" 
+                    <Button
+                      variant="primary"
+                      type="submit"
                       disabled={saving}
                       className="px-4 py-2 fw-semibold w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
                       style={{ backgroundColor: '#0d6efd', border: 'none', borderRadius: '6px' }}
@@ -420,8 +421,8 @@ const ComplaintDetails = () => {
                     </Button>
 
                     {isEligibleForRejection && (
-                      <Button 
-                        variant="outline-danger" 
+                      <Button
+                        variant="outline-danger"
                         type="button"
                         onClick={() => {
                           setRejectCategory('Duplicate complaint');
@@ -436,8 +437,8 @@ const ComplaintDetails = () => {
                       </Button>
                     )}
 
-                    <Button 
-                      variant="outline-secondary" 
+                    <Button
+                      variant="outline-secondary"
                       onClick={() => navigate('/dashboard/municipal_authority/complaints')}
                       className="px-4 py-2 fw-semibold w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
                       style={{ borderRadius: '6px' }}
@@ -464,19 +465,19 @@ const ComplaintDetails = () => {
               return (
                 <div key={index} className="timeline-item position-relative ps-4 pb-4">
                   {index !== complaint.status_history.length - 1 && (
-                    <div 
-                      className="position-absolute bg-primary-blue" 
+                    <div
+                      className="position-absolute bg-primary-blue"
                       style={{ left: '6px', top: '24px', bottom: 0, width: '2px', opacity: 0.2 }}
                     ></div>
                   )}
-                  <div 
-                    className="position-absolute rounded-circle" 
+                  <div
+                    className="position-absolute rounded-circle"
                     style={{ left: 0, top: '4px', width: '14px', height: '14px', backgroundColor: itemStyle.color }}
                   ></div>
                   <div>
                     <div className="d-flex justify-content-between align-items-start mb-1 flex-wrap gap-2">
                       <div className="d-flex align-items-center gap-2">
-                        <span className="px-2 py-0.5 rounded-pill fw-semibold small" style={{ backgroundColor: itemStyle.bg, color: itemStyle.color }}>
+                        <span className="px-2 py-0.5 rounded-pill fw-semibold small" style={{ backgroundColor: itemStyle.bg, color: itemStyle.color, border: `1px solid ${itemStyle.border}` }}>
                           {item.status}
                         </span>
                         <span className="fw-bold text-dark">{item.action_label || item.status}</span>
@@ -508,7 +509,7 @@ const ComplaintDetails = () => {
         </Modal.Header>
         <Modal.Body>
           <p className="text-muted small mb-3">
-            Complaints can be rejected only while Pending and before assignment if they are invalid, duplicate, unverifiable, or outside municipal responsibility. 
+            Complaints can be rejected only while Pending and before assignment if they are invalid, duplicate, unverifiable, or outside municipal responsibility.
             A mandatory rejection reason is required and will be sent to the citizen.
           </p>
 
@@ -518,8 +519,8 @@ const ComplaintDetails = () => {
 
           <Form.Group className="mb-3">
             <Form.Label className="fw-bold text-dark">Reason for Rejection *</Form.Label>
-            <Form.Select 
-              value={rejectCategory} 
+            <Form.Select
+              value={rejectCategory}
               onChange={(e) => setRejectCategory(e.target.value)}
               disabled={rejecting}
             >
@@ -547,15 +548,15 @@ const ComplaintDetails = () => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button 
-            variant="secondary" 
+          <Button
+            variant="secondary"
             onClick={() => setShowRejectModal(false)}
             disabled={rejecting}
           >
             Cancel
           </Button>
-          <Button 
-            variant="danger" 
+          <Button
+            variant="danger"
             onClick={handleConfirmReject}
             disabled={rejecting}
             className="d-flex align-items-center"

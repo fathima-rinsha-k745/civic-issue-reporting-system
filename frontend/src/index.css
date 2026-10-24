@@ -19,17 +19,45 @@ body {
 }
 
 /* Utilities */
-.text-primary-blue { color: var(--primary-blue) !important; }
-.text-secondary-blue { color: var(--secondary-blue) !important; }
-.bg-primary-blue { background-color: var(--primary-blue) !important; }
-.bg-light-blue { background-color: var(--light-blue) !important; }
+.text-primary-blue {
+  color: var(--primary-blue) !important;
+}
+
+.text-secondary-blue {
+  color: var(--secondary-blue) !important;
+}
+
+.bg-primary-blue {
+  background-color: var(--primary-blue) !important;
+}
+
+.bg-light-blue {
+  background-color: var(--light-blue) !important;
+}
 
 /* Custom Typography */
-.fs-main-heading { font-size: clamp(30px, 4vw, 34px); font-weight: bold; }
-.fs-section-heading { font-size: clamp(20px, 3vw, 23px); font-weight: bold; }
-.fs-card-heading { font-size: clamp(17px, 2vw, 19px); font-weight: bold; }
-.fs-body-text { font-size: clamp(14px, 1.5vw, 16px); }
-.fs-form-label { font-size: 14px; }
+.fs-main-heading {
+  font-size: clamp(30px, 4vw, 34px);
+  font-weight: bold;
+}
+
+.fs-section-heading {
+  font-size: clamp(20px, 3vw, 23px);
+  font-weight: bold;
+}
+
+.fs-card-heading {
+  font-size: clamp(17px, 2vw, 19px);
+  font-weight: bold;
+}
+
+.fs-body-text {
+  font-size: clamp(14px, 1.5vw, 16px);
+}
+
+.fs-form-label {
+  font-size: 14px;
+}
 
 /* Glass Cards */
 .glass-card {
@@ -42,14 +70,21 @@ body {
   transition: transform 0.3s ease, background 0.3s ease;
   color: white !important;
 }
+
 .glass-card:hover {
   background: rgba(255, 255, 255, 0.25) !important;
   transform: translateY(-5px);
 }
+
 .glass-card-dark-text {
   color: white !important;
 }
-.glass-card-dark-text p, .glass-card-dark-text div, .glass-card-dark-text h3, .glass-card-dark-text h4, .glass-card-dark-text h5 {
+
+.glass-card-dark-text p,
+.glass-card-dark-text div,
+.glass-card-dark-text h3,
+.glass-card-dark-text h4,
+.glass-card-dark-text h5 {
   color: white !important;
 }
 
@@ -59,9 +94,11 @@ body {
   border: 1px solid rgba(255, 255, 255, 0.3) !important;
   color: white !important;
 }
+
 .glass-input::placeholder {
   color: rgba(255, 255, 255, 0.6) !important;
 }
+
 .glass-input:focus {
   background: rgba(255, 255, 255, 0.2) !important;
   border-color: rgba(255, 255, 255, 0.6) !important;
@@ -84,7 +121,7 @@ body {
 /* Navbar */
 .navbar {
   background-color: white;
-  box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
 }
 
 .navbar-brand {
@@ -104,7 +141,8 @@ body {
   font-size: 15px;
 }
 
-.nav-link:hover, .nav-link.active {
+.nav-link:hover,
+.nav-link.active {
   color: var(--primary-blue) !important;
 }
 
@@ -127,6 +165,7 @@ body {
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
 }
+
 .btn-primary-blue:hover {
   background-color: var(--primary-blue);
   color: white;
@@ -140,6 +179,7 @@ body {
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
 }
+
 .btn-outline-blue:hover {
   background-color: var(--light-blue);
   color: var(--primary-blue);
@@ -193,7 +233,7 @@ body {
 }
 
 .feature-icon-wrapper {
-  background-color: rgba(255,255,255,0.2);
+  background-color: rgba(255, 255, 255, 0.2);
   width: 50px;
   height: 50px;
   border-radius: 50%;
@@ -229,6 +269,7 @@ body {
   margin-bottom: 50px;
   position: relative;
 }
+
 .section-title::after {
   content: '';
   display: block;
@@ -243,7 +284,7 @@ body {
   border-radius: 8px;
   padding: 30px 20px;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
   height: 100%;
   border: 1px solid #f0f0f0;
 }
@@ -290,24 +331,29 @@ body {
   color: white;
   padding: 60px 0 20px;
 }
+
 .footer-heading {
   font-weight: 600;
   margin-bottom: 20px;
   color: white;
 }
+
 .footer-link {
   color: #bbbbbb;
   text-decoration: none;
   display: block;
   margin-bottom: 10px;
 }
+
 .footer-link:hover {
   color: var(--accent-blue);
 }
+
 .footer-text {
   color: #bbbbbb;
   font-size: 0.9rem;
 }
+
 .footer-bottom {
   border-top: 1px solid #444;
   margin-top: 40px;
@@ -326,7 +372,8 @@ body {
    Comprehensive Mobile Responsive Enhancements
    ========================================================================== */
 
-html, body {
+html,
+body {
   overflow-x: hidden;
   width: 100%;
   max-width: 100vw;
@@ -406,20 +453,24 @@ html, body {
 
 /* Mobile-Friendly Touch Targets and Spacing */
 @media (max-width: 767.98px) {
-  .hero-title, .hero-subtitle {
+
+  .hero-title,
+  .hero-subtitle {
     font-size: 2.2rem !important;
   }
-  
+
   .display-4 {
     font-size: 2rem !important;
   }
-  
+
   .display-5 {
     font-size: 1.8rem !important;
   }
 
   /* Form controls touch target */
-  .btn, .form-control, .form-select {
+  .btn,
+  .form-control,
+  .form-select {
     min-height: 42px;
   }
 
@@ -440,9 +491,10 @@ html, body {
     margin-top: 24px;
     padding-top: 16px;
   }
-  
+
   /* Timeline spacing on small screens */
-  .timeline-entry, .timeline-item {
+  .timeline-entry,
+  .timeline-item {
     padding-left: 1.75rem !important;
   }
 
@@ -456,7 +508,9 @@ html, body {
 
 /* Extra small devices (<= 375px) */
 @media (max-width: 375px) {
-  .hero-title, .hero-subtitle {
+
+  .hero-title,
+  .hero-subtitle {
     font-size: 1.75rem !important;
   }
 
@@ -475,3 +529,1877 @@ html, body {
   }
 }
 
+/* ========================================================
+   CivicConnect - Modern Civic-Tech Glassmorphism Homepage
+   ======================================================== */
+:root {
+  --civic-navy: #08142C;
+  --civic-navy-deep: #050E20;
+  --civic-royal: #2563EB;
+  --civic-royal-hover: #1D4ED8;
+  --civic-teal: #0D9488;
+  --civic-teal-light: #2DD4BF;
+  --civic-amber: #D97706;
+  --civic-amber-light: #FBBF24;
+}
+
+/* Base Body Font */
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Layout Wrappers */
+.civic-home-layout {
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--civic-navy);
+}
+
+.civic-page-layout .civic-header-wrapper {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  background: rgba(8, 20, 44, 0.94);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 12px 0;
+}
+
+/* ========================================================
+   1. Compact Glassmorphism Navigation Bar
+   ======================================================== */
+.civic-home-layout .civic-header-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  padding-top: 20px;
+}
+
+.civic-header-container {
+  max-width: 1320px;
+}
+
+.civic-glass-navbar {
+  max-width: 900px;
+  margin: 0 auto;
+  background: rgba(13, 27, 54, 0.52);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 24px;
+  padding: 7px 22px;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s ease;
+}
+
+/* Left Brand */
+.civic-glass-brand {
+  cursor: pointer;
+  transition: opacity 0.2s ease;
+}
+
+.civic-glass-brand:hover {
+  opacity: 0.92;
+}
+
+.civic-brand-icon-box {
+  width: 32px;
+  height: 32px;
+  color: #ffffff;
+}
+
+.civic-brand-text {
+  font-weight: 700;
+  font-size: 1.35rem;
+  letter-spacing: -0.3px;
+  color: #ffffff;
+}
+
+.civic-brand-accent {
+  color: var(--civic-royal);
+}
+
+/* Nav Links */
+.civic-desktop-nav {
+  gap: 8px;
+}
+
+.civic-glass-nav-link {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: 0.93rem;
+  font-weight: 500;
+  padding: 6px 18px;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+  border: 1px solid transparent;
+}
+
+.civic-glass-nav-link:hover:not(.active) {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.civic-glass-nav-link.active {
+  background: rgba(37, 99, 235, 0.45);
+  color: #ffffff;
+  font-weight: 600;
+  border: 1px solid rgba(59, 130, 246, 0.45);
+  box-shadow: 0 0 16px rgba(37, 99, 235, 0.5);
+}
+
+/* Dropdown in Navbar */
+.civic-login-dropdown-btn {
+  cursor: pointer;
+}
+
+.civic-dropdown-chevron {
+  transition: transform 0.2s ease;
+}
+
+.civic-dropdown-chevron.open {
+  transform: rotate(180deg);
+}
+
+.civic-glass-dropdown-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  min-width: 275px;
+  background: rgba(18, 38, 74, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  padding: 10px 10px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.38);
+  z-index: 1050;
+  animation: civicFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes civicFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.civic-dropdown-label {
+  padding: 6px 14px 6px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: rgba(255, 255, 255, 0.55);
+  letter-spacing: 1.4px;
+  text-transform: uppercase;
+}
+
+.civic-dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 12px;
+  border-radius: 14px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  color: #ffffff;
+  border: 1px solid transparent;
+}
+
+.civic-dropdown-item:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.16);
+  transform: translateX(3px);
+  color: #ffffff;
+}
+
+.civic-dropdown-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+}
+
+.municipal-dropdown-icon {
+  background: var(--civic-teal);
+  box-shadow: 0 4px 14px rgba(45, 212, 191, 0.4);
+}
+
+.staff-dropdown-icon {
+  background: var(--civic-amber);
+  box-shadow: 0 4px 14px rgba(251, 191, 36, 0.4);
+}
+
+.civic-dropdown-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.25;
+}
+
+.civic-dropdown-desc {
+  font-size: 0.76rem;
+  color: rgba(255, 255, 255, 0.72);
+  margin-top: 2px;
+}
+
+/* Mobile Hamburger Toggle */
+.civic-mobile-toggle {
+  color: #ffffff;
+  padding: 8px;
+  border-radius: 8px;
+  transition: background 0.2s ease;
+}
+
+.civic-mobile-toggle:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+/* Mobile Dropdown */
+.civic-glass-mobile-menu {
+  background: rgba(18, 38, 74, 0.85);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.38);
+}
+
+.civic-glass-nav-link-mobile {
+  color: rgba(255, 255, 255, 0.85);
+  padding: 10px 16px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  border-radius: 10px;
+  transition: all 0.2s ease;
+}
+
+.civic-glass-nav-link-mobile:hover,
+.civic-glass-nav-link-mobile.active {
+  color: #ffffff;
+  background: rgba(37, 99, 235, 0.35);
+}
+
+/* ========================================================
+   2. Hero Viewport & Background Overlay
+   ======================================================== */
+.civic-hero-viewport {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('/city_hall_hero.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
+}
+
+.civic-hero-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right,
+      rgba(8, 20, 44, 0.95) 0%,
+      rgba(8, 20, 44, 0.88) 36%,
+      rgba(8, 20, 44, 0.45) 66%,
+      rgba(8, 20, 44, 0.12) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 991px) {
+  .civic-hero-overlay {
+    background: linear-gradient(to bottom,
+        rgba(8, 20, 44, 0.95) 0%,
+        rgba(8, 20, 44, 0.88) 100%);
+  }
+}
+
+.civic-hero-content {
+  z-index: 2;
+  min-height: 100vh;
+  max-width: 1320px;
+}
+
+.hero-top-spacer {
+  height: 68px;
+}
+
+@media (max-width: 991px) {
+  .hero-top-spacer {
+    height: 60px;
+  }
+}
+
+/* ========================================================
+   3. Main Hero Content (Left)
+   ======================================================== */
+.hero-eyebrow-accent {
+  width: 32px;
+  height: 3px;
+  background-color: var(--civic-royal);
+  border-radius: 2px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.hero-eyebrow-text {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+}
+
+.hero-main-heading {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(2.15rem, 3.8vw, 3.55rem);
+  line-height: 1.12;
+  letter-spacing: -0.03em;
+}
+
+.hero-heading-highlight {
+  color: var(--civic-royal);
+  position: relative;
+  display: inline-block;
+}
+
+.hero-subtitle {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(0.98rem, 1.2vw, 1.12rem);
+  line-height: 1.6;
+  max-width: 530px;
+  font-weight: 400;
+}
+
+/* ========================================================
+   4. Primary & Secondary Citizen Action Cards
+   ======================================================== */
+.hero-action-cards-row {
+  max-width: 720px;
+}
+
+.citizen-action-card {
+  flex: 1 1 240px;
+  min-width: 240px;
+  max-width: 345px;
+  background: rgba(18, 38, 74, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  padding: 13px 18px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.28);
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.citizen-action-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.38);
+}
+
+.citizen-action-card:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 3px;
+}
+
+/* Primary: Report an Issue */
+.primary-action-card {
+  border-color: rgba(37, 99, 235, 0.35);
+  background: rgba(18, 38, 74, 0.6);
+}
+
+.primary-action-card:hover {
+  background: rgba(22, 46, 88, 0.72);
+  border-color: rgba(59, 130, 246, 0.6);
+  box-shadow: 0 16px 42px rgba(37, 99, 235, 0.28);
+}
+
+/* Secondary: Track My Issue */
+.secondary-action-card {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(14, 28, 54, 0.55);
+}
+
+.secondary-action-card:hover {
+  background: rgba(18, 36, 70, 0.7);
+  border-color: rgba(56, 189, 248, 0.55);
+  box-shadow: 0 16px 42px rgba(14, 165, 233, 0.25);
+}
+
+.citizen-card-icon-circle {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: var(--civic-royal);
+  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.45);
+}
+
+.secondary-icon-circle {
+  background: #0284C7;
+  box-shadow: 0 4px 14px rgba(2, 132, 199, 0.4);
+}
+
+.citizen-card-title {
+  color: #ffffff;
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.citizen-card-subtitle {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.85rem;
+  margin-top: 2px;
+}
+
+.citizen-card-arrow-circle {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: #ffffff;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  transition: transform 0.2s ease, background 0.2s ease;
+}
+
+.secondary-arrow-circle {
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+}
+
+.secondary-arrow-circle .citizen-arrow-icon {
+  color: #ffffff;
+}
+
+.secondary-action-card:hover .secondary-arrow-circle {
+  background: #ffffff;
+}
+
+.secondary-action-card:hover .secondary-arrow-circle .citizen-arrow-icon {
+  color: #0284C7;
+}
+
+.citizen-arrow-icon {
+  color: var(--civic-royal);
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.citizen-action-card:hover .citizen-arrow-icon {
+  transform: translateX(3px);
+}
+
+/* ========================================================
+   5. Feature Highlights
+   ======================================================== */
+.hero-feature-highlights {
+  gap: 16px;
+}
+
+.feature-item {
+  color: #ffffff;
+}
+
+.feature-icon-circle {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  flex-shrink: 0;
+}
+
+.feature-icon {
+  color: #ffffff;
+}
+
+.feature-title {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #ffffff;
+  line-height: 1.2;
+}
+
+.feature-subtitle {
+  font-size: 0.8rem;
+  color: rgba(255, 255, 255, 0.72);
+}
+
+.feature-divider {
+  height: 28px;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 6px;
+}
+
+/* Closing Tagline */
+.hero-closing-tagline {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  font-weight: 500;
+}
+
+.closing-accent-bar {
+  width: 32px;
+  height: 2px;
+  background: var(--civic-royal);
+  border-radius: 1px;
+  display: inline-block;
+  flex-shrink: 0;
+}
+
+.closing-text {
+  letter-spacing: 0.2px;
+}
+
+/* ========================================================
+   6. Bottom-Right Authority & Staff Login Cards
+   ======================================================== */
+.hero-bottom-bar {
+  padding-bottom: 2rem;
+}
+
+@media (min-width: 992px) {
+  .hero-bottom-bar {
+    padding-bottom: 3.5rem;
+  }
+
+  .authority-cards-group {
+    transform: translateY(-20px);
+  }
+}
+
+.authority-cards-group {
+  gap: 16px;
+}
+
+.authority-role-card {
+  width: 220px;
+  background: rgba(14, 28, 54, 0.65);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-radius: 18px;
+  padding: 11px 16px;
+  box-shadow: 0 8px 26px rgba(0, 0, 0, 0.25);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  outline: none;
+}
+
+.authority-role-card:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 3px;
+}
+
+/* Municipal Authority Card */
+.municipal-role-card {
+  border: 1px solid rgba(20, 184, 166, 0.35);
+}
+
+.municipal-role-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(20, 184, 166, 0.7);
+  box-shadow: 0 12px 30px rgba(20, 184, 166, 0.2);
+  background: rgba(14, 28, 54, 0.8);
+}
+
+.municipal-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--civic-teal);
+  box-shadow: 0 4px 12px rgba(13, 148, 136, 0.35);
+}
+
+.municipal-role-link {
+  color: var(--civic-teal-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+/* Department Staff Card */
+.staff-role-card {
+  border: 1px solid rgba(245, 158, 11, 0.35);
+}
+
+.staff-role-card:hover {
+  transform: translateY(-2px);
+  border-color: rgba(245, 158, 11, 0.7);
+  box-shadow: 0 12px 30px rgba(245, 158, 11, 0.2);
+  background: rgba(14, 28, 54, 0.8);
+}
+
+.staff-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--civic-amber);
+  box-shadow: 0 4px 12px rgba(217, 119, 6, 0.35);
+}
+
+.staff-role-link {
+  color: var(--civic-amber-light);
+  font-size: 0.85rem;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.authority-role-title {
+  color: #ffffff;
+  font-size: 0.92rem;
+  font-weight: 700;
+  margin-bottom: 2px;
+}
+
+.authority-arrow {
+  transition: transform 0.2s ease;
+}
+
+.authority-role-card:hover .authority-arrow {
+  transform: translateX(3px);
+}
+
+/* ========================================================
+   7. Responsive Rules (Mobile & Tablet)
+   ======================================================== */
+@media (max-width: 991px) {
+  .civic-hero-viewport {
+    min-height: 100vh;
+    padding-bottom: 24px;
+  }
+
+  .hero-main-heading {
+    font-size: 2.5rem;
+  }
+
+  .citizen-action-card {
+    max-width: 100%;
+  }
+
+  .authority-cards-group {
+    width: 100%;
+  }
+
+  .authority-role-card {
+    flex: 1 1 calc(50% - 8px);
+    min-width: 180px;
+  }
+}
+
+@media (max-width: 575px) {
+  .hero-main-heading {
+    font-size: 2.05rem;
+  }
+
+  .hero-eyebrow-text {
+    font-size: 0.72rem;
+    letter-spacing: 1.2px;
+  }
+
+  .hero-feature-highlights {
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .feature-divider {
+    display: none !important;
+  }
+
+  .authority-cards-group {
+    flex-direction: column;
+  }
+
+  .authority-role-card {
+    width: 100%;
+  }
+}
+
+/* ========================================================
+   CivicConnect Subpages Theme (About Us & Services)
+   ======================================================== */
+.civic-subpage-viewport {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('/city_hall_hero.jpg');
+  background-size: cover;
+  background-position: center top;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  overflow-x: hidden;
+  padding-bottom: 70px;
+}
+
+.civic-subpage-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(180deg,
+      rgba(8, 20, 44, 0.90) 0%,
+      rgba(8, 20, 44, 0.86) 30%,
+      rgba(8, 20, 44, 0.92) 70%,
+      rgba(8, 20, 44, 0.97) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+.civic-subpage-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1240px;
+}
+
+.civic-subpage-spacer {
+  height: 90px;
+}
+
+@media (max-width: 991px) {
+  .civic-subpage-spacer {
+    height: 75px;
+  }
+}
+
+/* Subpage Header & Headings */
+.civic-subpage-header {
+  text-align: center;
+  max-width: 820px;
+  margin: 0 auto 40px;
+}
+
+.civic-subpage-title {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(2rem, 3.2vw, 2.9rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+}
+
+.civic-subpage-lead {
+  color: rgba(255, 255, 255, 0.85);
+  font-size: clamp(1rem, 1.2vw, 1.12rem);
+  line-height: 1.6;
+}
+
+/* Section Headings */
+.civic-section-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  color: #38BDF8;
+  font-size: 0.82rem;
+  font-weight: 700;
+  letter-spacing: 1.8px;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.civic-section-title {
+  color: #ffffff;
+  font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+
+/* Glassmorphism Cards */
+.civic-glass-card {
+  background: rgba(18, 38, 74, 0.62);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.32);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  color: #ffffff;
+}
+
+.civic-glass-card:hover {
+  transform: translateY(-4px);
+  background: rgba(22, 46, 88, 0.72);
+  border-color: rgba(59, 130, 246, 0.45);
+  box-shadow: 0 18px 46px rgba(0, 0, 0, 0.42);
+}
+
+/* Vision & Mission Cards */
+.civic-focus-card {
+  padding: 30px 26px;
+  height: 100%;
+}
+
+.civic-focus-icon-circle {
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.civic-focus-title {
+  color: #ffffff;
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-bottom: 12px;
+}
+
+.civic-focus-text {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  margin-bottom: 0;
+}
+
+/* Core Values Cards */
+.civic-value-card {
+  padding: 24px 20px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.civic-value-icon {
+  width: 46px;
+  height: 46px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 16px;
+  font-size: 1.25rem;
+}
+
+.civic-value-title {
+  color: #ffffff;
+  font-size: 1.12rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.civic-value-desc {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 0;
+}
+
+/* Statistics Boxes */
+.civic-stat-box {
+  background: rgba(18, 38, 74, 0.55);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 20px;
+  padding: 24px 18px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.28);
+  transition: transform 0.25s ease, border-color 0.25s ease;
+  height: 100%;
+}
+
+.civic-stat-box:hover {
+  transform: translateY(-3px);
+  border-color: rgba(56, 189, 248, 0.45);
+}
+
+.civic-stat-number {
+  font-size: clamp(2rem, 3.2vw, 2.7rem);
+  font-weight: 800;
+  color: #38BDF8;
+  letter-spacing: -0.02em;
+  line-height: 1.1;
+  margin-bottom: 6px;
+}
+
+.civic-stat-label {
+  font-size: 0.96rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin-bottom: 2px;
+}
+
+.civic-stat-sublabel {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.7);
+}
+
+/* Services: 4 Core Stakeholder Cards */
+.civic-stakeholder-card {
+  background: rgba(18, 38, 74, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  padding: 24px 22px;
+  box-shadow: 0 14px 38px rgba(0, 0, 0, 0.32);
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  cursor: pointer;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  text-decoration: none;
+  outline: none;
+}
+
+.civic-stakeholder-card:hover {
+  transform: translateY(-4px);
+  background: rgba(22, 46, 88, 0.78);
+  border-color: rgba(59, 130, 246, 0.55);
+  box-shadow: 0 20px 48px rgba(37, 99, 235, 0.3);
+  color: #ffffff;
+}
+
+.civic-stakeholder-card:focus-visible {
+  outline: 2px solid #38BDF8;
+  outline-offset: 3px;
+}
+
+.civic-badge-pill {
+  display: inline-block;
+  padding: 3px 10px;
+  border-radius: 9999px;
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.8px;
+  text-transform: uppercase;
+}
+
+.civic-stakeholder-title {
+  color: #ffffff;
+  font-size: 1.22rem;
+  font-weight: 700;
+  line-height: 1.25;
+  margin-bottom: 8px;
+}
+
+.civic-stakeholder-desc {
+  color: rgba(255, 255, 255, 0.8);
+  font-size: 0.88rem;
+  line-height: 1.55;
+  margin-bottom: 18px;
+}
+
+.civic-stakeholder-action {
+  font-size: 0.86rem;
+  font-weight: 600;
+  color: #38BDF8;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: gap 0.2s ease;
+}
+
+.civic-stakeholder-card:hover .civic-stakeholder-action {
+  gap: 12px;
+}
+
+/* Civic Issue Categories Cards */
+.civic-category-card {
+  background: rgba(18, 38, 74, 0.58);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 18px;
+  padding: 20px 18px;
+  transition: all 0.25s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.civic-category-card:hover {
+  transform: translateY(-3px);
+  background: rgba(22, 46, 88, 0.75);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 16px 40px rgba(0, 0, 0, 0.35);
+}
+
+.civic-category-icon-box {
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 14px;
+  font-size: 1.25rem;
+}
+
+.civic-category-title {
+  color: #ffffff;
+  font-size: 1.05rem;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.civic-category-desc {
+  color: rgba(255, 255, 255, 0.72);
+  font-size: 0.82rem;
+  line-height: 1.5;
+  margin-bottom: 14px;
+}
+
+.civic-category-link {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #38BDF8;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  background: transparent;
+  border: none;
+  padding: 0;
+  transition: color 0.2s ease;
+}
+
+.civic-category-link:hover {
+  color: #ffffff;
+}
+
+/* ========================================================
+   CivicConnect Contact Us Page Theme (Matching Reference)
+   ======================================================== */
+.civic-contact-viewport {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('/city_hall_hero.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+  padding-bottom: 70px;
+}
+
+.civic-contact-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right,
+      rgba(8, 20, 44, 0.96) 0%,
+      rgba(8, 20, 44, 0.90) 38%,
+      rgba(8, 20, 44, 0.55) 70%,
+      rgba(8, 20, 44, 0.18) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 991px) {
+  .civic-contact-overlay {
+    background: linear-gradient(to bottom,
+        rgba(8, 20, 44, 0.96) 0%,
+        rgba(8, 20, 44, 0.92) 100%);
+  }
+}
+
+.civic-contact-content {
+  position: relative;
+  z-index: 2;
+  max-width: 1240px;
+}
+
+.civic-contact-header {
+  margin-bottom: 34px;
+}
+
+.civic-contact-title {
+  color: #ffffff;
+  font-weight: 800;
+  font-size: clamp(2.4rem, 4vw, 3.4rem);
+  line-height: 1.15;
+  letter-spacing: -0.025em;
+  margin-bottom: 12px;
+}
+
+.civic-contact-title-accent {
+  color: #2563EB;
+}
+
+.civic-contact-subtitle {
+  color: rgba(255, 255, 255, 0.82);
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  line-height: 1.6;
+}
+
+/* Three Contact Cards */
+.civic-contact-card {
+  background: rgba(18, 38, 74, 0.65);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 22px;
+  padding: 30px 26px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.35);
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: #ffffff;
+  transition: transform 0.25s ease, border-color 0.25s ease;
+}
+
+.civic-contact-card:hover {
+  transform: translateY(-4px);
+  border-color: rgba(56, 189, 248, 0.45);
+  box-shadow: 0 20px 48px rgba(0, 0, 0, 0.42);
+}
+
+.civic-contact-icon-circle {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.civic-contact-card-title {
+  color: #ffffff;
+  font-size: 1.25rem;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.civic-contact-card-desc {
+  color: rgba(255, 255, 255, 0.75);
+  font-size: 0.9rem;
+  line-height: 1.55;
+  margin-bottom: 24px;
+}
+
+.civic-contact-inner-pill {
+  background: rgba(10, 22, 46, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
+  padding: 12px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 0.9rem;
+  transition: border-color 0.2s ease, background 0.2s ease;
+}
+
+.civic-contact-inner-pill:hover {
+  background: rgba(10, 22, 46, 0.85);
+  border-color: rgba(56, 189, 248, 0.5);
+}
+
+.civic-contact-info-block {
+  display: flex;
+  align-items: flex-start;
+  gap: 14px;
+  color: rgba(255, 255, 255, 0.82);
+  font-size: 0.88rem;
+  line-height: 1.6;
+}
+
+/* Bottom Wide Action Banner */
+.civic-contact-banner {
+  background: rgba(18, 38, 74, 0.68);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 22px;
+  padding: 22px 28px;
+  box-shadow: 0 16px 42px rgba(0, 0, 0, 0.35);
+  margin-top: 32px;
+}
+
+.civic-btn-report {
+  background: #2563EB;
+  border: none;
+  border-radius: 9999px;
+  padding: 11px 24px;
+  font-weight: 600;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.civic-btn-report:hover {
+  background: #1D4ED8;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.5);
+  color: #ffffff;
+}
+
+.civic-btn-track {
+  background: rgba(18, 38, 74, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  border-radius: 9999px;
+  padding: 10px 22px;
+  font-weight: 600;
+  color: #ffffff;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  transition: all 0.2s ease;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.civic-btn-track:hover {
+  background: rgba(255, 255, 255, 0.16);
+  border-color: rgba(56, 189, 248, 0.6);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+.civic-social-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  transition: all 0.2s ease;
+}
+
+.civic-social-btn:hover {
+  background: var(--civic-royal);
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: translateY(-2px);
+  color: #ffffff;
+}
+
+/* ========================================================
+   CivicConnect Dashboard Design System (Citizen, Authority, Staff)
+   Homepage Deep Navy-Blue Theme (No Background Images)
+   ======================================================== */
+.civic-dashboard-shell {
+  min-height: 100vh;
+  background-color: #09142A !important;
+  background: #09142A !important;
+  background-image: none !important;
+  color: #F8FAFC;
+  position: relative;
+}
+
+.civic-dashboard-shell::before {
+  display: none !important;
+}
+
+/* Deep Navy-Blue Sidebar - Matches Shell */
+.civic-dashboard-sidebar {
+  background: #09142A !important;
+  border-right: 1px solid rgba(59, 130, 246, 0.14) !important;
+  color: #F8FAFC !important;
+  position: relative;
+  z-index: 10;
+}
+
+.civic-dashboard-offcanvas {
+  background: #09142A !important;
+  border-right: 1px solid rgba(59, 130, 246, 0.18) !important;
+  color: #F8FAFC !important;
+}
+
+/* Deep Navy-Blue Top Header - Matches Shell */
+.civic-dashboard-header {
+  background: #09142A !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.14) !important;
+  color: #F8FAFC !important;
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25) !important;
+}
+
+/* Sidebar Nav Links - Clean, Flat Navigation */
+.civic-sidebar-link {
+  color: #94A3B8 !important;
+  padding: 10px 14px !important;
+  border-radius: 6px !important;
+  margin-bottom: 4px !important;
+  font-weight: 500;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  transition: all 0.15s ease;
+  border: 1px solid transparent;
+  text-decoration: none !important;
+}
+
+.civic-sidebar-link:hover {
+  background: rgba(37, 99, 235, 0.12) !important;
+  color: #F8FAFC !important;
+}
+
+/* Royal blue active menu items */
+.civic-sidebar-link.active,
+.civic-sidebar-link.bg-primary {
+  background: #2563EB !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35) !important;
+  border-color: #2563EB !important;
+}
+
+.civic-sidebar-logout {
+  color: #F87171 !important;
+  background: rgba(239, 68, 68, 0.08) !important;
+  border: 1px solid rgba(239, 68, 68, 0.2) !important;
+  border-radius: 6px !important;
+  margin-top: auto;
+  padding: 10px 14px !important;
+  transition: all 0.15s ease;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  text-decoration: none !important;
+}
+
+.civic-sidebar-logout:hover {
+  background: rgba(239, 68, 68, 0.2) !important;
+  color: #ffffff !important;
+}
+
+/* ========================================================
+   Clean, Flat Dashboard Cards & Surfaces
+   Smaller Corner Radii (8px), Minimal Shadows, Subtle Borders
+   ======================================================== */
+.civic-dashboard-shell .card {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.15) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22) !important;
+  color: #F8FAFC !important;
+  transition: border-color 0.15s ease;
+}
+
+.civic-dashboard-shell .card:hover {
+  border-color: rgba(59, 130, 246, 0.3) !important;
+}
+
+.civic-dashboard-shell .card-header {
+  background: #112248 !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.14) !important;
+  color: #F8FAFC !important;
+  border-top-left-radius: 8px !important;
+  border-top-right-radius: 8px !important;
+  padding: 12px 16px !important;
+}
+
+.civic-dashboard-shell .card-footer {
+  background: #112248 !important;
+  border-top: 1px solid rgba(59, 130, 246, 0.14) !important;
+  color: #94A3B8 !important;
+  border-bottom-left-radius: 8px !important;
+  border-bottom-right-radius: 8px !important;
+  padding: 10px 16px !important;
+}
+
+/* Compact Statistics Cards */
+.civic-stat-card {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.15) !important;
+  border-radius: 8px !important;
+  padding: 14px 12px !important;
+  text-align: center;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.civic-stat-value {
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.2;
+  color: #F8FAFC;
+  margin-bottom: 2px;
+}
+
+.civic-stat-label {
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: #94A3B8;
+  letter-spacing: 0.2px;
+  margin-bottom: 0;
+}
+
+/* Dimmed White Headings & Soft Gray Secondary Content */
+.civic-dashboard-shell h1,
+.civic-dashboard-shell h2,
+.civic-dashboard-shell h3,
+.civic-dashboard-shell h4,
+.civic-dashboard-shell h5,
+.civic-dashboard-shell h6 {
+  color: #F8FAFC !important;
+  font-weight: 700;
+}
+
+.civic-dashboard-shell .civic-page-title {
+  color: #F8FAFC !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.2px;
+}
+
+.civic-dashboard-shell .civic-page-subtitle {
+  color: #94A3B8 !important;
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Ensure no text-dark renders black text on dark navy */
+.civic-dashboard-shell .text-dark {
+  color: #F8FAFC !important;
+}
+
+.civic-dashboard-shell .text-muted,
+.civic-dashboard-shell .text-secondary {
+  color: #94A3B8 !important;
+}
+
+.civic-dashboard-shell .text-primary {
+  color: #38BDF8 !important;
+}
+
+.civic-dashboard-shell .text-primary-blue {
+  color: #60A5FA !important;
+}
+
+.civic-dashboard-shell .lead {
+  color: #CBD5E1 !important;
+}
+
+.civic-dashboard-shell .font-monospace {
+  color: #38BDF8 !important;
+}
+
+/* Surface Utility Overrides for Dashboard Pages */
+.civic-dashboard-shell .bg-white {
+  background: #0E1B38 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(59, 130, 246, 0.15) !important;
+}
+
+.civic-dashboard-shell .bg-light {
+  background: #09142A !important;
+  color: #CBD5E1 !important;
+  border-color: rgba(59, 130, 246, 0.14) !important;
+}
+
+.civic-dashboard-shell .bg-light-blue {
+  background: #112248 !important;
+  border: 1px solid rgba(59, 130, 246, 0.25) !important;
+  color: #F8FAFC !important;
+}
+
+/* Border Overrides */
+.civic-dashboard-shell .border,
+.civic-dashboard-shell .border-top,
+.civic-dashboard-shell .border-bottom,
+.civic-dashboard-shell .border-start,
+.civic-dashboard-shell .border-end {
+  border-color: rgba(59, 130, 246, 0.14) !important;
+}
+
+.civic-dashboard-shell .border-danger,
+.civic-dashboard-shell .border-danger-subtle {
+  border-color: rgba(239, 68, 68, 0.35) !important;
+}
+
+.civic-dashboard-shell .border-success,
+.civic-dashboard-shell .border-success-subtle {
+  border-color: rgba(34, 197, 94, 0.35) !important;
+}
+
+/* Scoped Dashboard Tables - Flat Dark Navy Design */
+.civic-dashboard-shell .table-responsive {
+  border-radius: 8px;
+  border: 1px solid rgba(59, 130, 246, 0.15);
+  background: #0E1B38;
+  box-shadow: none;
+  overflow: hidden;
+}
+
+.civic-dashboard-shell .table {
+  color: #F8FAFC !important;
+  border-color: rgba(59, 130, 246, 0.1) !important;
+  margin-bottom: 0 !important;
+}
+
+.civic-dashboard-shell .table thead th,
+.civic-dashboard-shell .table-light,
+.civic-dashboard-shell .table-light th {
+  background: #112248 !important;
+  color: #E2E8F0 !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.18) !important;
+  font-size: 0.78rem !important;
+  text-transform: uppercase !important;
+  letter-spacing: 0.5px !important;
+  font-weight: 600 !important;
+  padding: 11px 14px !important;
+}
+
+.civic-dashboard-shell .table tbody td {
+  background: transparent !important;
+  color: #F8FAFC !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+  padding: 11px 14px !important;
+  vertical-align: middle !important;
+  font-size: 0.88rem !important;
+}
+
+.civic-dashboard-shell .table tbody tr:hover td {
+  background: rgba(37, 99, 235, 0.1) !important;
+}
+
+/* Scoped Dashboard Form Controls - Flat & Clean */
+.civic-dashboard-shell .form-control,
+.civic-dashboard-shell .form-select {
+  background: #09142A !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  color: #F8FAFC !important;
+  border-radius: 6px !important;
+  padding: 8px 12px !important;
+  font-size: 0.9rem !important;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.civic-dashboard-shell .form-control::placeholder {
+  color: #64748B !important;
+}
+
+.civic-dashboard-shell .form-control:focus,
+.civic-dashboard-shell .form-select:focus {
+  border-color: #2563EB !important;
+  box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.3) !important;
+  background: #09142A !important;
+  color: #F8FAFC !important;
+}
+
+.civic-dashboard-shell .form-control[readonly] {
+  background: #060D1E !important;
+  border-color: rgba(59, 130, 246, 0.12) !important;
+  color: #94A3B8 !important;
+}
+
+.civic-dashboard-shell .form-select option {
+  background-color: #09142A !important;
+  color: #F8FAFC !important;
+}
+
+.civic-dashboard-shell .form-label {
+  color: #CBD5E1 !important;
+  font-weight: 500 !important;
+  font-size: 0.84rem !important;
+  margin-bottom: 5px !important;
+}
+
+.civic-dashboard-shell .input-group-text {
+  background: #09142A !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  color: #94A3B8 !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .form-check-input {
+  background-color: #09142A !important;
+  border: 1px solid rgba(59, 130, 246, 0.25) !important;
+}
+
+.civic-dashboard-shell .form-check-input:checked {
+  background-color: #2563EB !important;
+  border-color: #2563EB !important;
+}
+
+.civic-dashboard-shell .form-check-label {
+  color: #CBD5E1 !important;
+}
+
+/* Status Badges - Cyan, Green, Orange, Red for Status Indicators */
+.civic-dashboard-shell .badge {
+  border-radius: 4px !important;
+  font-weight: 600 !important;
+  padding: 4px 9px !important;
+  font-size: 0.72rem !important;
+  letter-spacing: 0.3px !important;
+}
+
+/* Pending: Orange */
+.civic-dashboard-shell .badge.bg-warning {
+  background: rgba(245, 158, 11, 0.16) !important;
+  color: #FBBF24 !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+}
+
+/* In Progress: Cyan */
+.civic-dashboard-shell .badge.bg-info {
+  background: rgba(6, 182, 212, 0.16) !important;
+  color: #38BDF8 !important;
+  border: 1px solid rgba(6, 182, 212, 0.35) !important;
+}
+
+/* Awaiting Confirmation: Purple / Indigo */
+.civic-dashboard-shell .badge.bg-primary {
+  background: rgba(139, 92, 246, 0.16) !important;
+  color: #C4B5FD !important;
+  border: 1px solid rgba(139, 92, 246, 0.35) !important;
+}
+
+/* Resolved: Green */
+.civic-dashboard-shell .badge.bg-success {
+  background: rgba(16, 185, 129, 0.16) !important;
+  color: #4ADE80 !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+}
+
+/* Rejected: Red */
+.civic-dashboard-shell .badge.bg-danger {
+  background: rgba(239, 68, 68, 0.16) !important;
+  color: #F87171 !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+}
+
+/* Secondary / Neutral */
+.civic-dashboard-shell .badge.bg-secondary {
+  background: rgba(148, 163, 184, 0.14) !important;
+  color: #CBD5E1 !important;
+  border: 1px solid rgba(148, 163, 184, 0.25) !important;
+}
+
+/* Scoped Dashboard Buttons - Royal Blue Primary */
+.civic-dashboard-shell .btn-primary,
+.civic-dashboard-shell .btn-primary-blue {
+  background: #2563EB !important;
+  border: 1px solid #2563EB !important;
+  border-radius: 6px !important;
+  padding: 7px 18px !important;
+  font-weight: 600 !important;
+  color: #ffffff !important;
+  box-shadow: 0 1px 3px rgba(37, 99, 235, 0.3) !important;
+  transition: all 0.15s ease !important;
+}
+
+.civic-dashboard-shell .btn-primary:hover,
+.civic-dashboard-shell .btn-primary-blue:hover {
+  background: #1D4ED8 !important;
+  border-color: #1D4ED8 !important;
+  color: #ffffff !important;
+}
+
+.civic-dashboard-shell .btn-outline-primary,
+.civic-dashboard-shell .btn-outline-blue {
+  background: rgba(37, 99, 235, 0.08) !important;
+  border: 1px solid rgba(59, 130, 246, 0.35) !important;
+  color: #60A5FA !important;
+  border-radius: 6px !important;
+  font-weight: 500 !important;
+  padding: 5px 14px !important;
+  transition: all 0.15s ease !important;
+}
+
+.civic-dashboard-shell .btn-outline-primary:hover,
+.civic-dashboard-shell .btn-outline-blue:hover {
+  background: #2563EB !important;
+  border-color: #2563EB !important;
+  color: #ffffff !important;
+}
+
+.civic-dashboard-shell .btn-outline-secondary {
+  background: rgba(255, 255, 255, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #CBD5E1 !important;
+  border-radius: 6px !important;
+  padding: 5px 14px !important;
+  font-weight: 500 !important;
+  transition: all 0.15s ease !important;
+}
+
+.civic-dashboard-shell .btn-outline-secondary:hover {
+  background: rgba(255, 255, 255, 0.12) !important;
+  border-color: rgba(56, 189, 248, 0.45) !important;
+  color: #38BDF8 !important;
+}
+
+.civic-dashboard-shell .btn-outline-danger {
+  border-radius: 6px !important;
+  transition: all 0.15s ease !important;
+}
+
+.civic-dashboard-shell .btn-success {
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .btn-danger {
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .btn-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  border: 1px solid rgba(255, 255, 255, 0.16) !important;
+  color: #E2E8F0 !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.16) !important;
+  color: #ffffff !important;
+}
+
+.civic-dashboard-shell .btn-link {
+  color: #38BDF8 !important;
+  text-decoration: none !important;
+}
+
+.civic-dashboard-shell .btn-link:hover {
+  color: #7DD3FC !important;
+  text-decoration: underline !important;
+}
+
+/* Scoped Dashboard Alerts - Flat with small border radius */
+.civic-dashboard-shell .alert-success {
+  background: rgba(16, 185, 129, 0.14) !important;
+  border: 1px solid rgba(16, 185, 129, 0.35) !important;
+  color: #A7F3D0 !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .alert-danger {
+  background: rgba(239, 68, 68, 0.14) !important;
+  border: 1px solid rgba(239, 68, 68, 0.35) !important;
+  color: #FECACA !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .alert-warning {
+  background: rgba(245, 158, 11, 0.14) !important;
+  border: 1px solid rgba(245, 158, 11, 0.35) !important;
+  color: #FDE68A !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .alert-info {
+  background: rgba(56, 189, 248, 0.14) !important;
+  border: 1px solid rgba(56, 189, 248, 0.35) !important;
+  color: #BAE6FD !important;
+  border-radius: 6px !important;
+}
+
+.civic-dashboard-shell .alert-light {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.15) !important;
+  color: #CBD5E1 !important;
+  border-radius: 6px !important;
+}
+
+/* List Groups */
+.civic-dashboard-shell .list-group-item {
+  background: #0E1B38 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(59, 130, 246, 0.1) !important;
+}
+
+.civic-dashboard-shell .list-group-item:hover {
+  background: rgba(37, 99, 235, 0.14) !important;
+  color: #ffffff !important;
+}
+
+.civic-dashboard-shell .list-group-item-action {
+  color: #F8FAFC !important;
+}
+
+/* Location Picker & Leaflet Map */
+.civic-dashboard-shell .location-picker-card {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.15) !important;
+  border-radius: 8px !important;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.22) !important;
+  color: #F8FAFC !important;
+}
+
+.civic-dashboard-shell .map-wrapper {
+  border: 1px solid rgba(59, 130, 246, 0.18) !important;
+  border-radius: 6px !important;
+}
+
+/* Modals */
+.civic-dashboard-shell .modal-content,
+.modal-content {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.22) !important;
+  border-radius: 10px !important;
+  color: #F8FAFC !important;
+  box-shadow: 0 15px 40px rgba(0, 0, 0, 0.55) !important;
+}
+
+.civic-dashboard-shell .modal-header,
+.civic-dashboard-shell .modal-footer,
+.modal-header,
+.modal-footer {
+  border-color: rgba(59, 130, 246, 0.14) !important;
+}
+
+.civic-dashboard-shell .btn-close,
+.modal-content .btn-close {
+  filter: invert(1) !important;
+}
+
+/* Notifications Dropdown inside Dashboards */
+.notification-dropdown-menu {
+  background: #0E1B38 !important;
+  border: 1px solid rgba(59, 130, 246, 0.2) !important;
+  border-radius: 8px !important;
+  color: #F8FAFC !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4) !important;
+}
+
+.notification-dropdown-menu .list-group-item {
+  background: transparent !important;
+  color: #F8FAFC !important;
+  border-color: rgba(255, 255, 255, 0.06) !important;
+}
+
+.notification-dropdown-menu .list-group-item:hover {
+  background: rgba(37, 99, 235, 0.15) !important;
+}
+
+.notification-dropdown-menu .bg-light {
+  background: #112248 !important;
+  color: #F8FAFC !important;
+  border-color: rgba(59, 130, 246, 0.16) !important;
+}
+
+.notification-dropdown-menu .bg-light span {
+  color: #F8FAFC !important;
+}
+
+/* Timeline Components */
+.civic-dashboard-shell .timeline-entry::before,
+.civic-dashboard-shell .timeline-item::before {
+  border-left-color: rgba(56, 189, 248, 0.35) !important;
+}

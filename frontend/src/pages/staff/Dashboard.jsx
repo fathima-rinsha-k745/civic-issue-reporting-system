@@ -67,78 +67,66 @@ const StaffDashboard = () => {
 
   return (
     <div>
-      {/* Personalized Welcome Banner */}
-      <Card className="border-0 shadow-sm mb-4 bg-white" style={{ borderLeft: '5px solid #0d6efd' }}>
-        <Card.Body className="p-3 p-sm-4">
-          <Row className="align-items-center">
-            <Col md={8}>
-              <h2 className="mb-1 text-dark fw-bold fs-3 fs-sm-2">
-                Welcome, {userProfile.fullName || 'Staff Member'}
-              </h2>
-              <div className="fs-6 fs-sm-5 fw-semibold text-secondary mb-2">
-                Department Staff — {userProfile.department || 'Assigned Department'}
-              </div>
-              <div className="d-flex flex-wrap align-items-center gap-2">
-                <Badge bg="primary" className="px-3 py-2 fw-medium text-uppercase" style={{ fontSize: '0.8rem', backgroundColor: '#0B1B3D' }}>
-                  {userProfile.department || 'Assigned Department'}
-                </Badge>
-                {userProfile.email && (
-                  <span className="text-muted d-inline-flex align-items-center small">
-                    <FaEnvelope className="me-1" /> {userProfile.email}
-                  </span>
-                )}
-              </div>
-            </Col>
-            <Col md={4} className="text-md-end mt-3 mt-md-0">
-              <Button 
-                as={Link} 
-                to="/dashboard/department_staff/profile" 
-                variant="outline-primary" 
-                size="sm"
-                className="fw-medium w-100 w-md-auto"
-              >
-                View Profile
-              </Button>
-            </Col>
-          </Row>
-        </Card.Body>
-      </Card>
+      {/* Page Header */}
+      <div className="d-flex flex-column flex-md-row justify-content-between align-items-start align-items-md-center gap-3 mb-4">
+        <div>
+          <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">
+            Welcome Back, {userProfile.fullName || 'Staff Member'}
+          </h2>
+          <p className="text-secondary mb-0">View assigned complaints and update their progress.</p>
+        </div>
+        <div className="d-flex align-items-center gap-2">
+          <Badge bg="primary" className="px-3 py-2 fw-medium text-uppercase">
+            {userProfile.department || 'Assigned Department'}
+          </Badge>
+          <Button 
+            as={Link} 
+            to="/dashboard/department_staff/profile" 
+            variant="outline-primary" 
+            size="sm"
+            className="fw-medium"
+          >
+            View Profile
+          </Button>
+        </div>
+      </div>
 
-      <Row className="g-2 g-sm-3 mb-4">
+      {/* Summary Cards - Compact & Neatly Aligned in a Single Row */}
+      <Row className="g-2 g-md-3 mb-4">
         <Col xs={6} md>
-          <Card className="border-0 shadow-sm text-center py-2 py-sm-3 bg-white h-100">
-            <h6 className="text-muted mb-1 small">Total Assigned</h6>
-            <h2 className="fw-bold mb-0 text-primary fs-3 fs-sm-2">{total}</h2>
-          </Card>
+          <div className="civic-stat-card py-3 px-2">
+            <div className="civic-stat-value text-white">{total}</div>
+            <div className="civic-stat-label">Total Assigned</div>
+          </div>
         </Col>
         <Col xs={6} md>
-          <Card className="border-0 shadow-sm text-center py-2 py-sm-3 bg-white h-100">
-            <h6 className="text-muted mb-1 small">Pending</h6>
-            <h2 className="fw-bold mb-0 text-warning fs-3 fs-sm-2">{pending}</h2>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #F59E0B' }}>
+            <div className="civic-stat-value text-warning">{pending}</div>
+            <div className="civic-stat-label">Pending</div>
+          </div>
         </Col>
         <Col xs={6} md>
-          <Card className="border-0 shadow-sm text-center py-2 py-sm-3 bg-white h-100">
-            <h6 className="text-muted mb-1 small">In Progress</h6>
-            <h2 className="fw-bold mb-0 text-info fs-3 fs-sm-2">{inProgress}</h2>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #06B6D4' }}>
+            <div className="civic-stat-value text-info">{inProgress}</div>
+            <div className="civic-stat-label">In Progress</div>
+          </div>
         </Col>
         <Col xs={6} md>
-          <Card className="border-0 shadow-sm text-center py-2 py-sm-3 bg-white h-100">
-            <h6 className="text-muted mb-1 small">Awaiting Citizen</h6>
-            <h2 className="fw-bold mb-0 text-primary fs-3 fs-sm-2">{awaitingConfirmation}</h2>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #8B5CF6' }}>
+            <div className="civic-stat-value text-primary">{awaitingConfirmation}</div>
+            <div className="civic-stat-label">Awaiting Citizen</div>
+          </div>
         </Col>
         <Col xs={12} md>
-          <Card className="border-0 shadow-sm text-center py-2 py-sm-3 bg-white h-100">
-            <h6 className="text-muted mb-1 small">Resolved</h6>
-            <h2 className="fw-bold mb-0 text-success fs-3 fs-sm-2">{resolved}</h2>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #10B981' }}>
+            <div className="civic-stat-value text-success">{resolved}</div>
+            <div className="civic-stat-label">Resolved</div>
+          </div>
         </Col>
       </Row>
 
       <div className="d-flex flex-column flex-sm-row justify-content-between align-items-start align-items-sm-center gap-2 mb-4">
-        <h3 className="mb-0 text-dark fw-bold fs-4 fs-sm-3">Recent Assigned Complaints</h3>
+        <h3 className="mb-0 text-white fw-bold fs-4 fs-sm-3">Recent Assigned Complaints</h3>
         <Button 
           as={Link} 
           to="/dashboard/department_staff/complaints" 

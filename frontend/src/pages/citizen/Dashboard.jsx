@@ -55,51 +55,43 @@ const Dashboard = () => {
     <div>
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-          <h2 className="mb-1 fs-3 fs-sm-2">Welcome, {user.fullName}</h2>
-          <p className="text-muted mb-0 small">Here is an overview of your civic issue reports.</p>
+          <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Welcome Back, Citizen</h2>
+          <p className="text-secondary mb-0">Track your complaints and stay updated on their progress.</p>
         </div>
-        <Button as={Link} to="/dashboard/citizen/report" variant="primary-blue" className="d-inline-flex align-items-center text-nowrap flex-shrink-0">
+        <Button as={Link} to="/dashboard/citizen/report" variant="primary" className="d-inline-flex align-items-center text-nowrap flex-shrink-0">
           <FaPlus className="me-2" /> Report a Civic Issue
         </Button>
       </div>
 
-      {/* Summary Cards */}
-      <Row className="mb-4 mb-md-5 g-2 g-sm-3 g-md-4">
+      {/* Summary Cards - Compact & Neatly Aligned in a Single Row */}
+      <Row className="g-2 g-md-3 mb-4">
         <Col xs={6} md={3}>
-          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
-            <Card.Body className="p-2 p-sm-3">
-              <FaClipboardList size={26} className="text-primary-blue mb-2" />
-              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.total}</h3>
-              <p className="text-muted mb-0 small">Total Complaints</p>
-            </Card.Body>
-          </Card>
+          <div className="civic-stat-card py-3 px-2">
+            <FaClipboardList size={20} className="text-primary mb-1 mx-auto" />
+            <div className="civic-stat-value text-white">{stats.total}</div>
+            <div className="civic-stat-label">Total Complaints</div>
+          </div>
         </Col>
         <Col xs={6} md={3}>
-          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
-            <Card.Body className="p-2 p-sm-3">
-              <FaHourglassHalf size={26} className="text-warning mb-2" />
-              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.pending}</h3>
-              <p className="text-muted mb-0 small">Pending</p>
-            </Card.Body>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #F59E0B' }}>
+            <FaHourglassHalf size={20} className="text-warning mb-1 mx-auto" />
+            <div className="civic-stat-value text-warning">{stats.pending}</div>
+            <div className="civic-stat-label">Pending</div>
+          </div>
         </Col>
         <Col xs={6} md={3}>
-          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
-            <Card.Body className="p-2 p-sm-3">
-              <FaTools size={26} className="text-info mb-2" />
-              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.inProgress}</h3>
-              <p className="text-muted mb-0 small">In Progress</p>
-            </Card.Body>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #06B6D4' }}>
+            <FaTools size={20} className="text-info mb-1 mx-auto" />
+            <div className="civic-stat-value text-info">{stats.inProgress}</div>
+            <div className="civic-stat-label">In Progress</div>
+          </div>
         </Col>
         <Col xs={6} md={3}>
-          <Card className="border-0 shadow-sm h-100 text-center py-2 py-sm-3">
-            <Card.Body className="p-2 p-sm-3">
-              <FaCheckCircle size={26} className="text-success mb-2" />
-              <h3 className="fw-bold mb-0 fs-4 fs-sm-3">{stats.resolved}</h3>
-              <p className="text-muted mb-0 small">Resolved</p>
-            </Card.Body>
-          </Card>
+          <div className="civic-stat-card py-3 px-2" style={{ borderBottom: '2px solid #10B981' }}>
+            <FaCheckCircle size={20} className="text-success mb-1 mx-auto" />
+            <div className="civic-stat-value text-success">{stats.resolved}</div>
+            <div className="civic-stat-label">Resolved</div>
+          </div>
         </Col>
       </Row>
 
