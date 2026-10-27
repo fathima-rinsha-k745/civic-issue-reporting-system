@@ -132,7 +132,21 @@ const SubmitComplaint = () => {
       
       <Card className="border-0 shadow-sm">
         <Card.Body className="p-3 p-sm-4 p-md-5">
-          {error && <Alert variant="danger">{error}</Alert>}
+          {error && (
+            <Alert variant="danger" className="d-flex align-items-center justify-content-between flex-wrap gap-2">
+              <span className="me-2">{error}</span>
+              {(error.toLowerCase().includes('session') || error.toLowerCase().includes('log in') || error.toLowerCase().includes('credential')) && (
+                <Button 
+                  size="sm" 
+                  variant="outline-danger" 
+                  className="fw-semibold px-3"
+                  onClick={() => navigate('/citizen/login')}
+                >
+                  Log In Again
+                </Button>
+              )}
+            </Alert>
+          )}
           
           <Form onSubmit={handleSubmit}>
             <Form.Group className="mb-4" controlId="description">

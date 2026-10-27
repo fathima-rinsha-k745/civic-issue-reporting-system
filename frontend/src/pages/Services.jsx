@@ -184,7 +184,7 @@ const Services = () => {
             <span className="hero-heading-highlight">Every Stakeholder</span>
           </h1>
           <p className="civic-subpage-lead mx-auto">
-            Empowering residents with fast problem reporting and equipping civic authorities 
+            Empowering residents with fast problem reporting and equipping civic authorities
             with real-time operational management tools for an efficient, cleaner city.
           </p>
         </div>
@@ -296,7 +296,7 @@ const Services = () => {
               Notice a Municipal Problem in Your Area?
             </h3>
             <p className="text-white-50 mx-auto mb-4" style={{ maxWidth: '580px' }}>
-              Submit a complaint with photos and location, and help your municipal authorities 
+              Submit a complaint with photos and location, and help your municipal authorities
               take prompt corrective action.
             </p>
             <div className="d-flex justify-content-center gap-3 flex-wrap">

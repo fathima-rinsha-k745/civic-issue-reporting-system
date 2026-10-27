@@ -42,11 +42,25 @@ const StaffAssignedComplaints = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
-      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
+      case 'Awaiting Authority Verification':
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Authority Verification</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
     }
+  };
+
+  const isAssignedToYou = (c) => {
+    if (c.is_assigned_to_current_user === true) return true;
+    const members = c.assigned_staff_members || [];
+    if (members.length === 0) return false;
+    const myEmail = (userProfile?.email || '').toLowerCase().trim();
+    const myId = userProfile?.id || userProfile?.user_id;
+    return members.some(a => {
+      const sEmail = (a.staff_email || a.email || '').toLowerCase().trim();
+      const sUserId = a.user_id;
+      return (myEmail && sEmail === myEmail) || (myId && String(myId) === String(sUserId));
+    });
   };
 
   // Filter complaints
@@ -56,7 +70,8 @@ const StaffAssignedComplaints = () => {
       (c.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (c.location || '').toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+    const matchesStatus = statusFilter === 'All' || c.status === statusFilter ||
+      (statusFilter === 'Awaiting Authority Verification' && (c.status === 'Awaiting Authority Verification' || c.status === 'Awaiting Citizen Confirmation'));
     
     return matchesSearch && matchesStatus;
   });
@@ -92,7 +107,7 @@ const StaffAssignedComplaints = () => {
                 <option value="All">All Statuses</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
-                <option value="Awaiting Citizen Confirmation">Awaiting Citizen Confirmation</option>
+                <option value="Awaiting Authority Verification">Awaiting Authority Verification</option>
                 <option value="Resolved">Resolved</option>
                 <option value="Rejected">Rejected</option>
               </Form.Select>
@@ -112,36 +127,43 @@ const StaffAssignedComplaints = () => {
               <div className="d-none d-md-block">
                 {/* Desktop Table View */}
                 <div className="table-responsive">
-                  <Table hover className="align-middle border">
+                  <Table hover className="align-middle border mb-0">
                     <thead className="table-light">
                       <tr>
-                        <th>Complaint ID</th>
-                        <th>Description</th>
-                        <th>Location</th>
-                        <th>Status</th>
-                        <th>Assigned Team</th>
-                        <th>Completion Remarks</th>
-                        <th>Action</th>
+                        <th style={{ width: '85px', minWidth: '75px' }}>ID</th>
+                        <th style={{ minWidth: '150px' }}>Description</th>
+                        <th style={{ minWidth: '130px' }}>Location</th>
+                        <th style={{ minWidth: '100px' }}>Status</th>
+                        <th style={{ minWidth: '140px' }}>Assigned Team</th>
+                        <th style={{ minWidth: '130px' }}>Completion Remarks</th>
+                        <th style={{ minWidth: '140px', textAlign: 'center' }}>Action</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredComplaints.map((c) => (
                         <tr key={c.id}>
-                          <td className="fw-medium">{c.id}</td>
+                          <td className="fw-medium">
+                            <Link 
+                              to={`/dashboard/department_staff/complaints/${c.id}`}
+                              className="text-info text-decoration-none fw-bold"
+                            >
+                              #{c.id}
+                            </Link>
+                          </td>
                           <td>
-                            <div className="text-truncate" style={{ maxWidth: '200px' }}>
+                            <div className="text-truncate" style={{ maxWidth: '170px' }} title={c.description}>
                               {c.description}
                             </div>
                           </td>
                           <td>
-                            <div className="text-truncate" style={{ maxWidth: '160px' }}>
+                            <div className="text-truncate" style={{ maxWidth: '130px' }} title={c.location}>
                               {c.location}
                             </div>
                           </td>
                           <td>{getStatusBadge(c.status)}</td>
                           <td>
                             {c.assigned_staff_members && c.assigned_staff_members.length > 0 ? (
-                              <div className="d-flex flex-wrap gap-1" style={{ maxWidth: '200px' }}>
+                              <div className="d-flex flex-wrap gap-1" style={{ maxWidth: '160px' }}>
                                 {c.assigned_staff_members.map((a, i) => {
                                   const sEmail = a.staff_email || a.email;
                                   const sName = a.staff_name || a.name || sEmail;
@@ -163,22 +185,22 @@ const StaffAssignedComplaints = () => {
                           </td>
                           <td>
                             {c.latest_completion?.completion_remarks ? (
-                              <div className="text-truncate text-secondary small" style={{ maxWidth: '180px' }} title={c.latest_completion.completion_remarks}>
+                              <div className="text-truncate text-secondary small" style={{ maxWidth: '140px' }} title={c.latest_completion.completion_remarks}>
                                 {c.latest_completion.completion_remarks}
                               </div>
                             ) : (
                               <span className="text-muted small">—</span>
                             )}
                           </td>
-                          <td>
+                          <td className="text-center">
                             <Button 
                               as={Link} 
                               to={`/dashboard/department_staff/complaints/${c.id}`}
-                              variant={c.status === 'Pending' ? 'primary' : 'outline-primary'} 
+                              variant={c.status === 'Pending' && isAssignedToYou(c) ? 'primary' : 'outline-info'} 
                               size="sm"
-                              className="d-flex align-items-center text-nowrap"
+                              className="d-inline-flex align-items-center text-nowrap px-3 py-1 shadow-sm"
                             >
-                              <FaEye className="me-1" /> {c.status === 'Pending' ? 'Start Work' : c.status === 'In Progress' ? 'Submit Completion' : 'View Task'}
+                              <FaEye className="me-1" /> {c.status === 'Pending' ? (isAssignedToYou(c) ? 'Start Work' : 'View Task') : c.status === 'In Progress' ? 'Submit Completion' : 'View Task'}
                             </Button>
                           </td>
                         </tr>
@@ -233,11 +255,11 @@ const StaffAssignedComplaints = () => {
                         <Button 
                           as={Link} 
                           to={`/dashboard/department_staff/complaints/${c.id}`}
-                          variant={c.status === 'Pending' ? 'primary' : 'outline-primary'} 
+                          variant={c.status === 'Pending' && isAssignedToYou(c) ? 'primary' : 'outline-primary'} 
                           size="sm"
                           className="px-3"
                         >
-                          {c.status === 'Pending' ? 'Start Work' : c.status === 'In Progress' ? 'Submit Completion' : 'View'}
+                          {c.status === 'Pending' ? (isAssignedToYou(c) ? 'Start Work' : 'View') : c.status === 'In Progress' ? 'Submit Completion' : 'View'}
                         </Button>
                       </div>
                     </Card.Body>

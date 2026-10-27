@@ -3,7 +3,7 @@ import { Card, Badge, Spinner, Button, Row, Col, Form, Alert, Modal } from 'reac
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { api } from '../../services/api';
 import LocationDisplay from '../../components/common/LocationDisplay';
-import { FaUserCheck, FaArrowLeft, FaUsers, FaBan, FaCheckCircle, FaHistory } from 'react-icons/fa';
+import { FaUserCheck, FaArrowLeft, FaUsers, FaBan, FaCheckCircle, FaTimesCircle, FaStar, FaHistory, FaClock } from 'react-icons/fa';
 
 const ComplaintDetails = () => {
   const { id } = useParams();
@@ -19,12 +19,63 @@ const ComplaintDetails = () => {
   const [selectedDepartment, setSelectedDepartment] = useState('');
   const [selectedStaffIds, setSelectedStaffIds] = useState([]);
 
-  // Rejection modal state
+  // Initial rejection modal state (for Pending complaints before assignment)
   const [showRejectModal, setShowRejectModal] = useState(false);
   const [rejectCategory, setRejectCategory] = useState('Duplicate complaint');
   const [customExplanation, setCustomExplanation] = useState('');
   const [rejectModalError, setRejectModalError] = useState('');
   const [rejecting, setRejecting] = useState(false);
+
+  // Authority Verification state (for Awaiting Authority Verification complaints)
+  const [showVerifyRejectModal, setShowVerifyRejectModal] = useState(false);
+  const [verifyRejectReason, setVerifyRejectReason] = useState('');
+  const [verifyApprovalRemarks, setVerifyApprovalRemarks] = useState('');
+  const [verifying, setVerifying] = useState(false);
+  const [verifyError, setVerifyError] = useState('');
+
+  const handleApproveVerification = async () => {
+    setVerifying(true);
+    setVerifyError('');
+    setError('');
+    setSuccess('');
+    try {
+      const updated = await api.verifyComplaint(id, {
+        action: 'approve',
+        remarks: verifyApprovalRemarks.trim() || 'Work completion inspected and approved by Municipal Authority.'
+      });
+      setComplaint(updated);
+      setSuccess('Complaint verification approved! Status has been updated to Resolved and the citizen has been notified.');
+    } catch (err) {
+      setVerifyError(err.message || 'Failed to approve completion.');
+    } finally {
+      setVerifying(false);
+    }
+  };
+
+  const handleRejectVerification = async () => {
+    if (!verifyRejectReason.trim()) {
+      setVerifyError('Please enter a rejection reason describing why the work was rejected.');
+      return;
+    }
+    setVerifying(true);
+    setVerifyError('');
+    setError('');
+    setSuccess('');
+    try {
+      const updated = await api.verifyComplaint(id, {
+        action: 'reject',
+        rejection_reason: verifyRejectReason.trim()
+      });
+      setComplaint(updated);
+      setShowVerifyRejectModal(false);
+      setVerifyRejectReason('');
+      setSuccess('Work completion rejected. The complaint has been returned to In Progress and the assigned staff and citizen have been notified.');
+    } catch (err) {
+      setVerifyError(err.message || 'Failed to reject completion.');
+    } finally {
+      setVerifying(false);
+    }
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -161,6 +212,7 @@ const ComplaintDetails = () => {
 
   const isResolved = complaint.status === 'Resolved';
   const isRejected = complaint.status === 'Rejected';
+  const isAwaitingVerification = complaint.status === 'Awaiting Authority Verification' || complaint.status === 'Awaiting Citizen Confirmation';
 
   const getStatusBadgeStyle = (status) => {
     switch (status) {
@@ -168,6 +220,7 @@ const ComplaintDetails = () => {
         return { bg: 'rgba(34, 197, 94, 0.18)', color: '#4ADE80', border: 'rgba(34, 197, 94, 0.45)' };
       case 'In Progress':
         return { bg: 'rgba(6, 182, 212, 0.18)', color: '#38BDF8', border: 'rgba(6, 182, 212, 0.45)' };
+      case 'Awaiting Authority Verification':
       case 'Awaiting Citizen Confirmation':
         return { bg: 'rgba(139, 92, 246, 0.2)', color: '#C4B5FD', border: 'rgba(139, 92, 246, 0.45)' };
       case 'Rejected':
@@ -192,7 +245,7 @@ const ComplaintDetails = () => {
           <FaArrowLeft className="me-2" /> Back to list
         </Button>
         <h2 className="fw-bold mb-1 text-white fs-3 fs-sm-2">Complaint Details</h2>
-        <p className="text-secondary mb-0">Review complete complaint information, assign department and staff, and manage status.</p>
+        <p className="text-secondary mb-0">Review complete complaint information, assign department and staff, and verify resolution.</p>
       </div>
 
       {error && <Alert variant="danger" dismissible onClose={() => setError('')}>{error}</Alert>}
@@ -223,10 +276,16 @@ const ComplaintDetails = () => {
           <div className="d-flex align-items-start">
             <FaCheckCircle className="fs-3 text-success me-3 mt-1 flex-shrink-0" />
             <div>
-              <h5 className="alert-heading fw-bold mb-1">Complaint Resolved</h5>
-              <p className="mb-0 text-dark">
-                This complaint has been confirmed as resolved by the citizen.
+              <h5 className="alert-heading fw-bold mb-1">Complaint Verified & Resolved</h5>
+              <p className="mb-1 text-dark">
+                This complaint was inspected and approved as resolved by <strong>{complaint.verified_by_name || 'Municipal Authority'}</strong>
+                {complaint.verified_at_formatted ? ` on ${complaint.verified_at_formatted}` : ''}.
               </p>
+              {complaint.verification_remarks && (
+                <div className="mt-2 p-2 bg-white rounded border border-success-subtle small text-dark">
+                  <strong>Verification Remarks:</strong> "{complaint.verification_remarks}"
+                </div>
+              )}
             </div>
           </div>
         </Alert>
@@ -320,14 +379,15 @@ const ComplaintDetails = () => {
                           Reported by <strong>{complaint.latest_completion.submitted_by_name}</strong> on {complaint.latest_completion.submitted_at_formatted}:
                         </small>
                         <span>"{complaint.latest_completion.completion_remarks}"</span>
-                        {complaint.latest_completion.citizen_response !== 'Pending' && (
+                        {complaint.latest_completion.verification_status && complaint.latest_completion.verification_status !== 'Pending' && (
                           <div className="mt-2 pt-2 border-top">
                             <small className="d-block text-muted">
-                              Citizen Response: <strong>{complaint.latest_completion.citizen_response}</strong> ({complaint.latest_completion.responded_at_formatted || ''})
+                              Authority Verification: <strong>{complaint.latest_completion.verification_status === 'Approved' ? 'Approved & Resolved' : 'Rework Requested'}</strong>
+                              {complaint.latest_completion.verified_at_formatted ? ` (${complaint.latest_completion.verified_at_formatted})` : ''}
                             </small>
-                            {complaint.latest_completion.citizen_remarks && (
+                            {complaint.latest_completion.verification_remarks && (
                               <small className="text-secondary fst-italic">
-                                Remarks: "{complaint.latest_completion.citizen_remarks}"
+                                Remarks: "{complaint.latest_completion.verification_remarks}"
                               </small>
                             )}
                           </div>
@@ -453,6 +513,187 @@ const ComplaintDetails = () => {
         </Card.Body>
       </Card>
 
+      {/* Verification Review Card for Complaints Awaiting Verification */}
+      {isAwaitingVerification && (
+        <Card className="border-0 shadow-sm rounded-3 mb-4 overflow-hidden" style={{ borderLeft: '4px solid #8B5CF6' }}>
+          <Card.Header className="py-3 px-4 d-flex justify-content-between align-items-center flex-wrap gap-2" style={{ backgroundColor: 'rgba(139, 92, 246, 0.12)' }}>
+            <div className="d-flex align-items-center gap-2">
+              <FaCheckCircle className="text-primary fs-5" />
+              <h5 className="mb-0 fw-bold text-dark">Municipal Verification Required</h5>
+            </div>
+            <Badge bg="primary" className="px-3 py-1 fw-semibold">
+              Awaiting Authority Verification
+            </Badge>
+          </Card.Header>
+          <Card.Body className="p-3 p-sm-4">
+            {verifyError && <Alert variant="danger" dismissible onClose={() => setVerifyError('')}>{verifyError}</Alert>}
+
+            <p className="text-muted small mb-3">
+              Department staff have completed the assigned work and submitted completion details. Compare the original complaint photo with the staff completion photo, review the completion remarks, and decide whether to <strong>Approve</strong> (mark as Resolved) or <strong>Reject</strong> (return to In Progress for rework).
+            </p>
+
+            {/* Side-by-side Photo Comparison */}
+            <Row className="g-3 mb-4">
+              <Col md={6}>
+                <div className="p-3 rounded border bg-light h-100 d-flex flex-column">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="fw-bold text-dark small">Original Issue Photo (Citizen)</span>
+                    <Badge bg="secondary" className="fw-normal">Before</Badge>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-center flex-grow-1 bg-white rounded border overflow-hidden p-2" style={{ minHeight: '220px' }}>
+                    {complaint.photo ? (
+                      <img
+                        src={complaint.photo.startsWith('http') ? complaint.photo : `http://127.0.0.1:8000${complaint.photo}`}
+                        alt="Original Issue"
+                        className="img-fluid rounded"
+                        style={{ maxHeight: '240px', maxWidth: '100%', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      <span className="text-muted small">No original photo submitted</span>
+                    )}
+                  </div>
+                </div>
+              </Col>
+
+              <Col md={6}>
+                <div className="p-3 rounded border bg-light h-100 d-flex flex-column">
+                  <div className="d-flex justify-content-between align-items-center mb-2">
+                    <span className="fw-bold text-dark small">Completion Photo (Staff)</span>
+                    <Badge bg="success" className="fw-normal">Completed Work</Badge>
+                  </div>
+                  <div className="d-flex align-items-center justify-content-center flex-grow-1 bg-white rounded border overflow-hidden p-2" style={{ minHeight: '220px' }}>
+                    {complaint.completion_photo ? (
+                      <img
+                        src={complaint.completion_photo.startsWith('http') ? complaint.completion_photo : `http://127.0.0.1:8000${complaint.completion_photo}`}
+                        alt="Staff Completion"
+                        className="img-fluid rounded"
+                        style={{ maxHeight: '240px', maxWidth: '100%', objectFit: 'contain' }}
+                      />
+                    ) : (
+                      <span className="text-muted small">No completion photo uploaded</span>
+                    )}
+                  </div>
+                </div>
+              </Col>
+            </Row>
+
+            {/* Staff Completion Remarks */}
+            <div className="p-3 rounded bg-light border mb-4">
+              <div className="d-flex justify-content-between align-items-center flex-wrap gap-2 mb-1">
+                <span className="fw-bold text-dark small">Staff Completion Remarks:</span>
+                {complaint.latest_completion?.submitted_at_formatted && (
+                  <span className="text-muted small">
+                    Submitted on {complaint.latest_completion.submitted_at_formatted}
+                    {complaint.latest_completion.submitted_by_name ? ` by ${complaint.latest_completion.submitted_by_name}` : ''}
+                  </span>
+                )}
+              </div>
+              <p className="text-dark small mb-0 fst-italic">
+                "{complaint.latest_completion?.completion_remarks || complaint.completion_remarks || 'Work completed as requested.'}"
+              </p>
+            </div>
+
+            {/* Authority Approval Remarks & Actions */}
+            <Form.Group className="mb-3">
+              <Form.Label className="fw-semibold text-dark small">
+                Authority Verification Remarks (Optional for Approval)
+              </Form.Label>
+              <Form.Control
+                type="text"
+                placeholder="e.g., Inspected and verified on-site by Municipal Authority..."
+                value={verifyApprovalRemarks}
+                onChange={(e) => setVerifyApprovalRemarks(e.target.value)}
+                disabled={verifying}
+              />
+            </Form.Group>
+
+            <div className="d-flex flex-column flex-sm-row gap-2 gap-sm-3 pt-2">
+              <Button
+                variant="success"
+                size="lg"
+                onClick={handleApproveVerification}
+                disabled={verifying}
+                className="d-inline-flex align-items-center justify-content-center fw-semibold px-4 w-100 w-sm-auto"
+              >
+                {verifying ? <Spinner size="sm" className="me-2" /> : <FaCheckCircle className="me-2" />}
+                Approve & Resolve Complaint
+              </Button>
+
+              <Button
+                variant="outline-danger"
+                size="lg"
+                onClick={() => {
+                  setVerifyRejectReason('');
+                  setVerifyError('');
+                  setShowVerifyRejectModal(true);
+                }}
+                disabled={verifying}
+                className="d-inline-flex align-items-center justify-content-center fw-semibold px-4 w-100 w-sm-auto"
+              >
+                <FaTimesCircle className="me-2" />
+                Reject & Return to In Progress
+              </Button>
+            </div>
+          </Card.Body>
+        </Card>
+      )}
+
+      {/* Citizen Feedback Display for Municipal Authority */}
+      {isResolved && (
+        <Card className="border-0 shadow-sm rounded-3 mb-4 overflow-hidden">
+          <Card.Header className="bg-white border-bottom py-3 px-4 d-flex justify-content-between align-items-center">
+            <h5 className="mb-0 fw-bold text-dark d-flex align-items-center">
+              <FaStar className="text-warning me-2" /> Citizen Feedback & Rating
+            </h5>
+            {complaint.feedback && (
+              <Badge bg="success" className="fw-normal">Feedback Received</Badge>
+            )}
+          </Card.Header>
+          <Card.Body className="p-3 p-sm-4">
+            {complaint.feedback ? (
+              <div>
+                <div className="d-flex align-items-center mb-3">
+                  <span className="text-muted fw-semibold small me-3">Citizen Rating:</span>
+                  {complaint.feedback.rating ? (
+                    <div className="d-flex align-items-center gap-1">
+                      {[1, 2, 3, 4, 5].map((star) => (
+                        <FaStar
+                          key={star}
+                          size={18}
+                          color={star <= complaint.feedback.rating ? '#F59E0B' : '#D1D5DB'}
+                        />
+                      ))}
+                      <span className="ms-2 fw-bold text-dark">
+                        {complaint.feedback.rating} / 5
+                      </span>
+                    </div>
+                  ) : (
+                    <span className="text-muted small fst-italic">No star rating submitted</span>
+                  )}
+                </div>
+
+                <div className="mb-2">
+                  <span className="text-muted fw-semibold small d-block mb-1">Citizen Feedback Comments:</span>
+                  <div className="p-3 bg-light rounded border text-dark small" style={{ whiteSpace: 'pre-wrap' }}>
+                    {complaint.feedback.comment || 'No written feedback comments provided.'}
+                  </div>
+                </div>
+
+                {complaint.feedback.updated_at && (
+                  <small className="text-muted d-block mt-2" style={{ fontSize: '0.8rem' }}>
+                    Submitted on: {new Date(complaint.feedback.updated_at).toLocaleString()}
+                  </small>
+                )}
+              </div>
+            ) : (
+              <div className="text-muted py-3 text-center bg-light rounded border">
+                <p className="mb-0 small">No citizen feedback submitted yet (feedback is optional).</p>
+              </div>
+            )}
+          </Card.Body>
+        </Card>
+      )}
+
       {/* Complaint Timeline */}
       <Card className="border-0 shadow-sm bg-light-blue mt-4">
         <Card.Body className="p-4">
@@ -563,6 +804,56 @@ const ComplaintDetails = () => {
           >
             {rejecting ? <Spinner size="sm" className="me-2" /> : <FaBan className="me-2" />}
             Confirm Rejection
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+      {/* Verification Rejection Modal */}
+      <Modal show={showVerifyRejectModal} onHide={() => !verifying && setShowVerifyRejectModal(false)} centered>
+        <Modal.Header closeButton={!verifying}>
+          <Modal.Title className="fw-bold text-danger d-flex align-items-center">
+            <FaBan className="me-2" /> Reject Work Completion
+          </Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <p className="text-muted small mb-3">
+            Rejecting this work completion will return the complaint status to <strong>In Progress</strong>.
+            A mandatory rejection reason is required and will be sent to the assigned department staff and citizen to guide rework.
+          </p>
+
+          {verifyError && <Alert variant="danger" className="py-2 small">{verifyError}</Alert>}
+
+          <Form.Group className="mb-3">
+            <Form.Label className="fw-bold text-dark">
+              Rejection Reason & Required Rework <span className="text-danger">*</span>
+            </Form.Label>
+            <Form.Control
+              as="textarea"
+              rows={4}
+              placeholder="Detail why the work was unsatisfactory and specify the required corrections..."
+              value={verifyRejectReason}
+              onChange={(e) => setVerifyRejectReason(e.target.value)}
+              disabled={verifying}
+              required
+            />
+          </Form.Group>
+        </Modal.Body>
+        <Modal.Footer>
+          <Button
+            variant="secondary"
+            onClick={() => setShowVerifyRejectModal(false)}
+            disabled={verifying}
+          >
+            Cancel
+          </Button>
+          <Button
+            variant="danger"
+            onClick={handleRejectVerification}
+            disabled={verifying || !verifyRejectReason.trim()}
+            className="d-flex align-items-center"
+          >
+            {verifying ? <Spinner size="sm" className="me-2" /> : <FaBan className="me-2" />}
+            Confirm Rejection & Reopen
           </Button>
         </Modal.Footer>
       </Modal>

@@ -5,13 +5,15 @@ import Sidebar from '../citizen/Sidebar';
 import { FaLandmark, FaUserCircle, FaBars } from 'react-icons/fa';
 import NotificationBell from '../common/NotificationBell';
 
+import { api } from '../../services/api';
+
 const CitizenLayout = () => {
   const navigate = useNavigate();
   const [userName, setUserName] = useState('');
   const [showMobileNav, setShowMobileNav] = useState(false);
 
   useEffect(() => {
-    // Check authentication
+    // Check initial local cache
     const userStr = localStorage.getItem('user');
     if (!userStr) {
       navigate('/citizen/login');
@@ -22,12 +24,25 @@ const CitizenLayout = () => {
       const user = JSON.parse(userStr);
       if (user.role !== 'CITIZEN') {
         navigate('/citizen/login');
-      } else {
-        setUserName(user.full_name || 'Citizen');
+        return;
       }
+      const rawName = (user.full_name || user.fullName || user.name || user.first_name || user.username || '').trim();
+      setUserName(rawName && rawName.toLowerCase() !== 'user' ? rawName : 'Citizen');
     } catch (e) {
       navigate('/citizen/login');
+      return;
     }
+
+    // Verify session validity with backend
+    api.getProfile().then(profile => {
+      if (!profile) {
+        navigate('/citizen/login');
+      } else if (profile.fullName) {
+        setUserName(profile.fullName);
+      }
+    }).catch(() => {
+      // Network hiccup - keep cached name
+    });
   }, [navigate]);
 
   return (

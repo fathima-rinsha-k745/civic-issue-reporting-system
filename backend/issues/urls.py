@@ -5,6 +5,7 @@ from .views import (
     DepartmentListCreateView, DepartmentDetailView,
     StaffListCreateView, StaffDetailView,
     ComplaintCompleteView, ComplaintCitizenConfirmView,
+    ComplaintVerifyView, ComplaintFeedbackView,
     ComplaintRejectView, ComplaintStartWorkView,
     NotificationListView, NotificationMarkReadView, NotificationUnreadCountView,
     AnalyticsView
@@ -21,6 +22,8 @@ urlpatterns = [
     path('complaints/<int:pk>/reject/', ComplaintRejectView.as_view(), name='complaints-reject'),
     path('complaints/<int:pk>/start-work/', ComplaintStartWorkView.as_view(), name='complaints-start-work'),
     path('complaints/<int:pk>/complete/', ComplaintCompleteView.as_view(), name='complaints-complete'),
+    path('complaints/<int:pk>/verify/', ComplaintVerifyView.as_view(), name='complaints-verify'),
+    path('complaints/<int:pk>/feedback/', ComplaintFeedbackView.as_view(), name='complaints-feedback'),
     path('complaints/<int:pk>/citizen-confirm/', ComplaintCitizenConfirmView.as_view(), name='complaints-citizen-confirm'),
     path('departments/', DepartmentListCreateView.as_view(), name='departments-list'),
     path('departments/<int:pk>/', DepartmentDetailView.as_view(), name='departments-detail'),

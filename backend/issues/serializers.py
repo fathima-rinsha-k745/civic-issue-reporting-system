@@ -2,7 +2,8 @@ from rest_framework import serializers
 from django.contrib.auth.models import User
 from .models import (
     UserProfile, Complaint, Department, ComplaintStatusHistory, 
-    DepartmentStaff, ComplaintAssignment, ComplaintCompletion, Notification
+    DepartmentStaff, ComplaintAssignment, ComplaintCompletion, Notification,
+    ComplaintFeedback
 )
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -119,15 +120,24 @@ class ComplaintAssignmentSerializer(serializers.ModelSerializer):
 class ComplaintCompletionSerializer(serializers.ModelSerializer):
     submitted_by_name = serializers.SerializerMethodField(read_only=True)
     submitted_at_formatted = serializers.SerializerMethodField(read_only=True)
+    verified_by_name = serializers.SerializerMethodField(read_only=True)
+    verified_at_formatted = serializers.SerializerMethodField(read_only=True)
     responded_at_formatted = serializers.SerializerMethodField(read_only=True)
+    completion_photo = serializers.SerializerMethodField(read_only=True)
 
     class Meta:
         model = ComplaintCompletion
         fields = [
             'id', 'complaint', 'submitted_by', 'submitted_by_name',
-            'completion_remarks', 'submitted_at', 'submitted_at_formatted',
+            'completion_remarks', 'completion_image', 'completion_photo',
+            'submitted_at', 'submitted_at_formatted',
+            'verification_status', 'verification_remarks',
+            'verified_by', 'verified_by_name', 'verified_at', 'verified_at_formatted',
             'citizen_response', 'citizen_remarks', 'responded_at', 'responded_at_formatted'
         ]
+        extra_kwargs = {
+            'completion_remarks': {'required': False, 'allow_blank': True}
+        }
 
     def get_submitted_by_name(self, obj):
         if obj.submitted_by:
@@ -137,8 +147,52 @@ class ComplaintCompletionSerializer(serializers.ModelSerializer):
     def get_submitted_at_formatted(self, obj):
         return obj.submitted_at.strftime('%Y-%m-%d %H:%M') if obj.submitted_at else None
 
+    def get_verified_by_name(self, obj):
+        if obj.verified_by:
+            name = obj.verified_by.get_full_name().strip()
+            return name if name and '@' not in name else 'Municipal Authority'
+        return None
+
+    def get_verified_at_formatted(self, obj):
+        return obj.verified_at.strftime('%Y-%m-%d %H:%M') if obj.verified_at else None
+
     def get_responded_at_formatted(self, obj):
         return obj.responded_at.strftime('%Y-%m-%d %H:%M') if obj.responded_at else None
+
+    def get_completion_photo(self, obj):
+        return obj.completion_image.url if obj.completion_image else None
+
+
+class ComplaintFeedbackSerializer(serializers.ModelSerializer):
+    citizen_name = serializers.SerializerMethodField(read_only=True)
+    created_at_formatted = serializers.SerializerMethodField(read_only=True)
+    updated_at_formatted = serializers.SerializerMethodField(read_only=True)
+
+    class Meta:
+        model = ComplaintFeedback
+        fields = [
+            'id', 'complaint', 'citizen', 'citizen_name',
+            'rating', 'comment', 'created_at', 'created_at_formatted',
+            'updated_at', 'updated_at_formatted'
+        ]
+        read_only_fields = ('citizen', 'created_at', 'updated_at')
+
+    def get_citizen_name(self, obj):
+        if obj.citizen:
+            name = obj.citizen.get_full_name().strip()
+            return name if name and '@' not in name else obj.citizen.email
+        return 'Citizen'
+
+    def get_created_at_formatted(self, obj):
+        return obj.created_at.strftime('%Y-%m-%d %H:%M') if obj.created_at else None
+
+    def get_updated_at_formatted(self, obj):
+        return obj.updated_at.strftime('%Y-%m-%d %H:%M') if obj.updated_at else None
+
+    def validate_rating(self, value):
+        if value is not None and (value < 1 or value > 5):
+            raise serializers.ValidationError("Rating must be between 1 and 5 stars.")
+        return value
 
 
 class NotificationSerializer(serializers.ModelSerializer):
@@ -169,6 +223,16 @@ class ComplaintStatusHistorySerializer(serializers.ModelSerializer):
         if not obj.updated_by:
             return 'System'
         full_name = obj.updated_by.get_full_name().strip()
+        if full_name == 'Authority One':
+            return 'Municipal Authority'
+        if full_name == 'Citizen One':
+            if obj.complaint and obj.complaint.citizen:
+                c_name = obj.complaint.citizen.get_full_name().strip()
+                if c_name and c_name != 'Citizen One':
+                    return c_name
+                if obj.complaint.citizen.email and obj.complaint.citizen.email != 'citizen@example.com':
+                    return obj.complaint.citizen.email
+            return 'Citizen'
         if full_name and '@' not in full_name:
             return full_name
 
@@ -185,8 +249,10 @@ class ComplaintStatusHistorySerializer(serializers.ModelSerializer):
         elif role == 'CITIZEN':
             if obj.complaint and obj.complaint.citizen:
                 c_name = obj.complaint.citizen.get_full_name().strip()
-                if c_name and '@' not in c_name:
+                if c_name and c_name != 'Citizen One' and '@' not in c_name:
                     return c_name
+                if obj.complaint.citizen.email and obj.complaint.citizen.email != 'citizen@example.com':
+                    return obj.complaint.citizen.email
             return 'Citizen'
         return 'System'
 
@@ -208,10 +274,12 @@ class ComplaintStatusHistorySerializer(serializers.ModelSerializer):
             return f"Work started by {actor}"
         elif 'assigned' in remarks or (role == 'MUNICIPAL_AUTHORITY' and obj.status == 'In Progress'):
             return f"Assigned by {actor}"
-        elif obj.status == 'Awaiting Citizen Confirmation':
+        elif obj.status in ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation']:
             return f"Completion submitted by {actor}"
         elif obj.status == 'Resolved':
-            return f"Confirmed by {actor}" if role == 'CITIZEN' else f"Resolved by {actor}"
+            return f"Approved and Resolved by {actor}" if role == 'MUNICIPAL_AUTHORITY' else f"Resolved by {actor}"
+        elif 'verification rejected' in remarks or 'returned to in progress' in remarks:
+            return f"Returned to In Progress by {actor}"
         elif 'not fixed' in remarks or 'reopen' in remarks or (role == 'CITIZEN' and obj.status == 'In Progress'):
             return f"Reopened by {actor}"
         elif obj.status == 'Rejected':
@@ -225,16 +293,23 @@ class ComplaintStatusHistorySerializer(serializers.ModelSerializer):
             return obj.updated_at.strftime('%Y-%m-%d %H:%M')
         return 'N/A'
 
+
 class ComplaintSerializer(serializers.ModelSerializer):
     department_name = serializers.CharField(source='department.name', read_only=True)
     citizen_name = serializers.SerializerMethodField()
+    citizen_email = serializers.EmailField(source='citizen.email', read_only=True)
     status_history = ComplaintStatusHistorySerializer(many=True, read_only=True)
     assigned_staff_members = serializers.SerializerMethodField(read_only=True)
     assigned_staff_ids = serializers.SerializerMethodField(read_only=True)
     latest_completion = serializers.SerializerMethodField(read_only=True)
     completions = serializers.SerializerMethodField(read_only=True)
+    feedback = serializers.SerializerMethodField(read_only=True)
+    completion_photo = serializers.SerializerMethodField(read_only=True)
     rejected_by_name = serializers.SerializerMethodField(read_only=True)
     rejected_at_formatted = serializers.SerializerMethodField(read_only=True)
+    verified_by_name = serializers.SerializerMethodField(read_only=True)
+    verified_at_formatted = serializers.SerializerMethodField(read_only=True)
+    is_assigned_to_current_user = serializers.SerializerMethodField(read_only=True)
     latitude = serializers.DecimalField(
         max_digits=9,
         decimal_places=6,
@@ -251,7 +326,7 @@ class ComplaintSerializer(serializers.ModelSerializer):
     class Meta:
         model = Complaint
         fields = '__all__'
-        read_only_fields = ('citizen', 'created_at', 'updated_at', 'rejected_by', 'rejected_at')
+        read_only_fields = ('citizen', 'created_at', 'updated_at', 'rejected_by', 'rejected_at', 'verified_by', 'verified_at')
 
     def to_internal_value(self, data):
         if hasattr(data, 'copy'):
@@ -259,11 +334,24 @@ class ComplaintSerializer(serializers.ModelSerializer):
         elif isinstance(data, dict):
             data = data.copy()
         
-        # Convert empty strings to None for coordinates
-        if 'latitude' in data and (data['latitude'] == '' or data['latitude'] == 'null'):
-            data['latitude'] = None
-        if 'longitude' in data and (data['longitude'] == '' or data['longitude'] == 'null'):
-            data['longitude'] = None
+        # Convert empty strings or round coordinates to 6 decimal places
+        if 'latitude' in data:
+            if data['latitude'] == '' or data['latitude'] == 'null' or data['latitude'] is None:
+                data['latitude'] = None
+            else:
+                try:
+                    data['latitude'] = f"{round(float(data['latitude']), 6):.6f}"
+                except (ValueError, TypeError):
+                    pass
+
+        if 'longitude' in data:
+            if data['longitude'] == '' or data['longitude'] == 'null' or data['longitude'] is None:
+                data['longitude'] = None
+            else:
+                try:
+                    data['longitude'] = f"{round(float(data['longitude']), 6):.6f}"
+                except (ValueError, TypeError):
+                    pass
             
         return super().to_internal_value(data)
 
@@ -296,7 +384,12 @@ class ComplaintSerializer(serializers.ModelSerializer):
 
     def get_citizen_name(self, obj):
         if obj.citizen:
-            return obj.citizen.get_full_name() or obj.citizen.email
+            full_name = obj.citizen.get_full_name().strip()
+            if full_name and full_name != 'Citizen One':
+                return full_name
+            if obj.citizen.email and obj.citizen.email != 'citizen@example.com':
+                return obj.citizen.email
+            return full_name or 'Citizen'
         return None
 
     def get_assigned_staff_members(self, obj):
@@ -313,14 +406,46 @@ class ComplaintSerializer(serializers.ModelSerializer):
     def get_completions(self, obj):
         return ComplaintCompletionSerializer(obj.completions.all()[:10], many=True).data
 
+    def get_feedback(self, obj):
+        if hasattr(obj, 'feedback') and obj.feedback:
+            return ComplaintFeedbackSerializer(obj.feedback).data
+        return None
+
+    def get_completion_photo(self, obj):
+        latest = obj.completions.first()
+        if latest and latest.completion_image:
+            return latest.completion_image.url
+        return None
+
     def get_rejected_by_name(self, obj):
         if obj.rejected_by:
             name = obj.rejected_by.get_full_name().strip()
-            if name and '@' not in name:
+            if name and '@' not in name and name != 'Authority One':
                 return name
             return 'Municipal Authority'
         return None
 
     def get_rejected_at_formatted(self, obj):
         return obj.rejected_at.strftime('%Y-%m-%d %H:%M') if obj.rejected_at else None
+
+    def get_verified_by_name(self, obj):
+        if obj.verified_by:
+            name = obj.verified_by.get_full_name().strip()
+            if name and '@' not in name and name != 'Authority One':
+                return name
+            return 'Municipal Authority'
+        return None
+
+    def get_verified_at_formatted(self, obj):
+        return obj.verified_at.strftime('%Y-%m-%d %H:%M') if obj.verified_at else None
+
+    def get_is_assigned_to_current_user(self, obj):
+        request = self.context.get('request') if hasattr(self, 'context') else None
+        if request and hasattr(request, 'user') and request.user.is_authenticated:
+            user = request.user
+            if obj.assignments.filter(staff__user=user, is_active=True).exists():
+                return True
+            if obj.assigned_staff and obj.assigned_staff.user_id == user.id:
+                return True
+        return False
 

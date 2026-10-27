@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 
 class UserProfile(models.Model):
@@ -45,6 +46,7 @@ class Complaint(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
         ('In Progress', 'In Progress'),
+        ('Awaiting Authority Verification', 'Awaiting Authority Verification'),
         ('Awaiting Citizen Confirmation', 'Awaiting Citizen Confirmation'),
         ('Resolved', 'Resolved'),
         ('Rejected', 'Rejected'),
@@ -127,6 +129,16 @@ class Complaint(models.Model):
     )
     rejected_at = models.DateTimeField(null=True, blank=True)
 
+    verified_by = models.ForeignKey(
+        'auth.User',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True,
+        related_name='verified_complaints'
+    )
+    verified_at = models.DateTimeField(null=True, blank=True)
+    verification_remarks = models.TextField(blank=True, null=True)
+
     def __str__(self):
         return f"{self.category} - {self.status}"
 
@@ -155,14 +167,22 @@ class ComplaintAssignment(models.Model):
 class ComplaintCompletion(models.Model):
     RESPONSE_CHOICES = [
         ('Pending', 'Pending'),
+        ('Approved', 'Approved'),
+        ('Rejected', 'Rejected'),
         ('Confirmed', 'Confirmed'),
         ('Disputed', 'Disputed'),
     ]
 
     complaint = models.ForeignKey(Complaint, on_delete=models.CASCADE, related_name='completions')
     submitted_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='submitted_completions')
-    completion_remarks = models.TextField()
+    completion_remarks = models.TextField(blank=True, default='')
+    completion_image = models.ImageField(upload_to='completions/', blank=True, null=True)
     submitted_at = models.DateTimeField(auto_now_add=True)
+
+    verified_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True, related_name='verified_completions')
+    verification_status = models.CharField(max_length=50, choices=RESPONSE_CHOICES, default='Pending')
+    verification_remarks = models.TextField(blank=True, null=True)
+    verified_at = models.DateTimeField(null=True, blank=True)
 
     citizen_response = models.CharField(max_length=20, choices=RESPONSE_CHOICES, default='Pending')
     citizen_remarks = models.TextField(blank=True, null=True)
@@ -172,7 +192,34 @@ class ComplaintCompletion(models.Model):
         ordering = ['-submitted_at']
 
     def __str__(self):
-        return f"Completion for Complaint #{self.complaint_id} ({self.citizen_response})"
+        return f"Completion for Complaint #{self.complaint_id} ({self.verification_status})"
+
+
+class ComplaintFeedback(models.Model):
+    complaint = models.OneToOneField(
+        Complaint,
+        on_delete=models.CASCADE,
+        related_name='feedback'
+    )
+    citizen = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name='feedbacks'
+    )
+    rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )
+    comment = models.TextField(blank=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        ordering = ['-created_at']
+
+    def __str__(self):
+        return f"Feedback for Complaint #{self.complaint_id} by {self.citizen.username} (Rating: {self.rating})"
 
 
 class ComplaintStatusHistory(models.Model):
@@ -198,4 +245,4 @@ class Notification(models.Model):
         ordering = ['-created_at']
 
     def __str__(self):
-        return f"Notification for {self.user.username}: {self.title}"
+        return f"Notification for {self.user.username}: {self.title}"

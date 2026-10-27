@@ -43,9 +43,11 @@ function App() {
           <Route path="services" element={<Services />} />
           <Route path="contact" element={<Contact />} />
           <Route path="citizen/login" element={<Login expectedRole="CITIZEN" title="Citizen Login" />} />
+          <Route path="login" element={<Login expectedRole="CITIZEN" title="Citizen Login" />} />
           <Route path="authority/login" element={<Login expectedRole="MUNICIPAL_AUTHORITY" title="Municipal Authority Login" />} />
           <Route path="staff/login" element={<Login expectedRole="DEPARTMENT_STAFF" title="Department Staff Login" />} />
           <Route path="register" element={<Register />} />
+          <Route path="citizen/register" element={<Register />} />
         </Route>
 
         {/* Citizen Protected Routes */}

@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
-import { Container, Row, Col, Card, Form, Button, Alert, InputGroup } from 'react-bootstrap';
+import { Container, Row, Col, Form, Alert } from 'react-bootstrap';
 import { useNavigate, Link, useLocation } from 'react-router-dom';
-import { FaEye, FaEyeSlash, FaUserPlus } from 'react-icons/fa';
+import {
+  FaEye,
+  FaEyeSlash,
+  FaUserPlus,
+  FaUser,
+  FaEnvelope,
+  FaLock,
+  FaArrowLeft
+} from 'react-icons/fa';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -139,232 +147,196 @@ const Register = () => {
   };
 
   return (
-    <div className="civic-subpage-viewport d-flex flex-column justify-content-center py-5">
-      {/* Background Gradient Overlay */}
-      <div className="civic-subpage-overlay" />
+    <div className="civic-auth-viewport position-relative">
+      {/* Background Split Gradient Overlay */}
+      <div className="civic-auth-overlay" />
 
-      <Container className="position-relative" style={{ zIndex: 2, maxWidth: '1240px' }}>
-        <div className="hero-top-spacer mb-2" />
+      {/* Main Auth Container */}
+      <Container className="civic-auth-content position-relative">
+        {/* Top spacer for floating navbar */}
+        <div className="hero-top-spacer" />
 
-        <Row className="justify-content-center">
-          <Col md={8} lg={6} xl={5}>
-            {/* Back link */}
-            <div className="mb-3">
-              <Link
-                to="/"
-                className="d-inline-flex align-items-center gap-2 text-decoration-none text-white-50"
-                style={{ fontSize: '0.88rem', transition: 'color 0.2s' }}
-              >
-                <span>&larr; Back to Home</span>
-              </Link>
-            </div>
+        {/* Center / Form Section - Left-Aligned matching reference */}
+        <div className="my-auto py-3 py-lg-4">
+          <Row className="align-items-center">
+            <Col xl={5} lg={6} md={8} sm={11} className="mx-auto mx-lg-0 ms-lg-3 ms-xl-5">
+              <div className="d-flex flex-column">
+                {/* Back Link */}
+                <Link to="/" className="auth-back-link">
+                  <FaArrowLeft size={11} />
+                  <span>Back to Home</span>
+                </Link>
 
-            {/* Registration Card */}
-            <Card
-              className="border-0 shadow-lg overflow-hidden"
-              style={{
-                background: 'rgba(18, 38, 74, 0.72)',
-                backdropFilter: 'blur(20px)',
-                WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.2)',
-                borderRadius: '24px',
-                boxShadow: '0 20px 50px rgba(0, 0, 0, 0.45)'
-              }}
-            >
-              <Card.Body className="p-4 p-sm-5">
-                {/* Header Icon */}
-                <div className="text-center mb-4">
-                  <div
-                    className="mx-auto rounded-circle d-flex align-items-center justify-content-center mb-3"
-                    style={{
-                      width: '56px',
-                      height: '56px',
-                      background: 'var(--civic-royal)',
-                      boxShadow: '0 8px 24px rgba(37, 99, 235, 0.45)'
-                    }}
-                  >
-                    <FaUserPlus size={24} className="text-white" />
+                {/* Registration Card */}
+                <div className="civic-auth-card">
+                  {/* Glowing Blue Avatar Circle */}
+                  <div className="auth-avatar-circle">
+                    <FaUserPlus size={22} className="text-white" />
                   </div>
-                  <h2 className="text-white fw-bold fs-3 mb-1">Citizen Registration</h2>
-                  <p className="text-white-50 small mb-0">Create an account to report & track civic issues</p>
+
+                  {/* Title & Subtitle */}
+                  <h1 className="auth-card-title">Citizen Registration</h1>
+                  <p className="auth-card-subtitle">
+                    Create an account to report & track civic issues
+                  </p>
+
+                  {error && (
+                    <Alert
+                      variant="danger"
+                      className="py-2 px-3 small border-0 text-white mb-3"
+                      style={{ background: 'rgba(239, 68, 68, 0.3)', border: '1px solid rgba(239, 68, 68, 0.5)', borderRadius: '10px' }}
+                    >
+                      {error}
+                    </Alert>
+                  )}
+                  {success && (
+                    <Alert
+                      variant="success"
+                      className="py-2 px-3 small border-0 text-white mb-3"
+                      style={{ background: 'rgba(34, 197, 94, 0.3)', border: '1px solid rgba(34, 197, 94, 0.5)', borderRadius: '10px' }}
+                    >
+                      {success}
+                    </Alert>
+                  )}
+
+                  <Form onSubmit={handleSubmit} noValidate>
+                    {/* Full Name */}
+                    <Form.Group className="mb-3" controlId="fullName">
+                      <Form.Label className="auth-form-label">Full Name</Form.Label>
+                      <div className="auth-input-wrapper">
+                        <span className="auth-input-left-icon">
+                          <FaUser size={14} />
+                        </span>
+                        <Form.Control
+                          type="text"
+                          placeholder="Enter your full name"
+                          value={formData.fullName}
+                          onChange={handleChange}
+                          isInvalid={!!validationErrors.fullName}
+                          required
+                          className="auth-form-control"
+                        />
+                      </div>
+                      {validationErrors.fullName && (
+                        <div className="auth-error-feedback">{validationErrors.fullName}</div>
+                      )}
+                    </Form.Group>
+
+                    {/* Email address */}
+                    <Form.Group className="mb-3" controlId="email">
+                      <Form.Label className="auth-form-label">Email address</Form.Label>
+                      <div className="auth-input-wrapper">
+                        <span className="auth-input-left-icon">
+                          <FaEnvelope size={14} />
+                        </span>
+                        <Form.Control
+                          type="email"
+                          placeholder="Enter your email"
+                          value={formData.email}
+                          onChange={handleChange}
+                          isInvalid={!!validationErrors.email}
+                          required
+                          className="auth-form-control"
+                        />
+                      </div>
+                      {validationErrors.email && (
+                        <div className="auth-error-feedback">{validationErrors.email}</div>
+                      )}
+                    </Form.Group>
+
+                    {/* Password */}
+                    <Form.Group className="mb-3" controlId="password">
+                      <Form.Label className="auth-form-label">Password</Form.Label>
+                      <div className="auth-input-wrapper">
+                        <span className="auth-input-left-icon">
+                          <FaLock size={14} />
+                        </span>
+                        <Form.Control
+                          type={showPassword ? "text" : "password"}
+                          placeholder="Create a password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          isInvalid={!!validationErrors.password}
+                          required
+                          className="auth-form-control has-right-btn"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="auth-input-right-btn"
+                          aria-label={showPassword ? "Hide password" : "Show password"}
+                        >
+                          {showPassword ? <FaEyeSlash size={15} /> : <FaEye size={15} />}
+                        </button>
+                      </div>
+                      {validationErrors.password && (
+                        <div className="auth-error-feedback">{validationErrors.password}</div>
+                      )}
+                    </Form.Group>
+
+                    {/* Confirm Password */}
+                    <Form.Group className="mb-4" controlId="confirmPassword">
+                      <Form.Label className="auth-form-label">Confirm Password</Form.Label>
+                      <div className="auth-input-wrapper">
+                        <span className="auth-input-left-icon">
+                          <FaLock size={14} />
+                        </span>
+                        <Form.Control
+                          type={showConfirmPassword ? "text" : "password"}
+                          placeholder="Re-enter password"
+                          value={formData.confirmPassword}
+                          onChange={handleChange}
+                          isInvalid={!!validationErrors.confirmPassword}
+                          required
+                          className="auth-form-control has-right-btn"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                          className="auth-input-right-btn"
+                          aria-label={showConfirmPassword ? "Hide password" : "Show password"}
+                        >
+                          {showConfirmPassword ? <FaEyeSlash size={15} /> : <FaEye size={15} />}
+                        </button>
+                      </div>
+                      {validationErrors.confirmPassword && (
+                        <div className="auth-error-feedback">{validationErrors.confirmPassword}</div>
+                      )}
+                    </Form.Group>
+
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      className="auth-submit-btn"
+                      disabled={loading}
+                    >
+                      {loading ? 'Creating Account...' : 'Create Account'}
+                    </button>
+
+                    {/* Bottom Link Divider */}
+                    <div className="d-flex align-items-center justify-content-center gap-2 mt-4 pt-1">
+                      <div className="auth-divider-line flex-grow-1" />
+                      <span className="auth-footer-text">
+                        Already have an account?{' '}
+                        <Link
+                          to="/citizen/login"
+                          state={{ redirectTo }}
+                          className="auth-footer-link"
+                        >
+                          Sign in here
+                        </Link>
+                      </span>
+                      <div className="auth-divider-line flex-grow-1" />
+                    </div>
+                  </Form>
                 </div>
+              </div>
+            </Col>
+          </Row>
+        </div>
 
-                {error && (
-                  <Alert
-                    variant="danger"
-                    className="py-2 px-3 small border-0 text-white"
-                    style={{ background: 'rgba(239, 68, 68, 0.3)', border: '1px solid rgba(239, 68, 68, 0.5)' }}
-                  >
-                    {error}
-                  </Alert>
-                )}
-                {success && (
-                  <Alert
-                    variant="success"
-                    className="py-2 px-3 small border-0 text-white"
-                    style={{ background: 'rgba(34, 197, 94, 0.3)', border: '1px solid rgba(34, 197, 94, 0.5)' }}
-                  >
-                    {success}
-                  </Alert>
-                )}
-
-                <Form onSubmit={handleSubmit}>
-                  <Form.Group className="mb-3" controlId="fullName">
-                    <Form.Label className="text-white small fw-semibold">Full Name</Form.Label>
-                    <Form.Control
-                      type="text"
-                      placeholder="Enter your full name"
-                      value={formData.fullName}
-                      onChange={handleChange}
-                      isInvalid={!!validationErrors.fullName}
-                      required
-                      style={{
-                        background: 'rgba(10, 22, 46, 0.75)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        color: '#ffffff',
-                        borderRadius: '12px',
-                        padding: '10px 14px'
-                      }}
-                    />
-                    <Form.Control.Feedback type="invalid" className="small text-danger fw-semibold">
-                      {validationErrors.fullName}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="email">
-                    <Form.Label className="text-white small fw-semibold">Email address</Form.Label>
-                    <Form.Control
-                      type="email"
-                      placeholder="Enter your email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      isInvalid={!!validationErrors.email}
-                      required
-                      style={{
-                        background: 'rgba(10, 22, 46, 0.75)',
-                        border: '1px solid rgba(255, 255, 255, 0.2)',
-                        color: '#ffffff',
-                        borderRadius: '12px',
-                        padding: '10px 14px'
-                      }}
-                    />
-                    <Form.Control.Feedback type="invalid" className="small text-danger fw-semibold">
-                      {validationErrors.email}
-                    </Form.Control.Feedback>
-                  </Form.Group>
-
-                  <Form.Group className="mb-3" controlId="password">
-                    <Form.Label className="text-white small fw-semibold">Password</Form.Label>
-                    <InputGroup hasValidation>
-                      <Form.Control
-                        type={showPassword ? "text" : "password"}
-                        placeholder="Create a password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        isInvalid={!!validationErrors.password}
-                        required
-                        style={{
-                          background: 'rgba(10, 22, 46, 0.75)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          color: '#ffffff',
-                          borderTopLeftRadius: '12px',
-                          borderBottomLeftRadius: '12px',
-                          padding: '10px 14px'
-                        }}
-                      />
-                      <Button
-                        variant="link"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="text-white-50 d-flex align-items-center justify-content-center text-decoration-none"
-                        style={{
-                          background: 'rgba(10, 22, 46, 0.75)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          borderLeft: 'none',
-                          borderTopRightRadius: '12px',
-                          borderBottomRightRadius: '12px',
-                          padding: '0 14px'
-                        }}
-                      >
-                        {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-                      </Button>
-                      <Form.Control.Feedback type="invalid" className="small text-danger fw-semibold">
-                        {validationErrors.password}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-
-                  <Form.Group className="mb-4" controlId="confirmPassword">
-                    <Form.Label className="text-white small fw-semibold">Confirm Password</Form.Label>
-                    <InputGroup hasValidation>
-                      <Form.Control
-                        type={showConfirmPassword ? "text" : "password"}
-                        placeholder="Re-enter password"
-                        value={formData.confirmPassword}
-                        onChange={handleChange}
-                        isInvalid={!!validationErrors.confirmPassword}
-                        required
-                        style={{
-                          background: 'rgba(10, 22, 46, 0.75)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          color: '#ffffff',
-                          borderTopLeftRadius: '12px',
-                          borderBottomLeftRadius: '12px',
-                          padding: '10px 14px'
-                        }}
-                      />
-                      <Button
-                        variant="link"
-                        onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                        className="text-white-50 d-flex align-items-center justify-content-center text-decoration-none"
-                        style={{
-                          background: 'rgba(10, 22, 46, 0.75)',
-                          border: '1px solid rgba(255, 255, 255, 0.2)',
-                          borderLeft: 'none',
-                          borderTopRightRadius: '12px',
-                          borderBottomRightRadius: '12px',
-                          padding: '0 14px'
-                        }}
-                      >
-                        {showConfirmPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
-                      </Button>
-                      <Form.Control.Feedback type="invalid" className="small text-danger fw-semibold">
-                        {validationErrors.confirmPassword}
-                      </Form.Control.Feedback>
-                    </InputGroup>
-                  </Form.Group>
-
-                  <Button
-                    variant="primary"
-                    type="submit"
-                    className="w-100 mb-3 fw-bold border-0"
-                    disabled={loading}
-                    style={{
-                      background: 'var(--civic-royal)',
-                      borderRadius: '9999px',
-                      padding: '11px 0',
-                      boxShadow: '0 4px 14px rgba(37, 99, 235, 0.45)'
-                    }}
-                  >
-                    {loading ? 'Creating Account...' : 'Create Account'}
-                  </Button>
-
-                  <div className="text-center mt-3">
-                    <small className="text-white-50">
-                      Already have an account?{' '}
-                      <Link
-                        to="/citizen/login"
-                        state={{ redirectTo }}
-                        className="text-info fw-bold text-decoration-none"
-                      >
-                        Sign in here
-                      </Link>
-                    </small>
-                  </div>
-                </Form>
-              </Card.Body>
-            </Card>
-          </Col>
-        </Row>
+        {/* Bottom spacer */}
+        <div className="hero-bottom-spacer pb-2" />
       </Container>
     </div>
   );

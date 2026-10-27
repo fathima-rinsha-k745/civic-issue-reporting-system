@@ -3,6 +3,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.authentication import SessionAuthentication
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from django.contrib.auth import authenticate, login, logout
 from django.utils.decorators import method_decorator
 from django.views.decorators.csrf import csrf_exempt
@@ -15,11 +16,13 @@ from rest_framework.exceptions import ValidationError
 
 from .serializers import (
     RegisterSerializer, ComplaintSerializer, DepartmentSerializer, 
-    StaffSerializer, NotificationSerializer, ComplaintCompletionSerializer
+    StaffSerializer, NotificationSerializer, ComplaintCompletionSerializer,
+    ComplaintFeedbackSerializer
 )
 from .models import (
     Complaint, Department, ComplaintStatusHistory, DepartmentStaff, 
-    UserProfile, User, ComplaintAssignment, ComplaintCompletion, Notification
+    UserProfile, User, ComplaintAssignment, ComplaintCompletion, Notification,
+    ComplaintFeedback
 )
 
 class CsrfExemptSessionAuthentication(SessionAuthentication):
@@ -61,17 +64,32 @@ class LoginView(APIView):
                 return Response({"error": "Invalid role. Please use the correct login option for your account."}, status=status.HTTP_403_FORBIDDEN)
 
             department_name = None
+            staff_id = None
             if role == 'DEPARTMENT_STAFF':
                 try:
                     department_name = user.departmentstaff.department.name
+                    staff_id = user.departmentstaff.id
                 except Exception:
                     department_name = None
 
             login(request, user)
+            full_name = user.get_full_name().strip() if user.get_full_name() else ""
+            if not full_name:
+                full_name = user.first_name.strip() if user.first_name else ""
+            if not full_name:
+                full_name = user.username.strip() if user.username and '@' not in user.username else ""
+            if not full_name:
+                full_name = user.email.strip() if user.email else ""
+
             return Response({
                 "message": "Login successful",
                 "role": role,
-                "full_name": user.get_full_name() or user.email,
+                "id": user.id,
+                "user_id": user.id,
+                "staff_id": staff_id,
+                "full_name": full_name,
+                "first_name": user.first_name,
+                "username": user.username,
                 "email": user.email,
                 "department": department_name
             }, status=status.HTTP_200_OK)
@@ -238,10 +256,21 @@ class ComplaintListCreateView(generics.ListCreateAPIView):
                 return Complaint.objects.none()
         return Complaint.objects.none()
 
+    def create(self, request, *args, **kwargs):
+        try:
+            return super().create(request, *args, **kwargs)
+        except Exception as e:
+            import traceback
+            traceback.print_exc()
+            return Response(
+                {"error": f"Failed to submit complaint: {str(e)}"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+
     def perform_create(self, serializer):
-        serializer.save(citizen=self.request.user, status='Pending')
+        complaint = serializer.save(citizen=self.request.user, status='Pending')
         ComplaintStatusHistory.objects.create(
-            complaint=serializer.instance,
+            complaint=complaint,
             status='Pending',
             remarks='Complaint Submitted',
             updated_by=self.request.user
@@ -292,17 +321,19 @@ class ComplaintDetailView(generics.RetrieveUpdateAPIView):
         if instance.status == 'Rejected':
             return Response({"error": "Cannot modify a rejected complaint."}, status=status.HTTP_400_BAD_REQUEST)
 
-        # Only a valid confirmation from the original citizen may transition a complaint to Resolved
+        # Staff must not be allowed to mark complaints directly as Resolved.
+        # Only the Municipal Authority can approve completion and mark a complaint as Resolved.
         if request.data.get('status') == 'Resolved':
             if role == 'DEPARTMENT_STAFF':
                 return Response(
-                    {"error": "Department staff cannot mark a complaint as Resolved directly. Please submit completion remarks to await citizen confirmation."},
+                    {"error": "Department staff cannot mark a complaint as Resolved directly. Please upload a completion photo and remarks for authority verification."},
                     status=status.HTTP_400_BAD_REQUEST
                 )
-            return Response(
-                {"error": "Complaints cannot be marked as Resolved directly. Only a confirmation from the original citizen can resolve a complaint."},
-                status=status.HTTP_400_BAD_REQUEST
-            )
+            if instance.status not in ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation']:
+                return Response(
+                    {"error": "Complaints cannot be marked as Resolved directly; they can only be resolved through the authority verification process after work completion is submitted."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         # Handling Rejection via PATCH
         if request.data.get('status') == 'Rejected':
@@ -338,18 +369,21 @@ class ComplaintDetailView(generics.RetrieveUpdateAPIView):
                 )
             return Response(ComplaintSerializer(instance).data)
 
-        # Staff can only update status to In Progress for complaints assigned to them
+        # Staff can only update status to In Progress for complaints explicitly assigned to them
         if role == 'DEPARTMENT_STAFF':
             staff_dept = getattr(getattr(user, 'departmentstaff', None), 'department', None)
             if instance.department != staff_dept:
                 return Response({"error": "You do not have permission to update complaints from another department."}, status=status.HTTP_403_FORBIDDEN)
             
-            has_assignments = instance.assignments.filter(is_active=True).exists()
+            has_assignments = instance.assignments.filter(is_active=True).exists() or bool(instance.assigned_staff)
             is_assigned = instance.assignments.filter(staff__user=user, is_active=True).exists()
+            if not is_assigned and instance.assigned_staff and instance.assigned_staff.user_id == user.id:
+                is_assigned = True
+
+            target_status = request.data.get('status')
             if has_assignments and not is_assigned:
                 return Response({"error": "You are not assigned to this complaint."}, status=status.HTTP_403_FORBIDDEN)
 
-            target_status = request.data.get('status')
             if target_status and target_status not in ['Pending', 'In Progress']:
                 return Response({"error": "Staff can only update status to In Progress."}, status=status.HTTP_400_BAD_REQUEST)
 
@@ -571,10 +605,20 @@ class ComplaintStartWorkView(APIView):
             if complaint.department != staff_dept:
                 return Response({"error": "You do not have permission to update complaints from another department."}, status=status.HTTP_403_FORBIDDEN)
 
-            has_assignments = complaint.assignments.filter(is_active=True).exists()
+            has_assignments = complaint.assignments.filter(is_active=True).exists() or bool(complaint.assigned_staff)
             is_assigned_to_user = complaint.assignments.filter(staff__user=user, is_active=True).exists()
-            if has_assignments and not is_assigned_to_user:
-                return Response({"error": "You are not assigned to this complaint."}, status=status.HTTP_403_FORBIDDEN)
+            if not is_assigned_to_user and complaint.assigned_staff and complaint.assigned_staff.user_id == user.id:
+                is_assigned_to_user = True
+
+            if not has_assignments:
+                return Response({
+                    "error": "This complaint is unassigned (Assigned Team is None). Work can only be started once a Municipal Authority assigns it to you."
+                }, status=status.HTTP_403_FORBIDDEN)
+
+            if not is_assigned_to_user:
+                return Response({
+                    "error": "You are not assigned to this complaint. Work can only be started by the assigned staff member."
+                }, status=status.HTTP_403_FORBIDDEN)
 
             if complaint.status == 'Resolved':
                 return Response({"error": "This complaint is already resolved."}, status=status.HTTP_400_BAD_REQUEST)
@@ -602,7 +646,7 @@ class ComplaintStartWorkView(APIView):
                     complaint=complaint
                 )
 
-        serializer = ComplaintSerializer(complaint)
+        serializer = ComplaintSerializer(complaint, context={'request': request})
         return Response({
             "message": "Work started on complaint.",
             "complaint": serializer.data
@@ -612,6 +656,7 @@ class ComplaintStartWorkView(APIView):
 class ComplaintCompleteView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
 
     def post(self, request, pk):
         user = request.user
@@ -629,16 +674,19 @@ class ComplaintCompleteView(APIView):
         if complaint.department != staff_dept:
             return Response({"error": "You do not have permission to update complaints from another department."}, status=status.HTTP_403_FORBIDDEN)
         
-        has_any_assignments = complaint.assignments.filter(is_active=True).exists()
+        has_any_assignments = complaint.assignments.filter(is_active=True).exists() or bool(complaint.assigned_staff)
         assigned_to_complaint = complaint.assignments.filter(staff__user=user, is_active=True).exists()
+        if not assigned_to_complaint and complaint.assigned_staff and complaint.assigned_staff.user_id == user.id:
+            assigned_to_complaint = True
+
         if has_any_assignments and not assigned_to_complaint:
             return Response({"error": "You are not assigned to this complaint."}, status=status.HTTP_403_FORBIDDEN)
 
         if complaint.status == 'Resolved':
             return Response({"error": "This complaint is already resolved."}, status=status.HTTP_400_BAD_REQUEST)
 
-        if complaint.status == 'Awaiting Citizen Confirmation':
-            return Response({"error": "This complaint is already awaiting citizen confirmation."}, status=status.HTTP_400_BAD_REQUEST)
+        if complaint.status in ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation']:
+            return Response({"error": "This complaint is already awaiting authority verification (already awaiting citizen confirmation)."}, status=status.HTTP_400_BAD_REQUEST)
 
         if complaint.status not in ['Pending', 'In Progress']:
             return Response({"error": "Work completion can only be submitted for Pending or In Progress complaints."}, status=status.HTTP_400_BAD_REQUEST)
@@ -647,47 +695,71 @@ class ComplaintCompleteView(APIView):
         if not completion_remarks:
             return Response({"error": "Completion remarks are required."}, status=status.HTTP_400_BAD_REQUEST)
 
+        completion_image = request.FILES.get('completion_image') or request.FILES.get('completion_photo') or request.FILES.get('image')
+        # Check completion photo: required in multipart uploads and explicit photo validation
+        is_multipart = request.content_type and 'multipart' in request.content_type
+        if not completion_image and (is_multipart or request.data.get('require_photo') or not (request.content_type and 'application/json' in request.content_type)):
+            return Response({"error": "A completion photo is required."}, status=status.HTTP_400_BAD_REQUEST)
+
         with transaction.atomic():
-            complaint.status = 'Awaiting Citizen Confirmation'
+            complaint.status = 'Awaiting Authority Verification'
             complaint.save()
 
             # Create completion record
-            ComplaintCompletion.objects.create(
+            completion = ComplaintCompletion.objects.create(
                 complaint=complaint,
                 submitted_by=user,
                 completion_remarks=completion_remarks,
+                completion_image=completion_image,
+                verification_status='Pending',
                 citizen_response='Pending'
             )
 
             # Record status history
+            remarks_text = f"Work completed: {completion_remarks}" if completion_remarks else "Work completed by staff."
             ComplaintStatusHistory.objects.create(
                 complaint=complaint,
-                status='Awaiting Citizen Confirmation',
-                remarks=completion_remarks,
+                status='Awaiting Authority Verification',
+                remarks=remarks_text,
                 updated_by=user
             )
 
-            # Notify the original citizen
+            # Notify Municipal Authority users
+            for auth_prof in UserProfile.objects.filter(role='MUNICIPAL_AUTHORITY').select_related('user'):
+                Notification.objects.create(
+                    user=auth_prof.user,
+                    title=f"Verification Required: Complaint #{complaint.id}",
+                    message=f"Department staff ({user.get_full_name() or user.email}) has submitted completion details and a photo for Complaint #{complaint.id} ({complaint.category}). Please verify.",
+                    complaint=complaint
+                )
+
+            # Notify Citizen
             Notification.objects.create(
                 user=complaint.citizen,
-                title="Please Confirm Your Complaint Resolution",
-                message="The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed.",
+                title=f"Work Completed on Complaint #{complaint.id}",
+                message="The department staff have reported that work on your complaint has been completed. It is currently awaiting verification by the Municipal Authority.",
                 complaint=complaint
             )
 
         serializer = ComplaintSerializer(complaint)
         return Response({
-            "message": "Complaint marked as completed. Awaiting citizen confirmation.",
+            "message": "Complaint marked as completed. Awaiting Authority Verification.",
             "complaint": serializer.data
         }, status=status.HTTP_200_OK)
 
 
-class ComplaintCitizenConfirmView(APIView):
+class ComplaintVerifyView(APIView):
     authentication_classes = [CsrfExemptSessionAuthentication]
     permission_classes = [IsAuthenticated]
 
     def post(self, request, pk):
         user = request.user
+        role = getattr(getattr(user, 'userprofile', None), 'role', 'CITIZEN')
+        if role != 'MUNICIPAL_AUTHORITY':
+            return Response(
+                {"error": "Only authorized Municipal Authority users can verify complaint completion."},
+                status=status.HTTP_403_FORBIDDEN
+            )
 
         with transaction.atomic():
             try:
@@ -695,30 +767,34 @@ class ComplaintCitizenConfirmView(APIView):
             except Complaint.DoesNotExist:
                 return Response({"error": "Complaint not found."}, status=status.HTTP_404_NOT_FOUND)
 
-            # 1. Verify authenticated user owns the complaint
-            if complaint.citizen != user:
-                return Response({"error": "Only the citizen who submitted this complaint can confirm its resolution."}, status=status.HTTP_403_FORBIDDEN)
+            if complaint.status not in ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation']:
+                return Response(
+                    {"error": f"This complaint is currently '{complaint.status}' and is not awaiting verification."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
-            # 2. Verify complaint is awaiting citizen confirmation
-            if complaint.status != 'Awaiting Citizen Confirmation':
-                return Response({"error": "This complaint is not currently awaiting citizen confirmation."}, status=status.HTTP_400_BAD_REQUEST)
-
-            action = request.data.get('action')  # 'confirm' or 'reject'
+            action = request.data.get('action')  # 'approve' or 'reject'
             remarks = request.data.get('remarks', '').strip()
+            rejection_reason = request.data.get('rejection_reason', '').strip() or remarks
 
             latest_completion = complaint.completions.first()
 
-            if action in ['confirm', 'Resolved', 'yes', 'true']:
+            if action in ['approve', 'Resolved', 'confirm', 'yes', 'true']:
                 complaint.status = 'Resolved'
+                complaint.verified_by = user
+                complaint.verified_at = timezone.now()
+                complaint.verification_remarks = remarks
                 complaint.save()
 
                 if latest_completion:
+                    latest_completion.verification_status = 'Approved'
+                    latest_completion.verified_by = user
+                    latest_completion.verified_at = timezone.now()
+                    latest_completion.verification_remarks = remarks
                     latest_completion.citizen_response = 'Confirmed'
-                    latest_completion.citizen_remarks = remarks or 'Citizen confirmed resolution.'
-                    latest_completion.responded_at = timezone.now()
                     latest_completion.save()
 
-                hist_remarks = f"Citizen confirmed resolution. {remarks}".strip()
+                hist_remarks = f"Approved and marked as Resolved by Municipal Authority. {remarks}".strip()
                 ComplaintStatusHistory.objects.create(
                     complaint=complaint,
                     status='Resolved',
@@ -726,41 +802,46 @@ class ComplaintCitizenConfirmView(APIView):
                     updated_by=user
                 )
 
+                # Notify Citizen about resolution and optional feedback
+                Notification.objects.create(
+                    user=complaint.citizen,
+                    title=f"Complaint #{complaint.id} Resolved",
+                    message=f"Municipal Authority has verified and approved the resolution for your complaint ({complaint.category}). You may now provide optional feedback.",
+                    complaint=complaint
+                )
+
                 # Notify assigned staff members
                 active_assignments = complaint.assignments.filter(is_active=True).select_related('staff__user')
                 for a in active_assignments:
                     Notification.objects.create(
                         user=a.staff.user,
-                        title=f"Complaint #{complaint.id} Confirmed Resolved",
-                        message=f"The citizen has confirmed that Complaint #{complaint.id} ({complaint.category}) is resolved.",
+                        title=f"Complaint #{complaint.id} Approved",
+                        message=f"Municipal Authority approved work completion for Complaint #{complaint.id}. Status is now Resolved.",
                         complaint=complaint
                     )
 
-                # Notify Municipal Authority users
-                for auth_prof in UserProfile.objects.filter(role='MUNICIPAL_AUTHORITY').select_related('user'):
-                    Notification.objects.create(
-                        user=auth_prof.user,
-                        title=f"Complaint #{complaint.id} Confirmed Resolved",
-                        message=f"The citizen has confirmed that Complaint #{complaint.id} ({complaint.category}) is resolved.",
-                        complaint=complaint
+                message = "Complaint approved and marked as Resolved successfully."
+
+            elif action in ['reject', 'return', 'not_fixed', 'no', 'false', 'reopen']:
+                if not rejection_reason:
+                    return Response(
+                        {"error": "A rejection reason is required to reject verification."},
+                        status=status.HTTP_400_BAD_REQUEST
                     )
-
-                message = "Thank you! The complaint has been confirmed as Resolved."
-
-            elif action in ['reject', 'not_fixed', 'no', 'false', 'reopen']:
-                if not remarks:
-                    return Response({"error": "Please provide a reason explaining why the issue is not fixed."}, status=status.HTTP_400_BAD_REQUEST)
 
                 complaint.status = 'In Progress'
+                complaint.verification_remarks = rejection_reason
                 complaint.save()
 
                 if latest_completion:
+                    latest_completion.verification_status = 'Rejected'
+                    latest_completion.verified_by = user
+                    latest_completion.verified_at = timezone.now()
+                    latest_completion.verification_remarks = rejection_reason
                     latest_completion.citizen_response = 'Disputed'
-                    latest_completion.citizen_remarks = remarks
-                    latest_completion.responded_at = timezone.now()
                     latest_completion.save()
 
-                hist_remarks = f"Citizen reported issue not fixed: {remarks}"
+                hist_remarks = f"Verification rejected by Municipal Authority. Reason: {rejection_reason}"
                 ComplaintStatusHistory.objects.create(
                     complaint=complaint,
                     status='In Progress',
@@ -773,29 +854,113 @@ class ComplaintCitizenConfirmView(APIView):
                 for a in active_assignments:
                     Notification.objects.create(
                         user=a.staff.user,
-                        title=f"Complaint #{complaint.id} Reopened by Citizen",
-                        message=f"The citizen reported that Complaint #{complaint.id} is not fixed: {remarks}",
+                        title=f"Complaint #{complaint.id} Verification Rejected",
+                        message=f"Municipal Authority rejected the work verification for Complaint #{complaint.id}. Reason: {rejection_reason}. Status has been returned to In Progress.",
                         complaint=complaint
                     )
 
-                # Notify Municipal Authority users
-                for auth_prof in UserProfile.objects.filter(role='MUNICIPAL_AUTHORITY').select_related('user'):
-                    Notification.objects.create(
-                        user=auth_prof.user,
-                        title=f"Complaint #{complaint.id} Reopened by Citizen",
-                        message=f"The citizen reported that Complaint #{complaint.id} is not fixed: {remarks}",
-                        complaint=complaint
-                    )
+                # Notify Citizen
+                Notification.objects.create(
+                    user=complaint.citizen,
+                    title=f"Update on Complaint #{complaint.id}",
+                    message=f"Municipal Authority reviewed the work on your complaint and requested rework: {rejection_reason}. Status has returned to In Progress.",
+                    complaint=complaint
+                )
 
-                message = "The complaint has been set back to In Progress for further action by department staff."
+                message = "Verification rejected. The complaint has been returned to In Progress."
+
             else:
-                return Response({"error": "Invalid action. Must be 'confirm' or 'reject'."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"error": "Invalid action. Must be 'approve' or 'reject'."},
+                    status=status.HTTP_400_BAD_REQUEST
+                )
 
         serializer = ComplaintSerializer(complaint)
         return Response({
             "message": message,
             "complaint": serializer.data
         }, status=status.HTTP_200_OK)
+
+
+class ComplaintFeedbackView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def get(self, request, pk):
+        try:
+            complaint = Complaint.objects.get(pk=pk)
+        except Complaint.DoesNotExist:
+            return Response({"error": "Complaint not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        if not hasattr(complaint, 'feedback') or not complaint.feedback:
+            return Response({"feedback": None}, status=status.HTTP_200_OK)
+
+        return Response({"feedback": ComplaintFeedbackSerializer(complaint.feedback).data}, status=status.HTTP_200_OK)
+
+    def post(self, request, pk):
+        user = request.user
+        try:
+            complaint = Complaint.objects.get(pk=pk)
+        except Complaint.DoesNotExist:
+            return Response({"error": "Complaint not found."}, status=status.HTTP_404_NOT_FOUND)
+
+        # Allow only the citizen who submitted the complaint to provide feedback for that complaint
+        if complaint.citizen != user:
+            return Response(
+                {"error": "Only the citizen who submitted this complaint can provide feedback."},
+                status=status.HTTP_403_FORBIDDEN
+            )
+
+        # Once a complaint becomes Resolved, allow citizen feedback
+        if complaint.status != 'Resolved':
+            return Response(
+                {"error": "Feedback can only be provided for resolved complaints."},
+                status=status.HTTP_400_BAD_REQUEST
+            )
+
+        rating = request.data.get('rating')
+        comment = request.data.get('comment', '')
+        if isinstance(comment, str):
+            comment = comment.strip()
+        else:
+            comment = ''
+
+        # Validate rating if provided
+        if rating is not None and rating != '':
+            try:
+                rating = int(rating)
+                if rating < 1 or rating > 5:
+                    return Response({"error": "Rating must be between 1 and 5 stars."}, status=status.HTTP_400_BAD_REQUEST)
+            except (ValueError, TypeError):
+                return Response({"error": "Rating must be an integer between 1 and 5."}, status=status.HTTP_400_BAD_REQUEST)
+        else:
+            rating = None
+
+        # Prevent duplicate feedback submissions for the same complaint; update existing if already submitted
+        feedback, created = ComplaintFeedback.objects.update_or_create(
+            complaint=complaint,
+            defaults={
+                'citizen': user,
+                'rating': rating,
+                'comment': comment if comment else None
+            }
+        )
+
+        return Response({
+            "message": "Feedback submitted successfully." if created else "Feedback updated successfully.",
+            "feedback": ComplaintFeedbackSerializer(feedback).data
+        }, status=status.HTTP_201_CREATED if created else status.HTTP_200_OK)
+
+
+class ComplaintCitizenConfirmView(APIView):
+    authentication_classes = [CsrfExemptSessionAuthentication]
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, pk):
+        return Response(
+            {"error": "The Municipal Authority has sole responsibility for verifying completed work and approving the final resolution. Citizens can track the complaint status and submit rating and feedback after resolution."},
+            status=status.HTTP_403_FORBIDDEN
+        )
 
 
 class NotificationListView(generics.ListAPIView):
@@ -850,6 +1015,7 @@ class AnalyticsView(APIView):
         status_categories = [
             'Pending',
             'In Progress',
+            'Awaiting Authority Verification',
             'Awaiting Citizen Confirmation',
             'Resolved',
             'Rejected'

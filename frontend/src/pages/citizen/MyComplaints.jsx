@@ -30,7 +30,8 @@ const MyComplaints = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
-      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
+      case 'Awaiting Authority Verification':
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Authority Verification</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
@@ -44,7 +45,8 @@ const MyComplaints = () => {
       (c.description && c.description.toLowerCase().includes(searchTerm.toLowerCase())) ||
       (c.location && c.location.toLowerCase().includes(searchTerm.toLowerCase()));
       
-    const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+    const matchesStatus = statusFilter === 'All' || c.status === statusFilter ||
+      (statusFilter === 'Awaiting Authority Verification' && (c.status === 'Awaiting Authority Verification' || c.status === 'Awaiting Citizen Confirmation'));
     
     return matchesSearch && matchesStatus;
   });
@@ -80,7 +82,7 @@ const MyComplaints = () => {
                 <option value="All">All Statuses</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
-                <option value="Awaiting Citizen Confirmation">Awaiting Citizen Confirmation</option>
+                <option value="Awaiting Authority Verification">Awaiting Authority Verification</option>
                 <option value="Resolved">Resolved</option>
                 <option value="Rejected">Rejected</option>
               </Form.Select>

@@ -14,7 +14,10 @@ import {
   FaUser, 
   FaCalendarAlt, 
   FaTag,
-  FaTools
+  FaTools,
+  FaCamera,
+  FaImage,
+  FaTimes
 } from 'react-icons/fa';
 import LocationDisplay from '../../components/common/LocationDisplay';
 
@@ -26,9 +29,29 @@ const ComplaintDetails = () => {
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [currentUser, setCurrentUser] = useState(() => {
+    try {
+      return JSON.parse(localStorage.getItem('user') || '{}');
+    } catch {
+      return {};
+    }
+  });
   
   const [completionRemarks, setCompletionRemarks] = useState('');
+  const [completionPhoto, setCompletionPhoto] = useState(null);
+  const [photoPreview, setPhotoPreview] = useState(null);
   const [startingWork, setStartingWork] = useState(false);
+
+  const handlePhotoChange = (e) => {
+    const file = e.target.files && e.target.files[0];
+    if (file) {
+      setCompletionPhoto(file);
+      setPhotoPreview(URL.createObjectURL(file));
+    } else {
+      setCompletionPhoto(null);
+      setPhotoPreview(null);
+    }
+  };
 
   useEffect(() => {
     let isMounted = true;
@@ -36,8 +59,12 @@ const ComplaintDetails = () => {
       try {
         setLoading(true);
         setError('');
-        const data = await api.getComplaintDetails(id);
+        const [profileData, data] = await Promise.all([
+          api.getProfile().catch(() => null),
+          api.getComplaintDetails(id)
+        ]);
         if (isMounted) {
+          if (profileData) setCurrentUser(profileData);
           setComplaint(data);
         }
       } catch (err) {
@@ -55,7 +82,53 @@ const ComplaintDetails = () => {
     return () => { isMounted = false; };
   }, [id]);
 
+  // Check if complaint has active staff assignments (Assigned Team is not None)
+  const hasActiveAssignments = () => {
+    if (!complaint) return false;
+    const members = complaint.assigned_staff_members || [];
+    return members.length > 0;
+  };
+
+  // Check if complaint is explicitly assigned to the currently logged-in staff member
+  const isAssignedToCurrentUser = () => {
+    if (!complaint) return false;
+
+    // 1. Check if backend database serialization explicitly confirmed assignment
+    if (complaint.is_assigned_to_current_user === true) {
+      return true;
+    }
+
+    const assignedMembers = complaint.assigned_staff_members || [];
+    if (assignedMembers.length === 0) {
+      return false;
+    }
+
+    const userEmail = (currentUser?.email || '').toLowerCase().trim();
+    const userId = currentUser?.id || currentUser?.user_id;
+    const staffId = currentUser?.staff_id;
+
+    return assignedMembers.some(m => {
+      const mEmail = (m.staff_email || m.email || '').toLowerCase().trim();
+      const mUserId = m.user_id;
+      const mStaffId = m.staff_id || m.id;
+
+      if (userEmail && mEmail && userEmail === mEmail) return true;
+      if (userId && mUserId && String(userId) === String(mUserId)) return true;
+      if (staffId && mStaffId && String(staffId) === String(mStaffId)) return true;
+      return false;
+    });
+  };
+
   const handleStartWork = async () => {
+    if (!hasActiveAssignments()) {
+      setError('Cannot start work: This complaint is unassigned (Assigned Team is None).');
+      return;
+    }
+    if (!isAssignedToCurrentUser()) {
+      setError('You cannot start work on this complaint because it is not explicitly assigned to you.');
+      return;
+    }
+
     setStartingWork(true);
     setError('');
     setSuccess('');
@@ -73,9 +146,8 @@ const ComplaintDetails = () => {
 
   const handleSubmitCompletion = async (e) => {
     e.preventDefault();
-    const trimmed = completionRemarks.trim();
-    if (!trimmed) {
-      setError('Please provide completion remarks describing the work completed.');
+    if (!completionPhoto) {
+      setError('Please upload a completion photo showing the completed work.');
       return;
     }
 
@@ -84,12 +156,16 @@ const ComplaintDetails = () => {
     setSuccess('');
 
     try {
-      const updated = await api.submitCompletion(id, {
-        completion_remarks: trimmed
-      });
+      const formData = new FormData();
+      formData.append('completion_remarks', completionRemarks.trim());
+      formData.append('completion_image', completionPhoto);
+
+      const updated = await api.submitCompletion(id, formData);
       setComplaint(updated);
       setCompletionRemarks('');
-      setSuccess('Work completion submitted successfully! The citizen has been asked to confirm whether the issue has been resolved.');
+      setCompletionPhoto(null);
+      setPhotoPreview(null);
+      setSuccess('Work completion submitted successfully! Status changed to Awaiting Authority Verification.');
     } catch (err) {
       setError(err.message || 'Failed to submit work completion.');
     } finally {
@@ -97,12 +173,26 @@ const ComplaintDetails = () => {
     }
   };
 
+  // Helper to dynamically resolve the actual registered citizen's name
+  const getCitizenDisplayName = () => {
+    if (!complaint) return 'Citizen';
+    const name = (complaint.citizen_name || complaint.citizen_full_name || '').trim();
+    if (name && name !== 'Citizen One') {
+      return name;
+    }
+    if (complaint.citizen_email && complaint.citizen_email !== 'citizen@example.com') {
+      return complaint.citizen_email;
+    }
+    return (name && name !== 'Citizen One') ? name : 'Citizen';
+  };
+
   // Helper for consistent status badges
   const getStatusBadge = (status) => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
-      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
+      case 'Awaiting Authority Verification':
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Authority Verification</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
@@ -113,6 +203,7 @@ const ComplaintDetails = () => {
   const getTimelineDotColor = (status) => {
     switch (status) {
       case 'Resolved': return '#198754';
+      case 'Awaiting Authority Verification':
       case 'Awaiting Citizen Confirmation': return '#6f42c1';
       case 'In Progress': return '#0d6efd';
       case 'Rejected': return '#dc3545';
@@ -122,20 +213,25 @@ const ComplaintDetails = () => {
 
   // Friendly actor name fallback
   const getActorDisplayName = (item) => {
-    if (item.updated_by_name && !item.updated_by_name.includes('@') && item.updated_by_name !== 'System') {
-      return item.updated_by_name;
+    if (item.updated_by_name && item.updated_by_name !== 'System') {
+      if (item.updated_by_name === 'Authority One') {
+        return 'Municipal Authority';
+      }
+      if (item.updated_by_name === 'Citizen One') {
+        return getCitizenDisplayName();
+      }
+      if (!item.updated_by_name.includes('@')) {
+        return item.updated_by_name;
+      }
     }
-    if (item.updated_by_role === 'MUNICIPAL_AUTHORITY') {
+    if (item.updated_by_name === 'Authority One' || item.updated_by_role === 'MUNICIPAL_AUTHORITY') {
       return 'Municipal Authority';
     }
     if (item.updated_by_role === 'DEPARTMENT_STAFF') {
       return 'Department Staff';
     }
-    if (item.updated_by_role === 'CITIZEN') {
-      if (complaint && complaint.citizen_name && !complaint.citizen_name.includes('@')) {
-        return complaint.citizen_name;
-      }
-      return 'Citizen';
+    if (item.updated_by_name === 'Citizen One' || item.updated_by_role === 'CITIZEN') {
+      return getCitizenDisplayName();
     }
     return 'System';
   };
@@ -147,16 +243,22 @@ const ComplaintDetails = () => {
 
     // Assignment actions must ALWAYS be labelled as assigned by the actor
     if (remarks.includes('assigned') || item.updated_by_role === 'MUNICIPAL_AUTHORITY') {
+      if (remarks.includes('verified') || remarks.includes('approved')) {
+        return `Verified & Approved by ${actor}`;
+      }
+      if (remarks.includes('rejected')) {
+        return `Verification Rejected by ${actor}`;
+      }
       return `Assigned by ${actor}`;
     }
     if (item.status === 'Pending') {
       return `Submitted by ${actor}`;
     }
-    if (item.status === 'Awaiting Citizen Confirmation') {
+    if (item.status === 'Awaiting Authority Verification' || item.status === 'Awaiting Citizen Confirmation') {
       return `Completion submitted by ${actor}`;
     }
     if (item.status === 'Resolved') {
-      return item.updated_by_role === 'CITIZEN' ? `Confirmed by ${actor}` : `Resolved by ${actor}`;
+      return item.updated_by_role === 'MUNICIPAL_AUTHORITY' ? `Verified & Approved by ${actor}` : `Resolved by ${actor}`;
     }
     if (remarks.includes('not fixed') || remarks.includes('reopen') || (item.updated_by_role === 'CITIZEN' && item.status === 'In Progress')) {
       return `Reopened by ${actor}`;
@@ -182,7 +284,7 @@ const ComplaintDetails = () => {
 
     if (item.status === 'Pending') {
       if (!rawRemarks || lower === 'complaint submitted' || lower.includes('automatically submitted') || lower.includes('complaint received')) {
-        return 'Complaint submitted by the citizen.';
+        return `Complaint submitted by ${getCitizenDisplayName()}.`;
       }
       return rawRemarks;
     }
@@ -194,18 +296,15 @@ const ComplaintDetails = () => {
       return rawRemarks || 'Complaint status updated to In Progress.';
     }
 
-    if (item.status === 'Awaiting Citizen Confirmation') {
+    if (item.status === 'Awaiting Authority Verification' || item.status === 'Awaiting Citizen Confirmation') {
       if (rawRemarks) {
         return `Work completion submitted: "${rawRemarks}"`;
       }
-      return 'Work completion submitted. Waiting for citizen confirmation.';
+      return 'Work completion submitted. Awaiting Municipal Authority verification.';
     }
 
     if (item.status === 'Resolved') {
-      if (lower.includes('citizen confirmed') || item.updated_by_role === 'CITIZEN') {
-        return rawRemarks.length > 'citizen confirmed resolution.'.length ? rawRemarks : 'The citizen confirmed that the issue was resolved.';
-      }
-      return rawRemarks || 'The citizen confirmed that the issue was resolved.';
+      return rawRemarks || 'Complaint verified and marked as Resolved by Municipal Authority.';
     }
 
     return rawRemarks || `Status updated to ${item.status}.`;
@@ -259,7 +358,7 @@ const ComplaintDetails = () => {
 
   const isPending = complaint.status === 'Pending';
   const isInProgress = complaint.status === 'In Progress';
-  const isCompletedAwaiting = complaint.status === 'Awaiting Citizen Confirmation';
+  const isCompletedAwaiting = complaint.status === 'Awaiting Authority Verification' || complaint.status === 'Awaiting Citizen Confirmation';
   const isResolved = complaint.status === 'Resolved';
   const isRejected = complaint.status === 'Rejected';
   const timelineHistory = complaint.history || complaint.status_history || [];
@@ -279,7 +378,7 @@ const ComplaintDetails = () => {
         <div className="d-flex justify-content-between align-items-center flex-wrap gap-2">
           <div>
             <h2 className="fw-bold mb-1 text-white fs-3 fs-sm-2">Complaint Task Details</h2>
-            <p className="text-secondary mb-0">Review task details and submit work completion for citizen verification.</p>
+            <p className="text-secondary mb-0">Review task details and submit work completion for municipal authority verification.</p>
           </div>
           <div>{getStatusBadge(complaint.status)}</div>
         </div>
@@ -307,7 +406,7 @@ const ComplaintDetails = () => {
               <div className="d-flex align-items-center mb-2">
                 <FaUser className="me-2 text-secondary" />
                 <span className="text-muted fw-semibold small me-2">Citizen:</span>
-                <span className="text-dark fw-medium">{complaint.citizen_name || 'Citizen'}</span>
+                <span className="text-dark fw-medium">{getCitizenDisplayName()}</span>
               </div>
             </Col>
             <Col md={6}>
@@ -324,14 +423,19 @@ const ComplaintDetails = () => {
                 <div>
                   {complaint.assigned_staff_members && complaint.assigned_staff_members.length > 0 ? (
                     <div className="d-inline-flex flex-wrap gap-1 align-items-center">
-                      {complaint.assigned_staff_members.map(s => (
-                        <Badge key={s.id} bg="primary" className="fw-normal px-2 py-1">
-                          {s.staff_name || s.name || s.staff_email}
-                        </Badge>
-                      ))}
+                      {complaint.assigned_staff_members.map(s => {
+                        const sEmail = (s.staff_email || s.email || '').toLowerCase().trim();
+                        const myEmail = (currentUser?.email || '').toLowerCase().trim();
+                        const isYou = (sEmail && sEmail === myEmail) || (s.user_id && String(s.user_id) === String(currentUser?.id || currentUser?.user_id));
+                        return (
+                          <Badge key={s.id || s.staff_id} bg={isYou ? "primary" : "secondary"} className="fw-normal px-2 py-1">
+                            {s.staff_name || s.name || s.staff_email} {isYou && '(You)'}
+                          </Badge>
+                        );
+                      })}
                     </div>
                   ) : (
-                    <span className="text-muted small">Assigned to Department Team</span>
+                    <span className="text-muted small">None</span>
                   )}
                 </div>
               </div>
@@ -380,23 +484,44 @@ const ComplaintDetails = () => {
               <h6 className="fw-bold text-success d-flex align-items-center mb-2">
                 <FaCheckCircle className="me-2" /> Complaint Successfully Resolved
               </h6>
-              <p className="text-dark fw-medium mb-0">
-                The citizen has confirmed that the issue was resolved.
+              <p className="text-dark fw-medium mb-1">
+                The Municipal Authority has verified and approved the resolution.
               </p>
+              {complaint.verified_by_name && (
+                <div className="text-muted small mb-2">
+                  Verified by <strong>{complaint.verified_by_name === 'Authority One' ? 'Municipal Authority' : complaint.verified_by_name}</strong> {complaint.verified_at_formatted ? `on ${complaint.verified_at_formatted}` : ''}
+                </div>
+              )}
+              {complaint.verification_remarks && (
+                <div className="p-2 rounded bg-white border small text-dark mb-2">
+                  <strong>Authority Remarks:</strong> "{complaint.verification_remarks}"
+                </div>
+              )}
+              {complaint.completion_photo && (
+                <div className="mt-3">
+                  <span className="text-muted small fw-semibold d-block mb-1">Verified Completion Photo:</span>
+                  <img
+                    src={complaint.completion_photo.startsWith('http') ? complaint.completion_photo : `http://127.0.0.1:8000${complaint.completion_photo}`}
+                    alt="Work Completion"
+                    className="rounded border shadow-sm"
+                    style={{ maxHeight: '200px', maxWidth: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
             </div>
           )}
 
-          {/* Awaiting Citizen Confirmation state: Form is disabled/hidden while awaiting citizen response */}
+          {/* Awaiting Authority Verification state: Form is disabled/hidden while awaiting authority review */}
           {isCompletedAwaiting && (
             <div className="p-3 rounded border border-primary-subtle bg-light">
               <h6 className="fw-bold text-primary d-flex align-items-center mb-2">
-                <FaClock className="me-2" /> Awaiting Citizen Confirmation
+                <FaClock className="me-2" /> Awaiting Authority Verification
               </h6>
               <p className="text-muted small mb-3">
-                Work completion has been submitted. The citizen has been requested to verify and confirm whether the issue has been resolved. The completion form is disabled until the citizen responds.
+                Work completion has been submitted. The Municipal Authority is reviewing the completion photo and remarks before approving resolution. The completion form is disabled until the verification is completed.
               </p>
               {complaint.latest_completion && (
-                <div className="p-3 rounded bg-white border small">
+                <div className="p-3 rounded bg-white border small mb-3">
                   <div className="fw-semibold text-dark mb-1">
                     Submitted Remarks: "{complaint.latest_completion.completion_remarks || 'Work completed.'}"
                   </div>
@@ -405,53 +530,106 @@ const ComplaintDetails = () => {
                   </div>
                 </div>
               )}
+              {complaint.completion_photo && (
+                <div className="mt-2">
+                  <span className="text-muted small fw-semibold d-block mb-1">Uploaded Completion Photo:</span>
+                  <img
+                    src={complaint.completion_photo.startsWith('http') ? complaint.completion_photo : `http://127.0.0.1:8000${complaint.completion_photo}`}
+                    alt="Completion Evidence"
+                    className="rounded border shadow-sm"
+                    style={{ maxHeight: '200px', maxWidth: '100%', objectFit: 'cover' }}
+                  />
+                </div>
+              )}
             </div>
           )}
 
-          {/* 1. Pending state: Assigned staff member must explicitly start work */}
+          {/* 1. Pending state: Only explicitly assigned staff member can start work */}
           {isPending && (
             <div className="p-3 rounded border border-warning-subtle bg-light">
               <h6 className="fw-bold text-dark d-flex align-items-center mb-2">
                 <FaClock className="me-2 text-warning" /> Work Not Yet Started
               </h6>
-              <p className="text-muted small mb-3">
-                This complaint is currently <strong>Pending</strong>. Click below to start working on this complaint. This will update the status to <strong>In Progress</strong> and notify the citizen.
-              </p>
-              <Button 
-                variant="primary" 
-                onClick={handleStartWork}
-                disabled={startingWork}
-                className="fw-semibold px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
-              >
-                {startingWork ? (
-                  <>
-                    <Spinner size="sm" className="me-2" /> Starting Work...
-                  </>
-                ) : (
-                  <>
-                    <FaTools className="me-2" /> Start Work
-                  </>
-                )}
-              </Button>
+
+              {!hasActiveAssignments() ? (
+                /* Case A: Complaint has NO assigned team (Assigned Team is None) */
+                <div>
+                  <p className="text-muted small mb-3">
+                    This complaint is currently <strong>Pending</strong>, but no staff member is assigned (<strong>Assigned Team: None</strong>). Work cannot be started until a Municipal Authority assigns this complaint to you.
+                  </p>
+                  <Button 
+                    variant="secondary" 
+                    disabled={true}
+                    className="fw-semibold px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center opacity-75"
+                    title="Cannot start work: Assigned Team is None"
+                  >
+                    <FaTools className="me-2" /> Start Work (Unassigned)
+                  </Button>
+                </div>
+              ) : isAssignedToCurrentUser() ? (
+                /* Case B: Explicitly assigned to the currently logged-in staff member */
+                <div>
+                  <p className="text-muted small mb-3">
+                    This complaint is currently <strong>Pending</strong> and assigned to you. Click below to start working on this complaint. This will update the status to <strong>In Progress</strong> and notify the citizen.
+                  </p>
+                  <Button 
+                    variant="primary" 
+                    onClick={handleStartWork}
+                    disabled={startingWork}
+                    className="fw-semibold px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center"
+                  >
+                    {startingWork ? (
+                      <>
+                        <Spinner size="sm" className="me-2" /> Starting Work...
+                      </>
+                    ) : (
+                      <>
+                        <FaTools className="me-2" /> Start Work
+                      </>
+                    )}
+                  </Button>
+                </div>
+              ) : (
+                /* Case C: Assigned to another staff member */
+                <div>
+                  <p className="text-muted small mb-3">
+                    This complaint is currently <strong>Pending</strong> and assigned to another staff member (
+                    <strong>
+                      {(complaint.assigned_staff_members || []).map(m => m.staff_name || m.name || m.staff_email).join(', ') || 'Another Staff Member'}
+                    </strong>
+                    ). Only the assigned staff member is authorized to start work on this task.
+                  </p>
+                  <Button 
+                    variant="secondary" 
+                    disabled={true}
+                    className="fw-semibold px-4 py-2 w-100 w-sm-auto d-inline-flex align-items-center justify-content-center opacity-75"
+                    title="Cannot start work: Assigned to another staff member"
+                  >
+                    <FaTools className="me-2" /> Start Work (Assigned to Other Staff)
+                  </Button>
+                </div>
+              )}
             </div>
           )}
 
-          {/* 2. In Progress state: Staff completes work and submits for citizen confirmation */}
+          {/* 2. In Progress state: Staff completes work and submits for authority verification */}
           {isInProgress && (
             <>
               <p className="text-muted mb-3">
-                Describe the work completed. The citizen will be asked to confirm whether the issue has been resolved.
+                Add a completion description (optional) and upload a completion photo.
               </p>
 
-              {/* If citizen disputed previously and complaint is back In Progress */}
-              {complaint.latest_completion && complaint.latest_completion.citizen_response === 'Disputed' && (
-                <Alert variant="warning" className="small mb-4 border-warning">
+              {/* If authority rejected completion previously and returned complaint to In Progress */}
+              {(complaint.latest_completion?.verification_status === 'Rejected' || (complaint.verification_remarks && isInProgress)) && (
+                <Alert variant="danger" className="small mb-4 border-danger">
                   <div className="d-flex align-items-start">
-                    <FaExclamationTriangle className="me-2 mt-1 text-warning flex-shrink-0" size={16} />
+                    <FaExclamationTriangle className="me-2 mt-1 text-danger flex-shrink-0" size={16} />
                     <div>
-                      <div className="fw-bold text-dark">Citizen Feedback: "{complaint.latest_completion.citizen_remarks}"</div>
+                      <div className="fw-bold text-dark">
+                        Authority Verification Rejected: "{complaint.latest_completion?.verification_remarks || complaint.verification_remarks}"
+                      </div>
                       <div className="text-muted mt-1">
-                        The citizen reported that the issue was not fixed. Please carry out the required work and submit completion again once resolved.
+                        The Municipal Authority rejected the completion report. Please carry out the required rework, then upload a new completion photo and remarks below.
                       </div>
                     </div>
                   </div>
@@ -461,17 +639,58 @@ const ComplaintDetails = () => {
               <Form onSubmit={handleSubmitCompletion}>
                 <Form.Group className="mb-3">
                   <Form.Label className="fw-semibold text-dark small">
-                    Completion Remarks <span className="text-danger">*</span>
+                    Completion Remarks
                   </Form.Label>
                   <Form.Control
                     as="textarea"
                     rows={3}
-                    placeholder="Describe what was done to resolve the complaint..."
+                    placeholder="Add a completion description (optional)..."
                     value={completionRemarks}
                     onChange={(e) => setCompletionRemarks(e.target.value)}
-                    required
                   />
                 </Form.Group>
+
+                <Form.Group className="mb-4">
+                  <Form.Label className="fw-semibold text-dark small d-flex align-items-center">
+                    <FaCamera className="me-2 text-primary" />
+                    Completion Photo <span className="text-danger">*</span>
+                  </Form.Label>
+                  <Form.Control
+                    type="file"
+                    accept="image/*"
+                    onChange={handlePhotoChange}
+                    required
+                    className="shadow-none"
+                  />
+                  <Form.Text className="text-muted">
+                    Upload clear photographic evidence demonstrating that work is completed.
+                  </Form.Text>
+
+                  {photoPreview && (
+                    <div className="mt-3 p-2 bg-light border rounded position-relative d-inline-block">
+                      <img
+                        src={photoPreview}
+                        alt="Completion Preview"
+                        className="rounded"
+                        style={{ maxHeight: '180px', maxWidth: '100%', objectFit: 'cover' }}
+                      />
+                      <Button
+                        variant="dark"
+                        size="sm"
+                        className="position-absolute top-0 end-0 m-1 rounded-circle p-1"
+                        style={{ width: '26px', height: '26px', lineHeight: 1 }}
+                        onClick={() => {
+                          setCompletionPhoto(null);
+                          setPhotoPreview(null);
+                        }}
+                        title="Remove photo"
+                      >
+                        <FaTimes size={12} />
+                      </Button>
+                    </div>
+                  )}
+                </Form.Group>
+
                 <div className="d-flex justify-content-start">
                   <Button 
                     variant="primary" 
@@ -485,7 +704,7 @@ const ComplaintDetails = () => {
                       </>
                     ) : (
                       <>
-                        <FaPaperPlane className="me-2" /> Submit for Citizen Confirmation
+                        <FaPaperPlane className="me-2" /> Submit for Authority Verification
                       </>
                     )}
                   </Button>
@@ -507,7 +726,7 @@ const ComplaintDetails = () => {
               </p>
               {complaint.rejected_by_name && (
                 <div className="text-muted small mt-1" style={{ fontSize: '0.8rem' }}>
-                  Rejected by {complaint.rejected_by_name} {complaint.rejected_at_formatted ? `on ${complaint.rejected_at_formatted}` : ''}
+                  Rejected by {complaint.rejected_by_name === 'Authority One' ? 'Municipal Authority' : complaint.rejected_by_name} {complaint.rejected_at_formatted ? `on ${complaint.rejected_at_formatted}` : ''}
                 </div>
               )}
             </div>

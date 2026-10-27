@@ -45,7 +45,8 @@ const Dashboard = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
-      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Confirmation</Badge>;
+      case 'Awaiting Authority Verification':
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Verification</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
@@ -101,7 +102,8 @@ const Dashboard = () => {
       (c.description || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
       (c.location || '').toLowerCase().includes(searchTerm.toLowerCase());
       
-    const matchesStatus = statusFilter === 'All' || c.status === statusFilter;
+    const matchesStatus = statusFilter === 'All' || c.status === statusFilter ||
+      (statusFilter === 'Awaiting Authority Verification' && (c.status === 'Awaiting Authority Verification' || c.status === 'Awaiting Citizen Confirmation'));
     const matchesDept = departmentFilter === 'All' || c.department === departmentFilter || c.department_name === departmentFilter;
     
     return matchesSearch && matchesStatus && matchesDept;
@@ -145,7 +147,7 @@ const Dashboard = () => {
                 <option value="All">All Statuses</option>
                 <option value="Pending">Pending</option>
                 <option value="In Progress">In Progress</option>
-                <option value="Awaiting Citizen Confirmation">Awaiting Confirmation</option>
+                <option value="Awaiting Authority Verification">Awaiting Verification</option>
                 <option value="Resolved">Resolved</option>
                 <option value="Rejected">Rejected</option>
               </Form.Select>

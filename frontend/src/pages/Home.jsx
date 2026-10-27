@@ -67,7 +67,7 @@ const Home = () => {
               <div className="hero-eyebrow d-flex align-items-center mb-2 mb-lg-3">
                 <span className="hero-eyebrow-accent me-3" />
                 <span className="hero-eyebrow-text">
-                  CLEANER CITIES &nbsp;|&nbsp; SAFER COMMUNITIES &nbsp;|&nbsp; BETTER TOMORROW
+                  CLEANER KERALA &nbsp;|&nbsp; SAFER COMMUNITIES &nbsp;|&nbsp; BETTER TOMORROW
                 </span>
               </div>
 
@@ -194,7 +194,7 @@ const Home = () => {
           <div className="hero-closing-tagline d-flex align-items-center">
             <span className="closing-accent-bar me-3" />
             <span className="closing-text">
-              Together for a Cleaner, Greener and Healthier City
+              Together for a Cleaner, Greener and Healthier Kerala
             </span>
           </div>
         </div>

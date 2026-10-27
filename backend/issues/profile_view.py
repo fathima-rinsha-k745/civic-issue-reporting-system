@@ -15,15 +15,30 @@ class ProfileView(APIView):
         except:
             role = 'CITIZEN'
         department_name = None
+        staff_id = None
         if role == 'DEPARTMENT_STAFF':
             try:
                 department_name = user.departmentstaff.department.name
+                staff_id = user.departmentstaff.id
             except:
                 pass
 
+        full_name = user.get_full_name().strip() if user.get_full_name() else ""
+        if not full_name:
+            full_name = user.first_name.strip() if user.first_name else ""
+        if not full_name:
+            full_name = user.username.strip() if user.username and '@' not in user.username else ""
+        if not full_name:
+            full_name = user.email.strip() if user.email else ""
+
         return Response({
+            "id": user.id,
+            "user_id": user.id,
+            "staff_id": staff_id,
             "email": user.email,
-            "full_name": user.get_full_name() or user.email,
+            "full_name": full_name,
+            "first_name": user.first_name,
+            "username": user.username,
             "role": role,
             "department": department_name
         })

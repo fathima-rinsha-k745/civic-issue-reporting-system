@@ -12,6 +12,7 @@ const Dashboard = () => {
   });
   const [recent, setRecent] = useState([]);
   const [departments, setDepartments] = useState([]);
+  const [allComplaints, setAllComplaints] = useState([]);
 
   useEffect(() => {
     const fetchDashboard = async () => {
@@ -21,6 +22,8 @@ const Dashboard = () => {
           api.getMyComplaints(),
           api.getDepartments().catch(() => [])
         ]);
+        
+        setAllComplaints(complaints);
         
         const s = {
           total: complaints.length,
@@ -116,7 +119,7 @@ const Dashboard = () => {
       </Row>
 
       {/* Analytics Graphs Section */}
-      <AnalyticsSection />
+      <AnalyticsSection complaints={allComplaints} unassignedCount={stats.unassigned} />
 
       <Row className="g-4">
         {/* Recent Complaints */}

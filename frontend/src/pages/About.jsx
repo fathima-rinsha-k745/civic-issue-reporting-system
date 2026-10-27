@@ -128,8 +128,8 @@ const About = () => {
             <span className="hero-heading-highlight">Responsive Cities</span>
           </h1>
           <p className="civic-subpage-lead mx-auto">
-            CivicConnect is a unified civic technology platform designed to bridge the gap between citizens, 
-            municipal authorities, and department staff. We enable transparent issue reporting, accountable 
+            CivicConnect is a unified civic technology platform designed to bridge the gap between citizens,
+            municipal authorities, and department staff. We enable transparent issue reporting, accountable
             governance, and rapid community-wide resolutions.
           </p>
         </div>
@@ -139,7 +139,7 @@ const About = () => {
           {/* Vision */}
           <Col md={6}>
             <div className="civic-glass-card civic-focus-card">
-              <div 
+              <div
                 className="civic-focus-icon-circle"
                 style={{ background: 'linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%)' }}
               >
@@ -148,8 +148,8 @@ const About = () => {
               <div className="civic-section-label">Future Outlook</div>
               <h2 className="civic-focus-title">Our Vision</h2>
               <p className="civic-focus-text">
-                To create digitally empowered, sustainable, and inclusive urban centers where civic issues 
-                are reported seamlessly and addressed swiftly. We envision cities where every resident acts 
+                To create digitally empowered, sustainable, and inclusive urban centers where civic issues
+                are reported seamlessly and addressed swiftly. We envision cities where every resident acts
                 as an active custodian of their neighborhood, supported by transparent and agile local governments.
               </p>
             </div>
@@ -158,7 +158,7 @@ const About = () => {
           {/* Mission */}
           <Col md={6}>
             <div className="civic-glass-card civic-focus-card">
-              <div 
+              <div
                 className="civic-focus-icon-circle"
                 style={{ background: 'linear-gradient(135deg, #0D9488 0%, #0F766E 100%)' }}
               >
@@ -167,8 +167,8 @@ const About = () => {
               <div className="civic-section-label">Core Purpose</div>
               <h2 className="civic-focus-title">Our Mission</h2>
               <p className="civic-focus-text">
-                To simplify civic engagement through accessible web tools, eliminate operational barriers 
-                in municipal workflows, and provide actionable real-time insights to public administrators 
+                To simplify civic engagement through accessible web tools, eliminate operational barriers
+                in municipal workflows, and provide actionable real-time insights to public administrators
                 for data-driven urban maintenance and heightened accountability.
               </p>
             </div>
@@ -189,8 +189,8 @@ const About = () => {
             {coreValues.map((val, idx) => (
               <Col lg={3} sm={6} key={idx}>
                 <div className="civic-glass-card civic-value-card">
-                  <div 
-                    className="civic-value-icon" 
+                  <div
+                    className="civic-value-icon"
                     style={{ background: val.bg, color: val.color }}
                   >
                     {val.icon}
@@ -239,8 +239,8 @@ const About = () => {
                       <span className="text-info fw-bold" style={{ letterSpacing: '1px' }}>
                         {item.step}
                       </span>
-                      <div 
-                        className="rounded-circle d-flex align-items-center justify-content-center text-white" 
+                      <div
+                        className="rounded-circle d-flex align-items-center justify-content-center text-white"
                         style={{ width: '38px', height: '38px', background: 'rgba(37, 99, 235, 0.35)' }}
                       >
                         {item.icon}
@@ -257,7 +257,7 @@ const About = () => {
 
         {/* Call to Action Banner */}
         <div className="mt-5 pt-2">
-          <div 
+          <div
             className="civic-glass-card p-4 p-md-5 text-center position-relative overflow-hidden"
             style={{ borderColor: 'rgba(59, 130, 246, 0.4)' }}
           >
@@ -268,8 +268,8 @@ const About = () => {
               Report a civic issue in less than two minutes and track its progress in real time.
             </p>
             <div className="d-flex justify-content-center gap-3 flex-wrap">
-              <Link 
-                to="/citizen/login" 
+              <Link
+                to="/citizen/login"
                 state={{ redirectTo: '/dashboard/citizen/report' }}
                 className="btn btn-primary px-4 py-2 rounded-pill fw-semibold d-inline-flex align-items-center gap-2"
                 style={{ background: 'var(--civic-royal)', border: 'none' }}
@@ -277,8 +277,8 @@ const About = () => {
                 <span>Report an Issue</span>
                 <FaArrowRight size={13} />
               </Link>
-              <Link 
-                to="/services" 
+              <Link
+                to="/services"
                 className="btn btn-outline-light px-4 py-2 rounded-pill fw-semibold"
                 style={{ borderColor: 'rgba(255, 255, 255, 0.35)' }}
               >

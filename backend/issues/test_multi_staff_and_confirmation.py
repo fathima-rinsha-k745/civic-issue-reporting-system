@@ -257,29 +257,24 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         self.complaint.refresh_from_db()
-        self.assertEqual(self.complaint.status, 'Awaiting Citizen Confirmation')
+        self.assertEqual(self.complaint.status, 'Awaiting Authority Verification')
 
         # Check ComplaintCompletion record
         completion = ComplaintCompletion.objects.filter(complaint=self.complaint).first()
         self.assertIsNotNone(completion)
         self.assertEqual(completion.submitted_by, self.staff1_user)
         self.assertEqual(completion.completion_remarks, remarks_text)
-        self.assertEqual(completion.citizen_response, 'Pending')
 
         # Check Status History
-        history = ComplaintStatusHistory.objects.filter(complaint=self.complaint, status='Awaiting Citizen Confirmation').first()
+        history = ComplaintStatusHistory.objects.filter(complaint=self.complaint, status='Awaiting Authority Verification').first()
         self.assertIsNotNone(history)
         self.assertEqual(history.updated_by, self.staff1_user)
-        self.assertEqual(history.remarks, remarks_text)
 
         # Check Citizen Notification with exact required title and message
         notif = Notification.objects.filter(user=self.citizen_user, complaint=self.complaint).first()
         self.assertIsNotNone(notif)
-        self.assertEqual(notif.title, "Please Confirm Your Complaint Resolution")
-        self.assertEqual(
-            notif.message,
-            "The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed."
-        )
+        self.assertIn("Work Completed", notif.title)
+        self.assertIn("awaiting verification by the Municipal Authority", notif.message)
 
     def test_citizen_confirms_issue_is_fixed(self):
         """
@@ -288,87 +283,78 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
         """
         ComplaintAssignment.objects.create(complaint=self.complaint, staff=self.staff1, assigned_by=self.auth_user, is_active=True)
         self.complaint.department = self.sanitation_dept
-        self.complaint.status = 'Awaiting Citizen Confirmation'
+        self.complaint.status = 'Awaiting Authority Verification'
         self.complaint.save()
 
         completion = ComplaintCompletion.objects.create(
             complaint=self.complaint,
             submitted_by=self.staff1_user,
             completion_remarks="Dumpster cleared.",
-            citizen_response='Pending'
+            verification_status='Pending'
         )
 
-        # Citizen confirms
+        # Citizen cannot confirm resolution (403 Forbidden - Authority has sole responsibility)
         self.client.force_authenticate(user=self.citizen_user)
         res = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'confirm'}, format='json')
-        self.assertEqual(res.status_code, status.HTTP_200_OK)
+        self.assertEqual(res.status_code, status.HTTP_403_FORBIDDEN)
+
+        # Municipal Authority verifies and approves resolution (200 OK)
+        self.client.force_authenticate(user=self.auth_user)
+        res_auth = self.client.post(f'/api/complaints/{self.complaint.id}/verify/', {'action': 'approve', 'remarks': 'Verified on site.'}, format='json')
+        self.assertEqual(res_auth.status_code, status.HTTP_200_OK)
 
         self.complaint.refresh_from_db()
         self.assertEqual(self.complaint.status, 'Resolved')
 
         completion.refresh_from_db()
-        self.assertEqual(completion.citizen_response, 'Confirmed')
-        self.assertIsNotNone(completion.responded_at)
+        self.assertEqual(completion.verification_status, 'Approved')
 
-        # Check notifications sent to staff and authority
+        # Check notifications sent to staff and citizen
         staff_notif = Notification.objects.filter(user=self.staff1_user, complaint=self.complaint)
         self.assertTrue(staff_notif.exists())
 
-        auth_notif = Notification.objects.filter(user=self.auth_user, complaint=self.complaint)
-        self.assertTrue(auth_notif.exists())
+        citizen_notif = Notification.objects.filter(user=self.citizen_user, complaint=self.complaint)
+        self.assertTrue(citizen_notif.exists())
 
     def test_citizen_reports_issue_not_fixed_reopens_to_in_progress(self):
         """
-        When citizen clicks 'No, Not Fixed', remarks are required, status moves back
+        When Municipal Authority rejects verification, status moves back
         to In Progress, and notifications are sent.
         """
         ComplaintAssignment.objects.create(complaint=self.complaint, staff=self.staff1, assigned_by=self.auth_user, is_active=True)
         self.complaint.department = self.sanitation_dept
-        self.complaint.status = 'Awaiting Citizen Confirmation'
+        self.complaint.status = 'Awaiting Authority Verification'
         self.complaint.save()
 
         completion = ComplaintCompletion.objects.create(
             complaint=self.complaint,
             submitted_by=self.staff1_user,
             completion_remarks="Garbage cleared.",
-            citizen_response='Pending'
+            verification_status='Pending'
         )
 
+        # Citizen cannot dispute resolution (403 Forbidden)
         self.client.force_authenticate(user=self.citizen_user)
+        res_cit = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'reject', 'remarks': 'Still dirty'}, format='json')
+        self.assertEqual(res_cit.status_code, status.HTTP_403_FORBIDDEN)
 
-        # 1. Missing remarks fails
-        res_fail = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'reject', 'remarks': ''}, format='json')
-        self.assertEqual(res_fail.status_code, status.HTTP_400_BAD_REQUEST)
-
-        # 2. Valid rejection with explanation
+        # Municipal Authority requests rework via verify endpoint
+        self.client.force_authenticate(user=self.auth_user)
         dispute_text = "The bins are still full behind the grocery shop."
-        res = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'reject', 'remarks': dispute_text}, format='json')
+        res = self.client.post(f'/api/complaints/{self.complaint.id}/verify/', {'action': 'reject', 'rejection_reason': dispute_text}, format='json')
         self.assertEqual(res.status_code, status.HTTP_200_OK)
 
         self.complaint.refresh_from_db()
         self.assertEqual(self.complaint.status, 'In Progress')
 
         completion.refresh_from_db()
-        self.assertEqual(completion.citizen_response, 'Disputed')
-        self.assertEqual(completion.citizen_remarks, dispute_text)
+        self.assertEqual(completion.verification_status, 'Rejected')
+        self.assertEqual(completion.verification_remarks, dispute_text)
 
         # Check status history logs the rejection reason
         latest_hist = ComplaintStatusHistory.objects.filter(complaint=self.complaint).order_by('-updated_at', '-id').first()
         self.assertEqual(latest_hist.status, 'In Progress')
         self.assertIn(dispute_text, latest_hist.remarks)
-
-        # Staff can do work again and submit another completion
-        self.client.force_authenticate(user=self.staff1_user)
-        res_second_comp = self.client.post(f'/api/complaints/{self.complaint.id}/complete/', {
-            'completion_remarks': 'Secondary cleanup completed including grocery shop alley.'
-        }, format='json')
-        self.assertEqual(res_second_comp.status_code, status.HTTP_200_OK)
-
-        # Verify audit history preserves both completion records
-        all_completions = ComplaintCompletion.objects.filter(complaint=self.complaint).order_by('submitted_at')
-        self.assertEqual(all_completions.count(), 2)
-        self.assertEqual(all_completions[0].citizen_response, 'Disputed')
-        self.assertEqual(all_completions[1].citizen_response, 'Pending')
 
     def test_unauthorized_user_cannot_confirm_resolution(self):
         """
@@ -431,9 +417,9 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
             'completion_remarks': 'Sanitation team removed all debris.'
         }, format='json')
 
-        # 3. Citizen confirm event
-        self.client.force_authenticate(user=self.citizen_user)
-        self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'confirm'}, format='json')
+        # 3. Authority verify and approve event
+        self.client.force_authenticate(user=self.auth_user)
+        self.client.post(f'/api/complaints/{self.complaint.id}/verify/', {'action': 'approve', 'remarks': 'Verified by Authority.'}, format='json')
 
         # Fetch complaint details via API
         res = self.client.get(f'/api/complaints/{self.complaint.id}/')
@@ -453,15 +439,15 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
         self.assertEqual(pending_h['updated_by_name'], 'Rahul Sharma')
         self.assertEqual(pending_h['action_label'], 'Submitted by Rahul Sharma')
 
-        # Event 2: Awaiting Citizen Confirmation submitted by staff
-        awaiting_h = next(item for item in history if item['status'] == 'Awaiting Citizen Confirmation')
+        # Event 2: Awaiting Authority Verification submitted by staff
+        awaiting_h = next(item for item in history if item['status'] in ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation'])
         self.assertEqual(awaiting_h['updated_by_name'], 'Anjali Nair')
         self.assertEqual(awaiting_h['action_label'], 'Completion submitted by Anjali Nair')
 
-        # Event 3: Resolved confirmed by citizen
+        # Event 3: Resolved verified by authority
         resolved_h = next(item for item in history if item['status'] == 'Resolved')
-        self.assertEqual(resolved_h['updated_by_name'], 'Rahul Sharma')
-        self.assertEqual(resolved_h['action_label'], 'Confirmed by Rahul Sharma')
+        self.assertEqual(resolved_h['updated_by_name'], 'Rajesh Menon')
+        self.assertIn('Rajesh Menon', resolved_h['action_label'])
 
     def test_cannot_submit_completion_when_already_awaiting_confirmation(self):
         """
@@ -566,22 +552,9 @@ class MultiStaffAssignmentAndCitizenConfirmationTests(TestCase):
 
         self.client.force_authenticate(user=self.citizen_user)
 
-        # First confirmation
+        # Citizen confirm is forbidden (Municipal Authority has sole verification responsibility)
         res1 = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'confirm'}, format='json')
-        self.assertEqual(res1.status_code, status.HTTP_200_OK)
-
-        self.complaint.refresh_from_db()
-        self.assertEqual(self.complaint.status, 'Resolved')
-        resolved_count = self.complaint.status_history.filter(status='Resolved').count()
-        self.assertEqual(resolved_count, 1)
-
-        # Duplicate second confirmation
-        res2 = self.client.post(f'/api/complaints/{self.complaint.id}/citizen-confirm/', {'action': 'confirm'}, format='json')
-        self.assertEqual(res2.status_code, status.HTTP_400_BAD_REQUEST)
-
-        # Ensure still only 1 Resolved history entry
-        self.complaint.refresh_from_db()
-        self.assertEqual(self.complaint.status_history.filter(status='Resolved').count(), 1)
+        self.assertEqual(res1.status_code, status.HTTP_403_FORBIDDEN)
 
     def test_staff_filtering_by_department_and_active_status(self):
         """

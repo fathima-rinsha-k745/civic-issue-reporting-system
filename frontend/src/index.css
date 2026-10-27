@@ -796,7 +796,7 @@ body {
 .civic-hero-viewport {
   position: relative;
   min-height: 100vh;
-  background-image: url('/city_hall_hero.jpg');
+  background-image: url('/kerala_waterfront_hero.jpg');
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;
@@ -813,10 +813,10 @@ body {
   right: 0;
   bottom: 0;
   background: linear-gradient(to right,
-      rgba(8, 20, 44, 0.95) 0%,
-      rgba(8, 20, 44, 0.88) 36%,
-      rgba(8, 20, 44, 0.45) 66%,
-      rgba(8, 20, 44, 0.12) 100%);
+      rgba(8, 20, 44, 0.82) 0%,
+      rgba(8, 20, 44, 0.68) 36%,
+      rgba(8, 20, 44, 0.30) 66%,
+      rgba(8, 20, 44, 0.05) 100%);
   pointer-events: none;
   z-index: 1;
 }
@@ -824,8 +824,8 @@ body {
 @media (max-width: 991px) {
   .civic-hero-overlay {
     background: linear-gradient(to bottom,
-        rgba(8, 20, 44, 0.95) 0%,
-        rgba(8, 20, 44, 0.88) 100%);
+        rgba(8, 20, 44, 0.82) 0%,
+        rgba(8, 20, 44, 0.72) 100%);
   }
 }
 
@@ -871,6 +871,7 @@ body {
   font-size: clamp(2.15rem, 3.8vw, 3.55rem);
   line-height: 1.12;
   letter-spacing: -0.03em;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
 .hero-heading-highlight {
@@ -880,11 +881,12 @@ body {
 }
 
 .hero-subtitle {
-  color: rgba(255, 255, 255, 0.85);
+  color: rgba(255, 255, 255, 0.92);
   font-size: clamp(0.98rem, 1.2vw, 1.12rem);
   line-height: 1.6;
   max-width: 530px;
   font-weight: 400;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.4);
 }
 
 /* ========================================================
@@ -1239,7 +1241,7 @@ body {
 .civic-subpage-viewport {
   position: relative;
   min-height: 100vh;
-  background-image: url('/city_hall_hero.jpg');
+  background-image: url('/kerala_waterfront_hero.jpg');
   background-size: cover;
   background-position: center top;
   background-repeat: no-repeat;
@@ -1587,7 +1589,7 @@ body {
 .civic-contact-viewport {
   position: relative;
   min-height: 100vh;
-  background-image: url('/city_hall_hero.jpg');
+  background-image: url('/kerala_waterfront_hero.jpg');
   background-size: cover;
   background-position: center 30%;
   background-repeat: no-repeat;
@@ -2043,7 +2045,27 @@ body {
   border: 1px solid rgba(59, 130, 246, 0.15);
   background: #0E1B38;
   box-shadow: none;
-  overflow: hidden;
+  overflow-x: auto !important;
+  overflow-y: visible;
+  -webkit-overflow-scrolling: touch;
+}
+
+.civic-dashboard-shell .table-responsive::-webkit-scrollbar {
+  height: 8px;
+}
+
+.civic-dashboard-shell .table-responsive::-webkit-scrollbar-track {
+  background: #081226;
+  border-radius: 4px;
+}
+
+.civic-dashboard-shell .table-responsive::-webkit-scrollbar-thumb {
+  background: #2563eb;
+  border-radius: 4px;
+}
+
+.civic-dashboard-shell .table-responsive::-webkit-scrollbar-thumb:hover {
+  background: #3b82f6;
 }
 
 .civic-dashboard-shell .table {
@@ -2402,4 +2424,265 @@ body {
 .civic-dashboard-shell .timeline-entry::before,
 .civic-dashboard-shell .timeline-item::before {
   border-left-color: rgba(56, 189, 248, 0.35) !important;
+}
+
+/* Compact Chart Panels for Authority Dashboard */
+.civic-chart-card {
+  background: #0B1936 !important;
+  border: 1px solid rgba(59, 130, 246, 0.18) !important;
+  border-radius: 12px !important;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.25) !important;
+  color: #F8FAFC !important;
+  overflow: hidden;
+}
+
+.civic-chart-card .card-header {
+  background: #0D1F42 !important;
+  border-bottom: 1px solid rgba(59, 130, 246, 0.12) !important;
+  padding: 10px 14px 8px 14px !important;
+}
+
+/* ========================================================
+   CivicConnect Auth Pages (Register & Login - Split Hero Theme)
+   ======================================================== */
+.civic-auth-viewport {
+  position: relative;
+  min-height: 100vh;
+  background-image: url('/kerala_waterfront_hero.jpg');
+  background-size: cover;
+  background-position: center 30%;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow-x: hidden;
+}
+
+.civic-auth-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(to right,
+      #08142c 0%,
+      #08142c 40%,
+      rgba(8, 20, 44, 0.82) 48%,
+      rgba(8, 20, 44, 0.35) 60%,
+      rgba(8, 20, 44, 0.08) 75%,
+      rgba(8, 20, 44, 0.0) 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+@media (max-width: 991px) {
+  .civic-auth-overlay {
+    background: linear-gradient(to bottom,
+        #08142c 0%,
+        rgba(8, 20, 44, 0.94) 70%,
+        rgba(8, 20, 44, 0.85) 100%);
+  }
+}
+
+.civic-auth-content {
+  position: relative;
+  z-index: 2;
+  min-height: 100vh;
+  max-width: 1320px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.civic-auth-card {
+  background: rgba(10, 24, 52, 0.78);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.10);
+  border-radius: 26px;
+  padding: 36px 36px 30px;
+  box-shadow: 0 25px 65px rgba(0, 0, 0, 0.55), 0 0 35px rgba(8, 20, 44, 0.6);
+  width: 100%;
+}
+
+@media (max-width: 576px) {
+  .civic-auth-card {
+    padding: 26px 20px 22px;
+    border-radius: 20px;
+  }
+}
+
+.auth-avatar-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto 16px;
+  box-shadow: 0 0 26px rgba(37, 99, 235, 0.7);
+}
+
+.auth-card-title {
+  color: #ffffff;
+  font-weight: 700;
+  font-size: clamp(1.45rem, 2vw, 1.7rem);
+  text-align: center;
+  margin-bottom: 6px;
+  letter-spacing: -0.02em;
+}
+
+.auth-card-subtitle {
+  color: rgba(255, 255, 255, 0.65);
+  font-size: 0.86rem;
+  text-align: center;
+  margin-bottom: 22px;
+  line-height: 1.45;
+}
+
+.auth-form-label {
+  color: rgba(255, 255, 255, 0.90);
+  font-size: 0.85rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+  display: block;
+}
+
+.auth-input-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.auth-input-left-icon {
+  position: absolute;
+  left: 14px;
+  color: rgba(255, 255, 255, 0.45);
+  pointer-events: none;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.auth-form-control {
+  background: rgba(8, 20, 44, 0.75) !important;
+  border: 1px solid rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 11px 16px 11px 42px !important;
+  font-size: 0.92rem !important;
+  transition: all 0.2s ease !important;
+  box-shadow: none !important;
+  width: 100%;
+}
+
+.auth-form-control::placeholder {
+  color: rgba(255, 255, 255, 0.38) !important;
+}
+
+.auth-form-control:focus {
+  background: rgba(8, 20, 44, 0.92) !important;
+  border-color: #38BDF8 !important;
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.25) !important;
+}
+
+.auth-form-control.is-invalid {
+  border-color: #ef4444 !important;
+}
+
+.auth-form-control.has-right-btn {
+  padding-right: 42px !important;
+}
+
+.auth-input-right-btn {
+  position: absolute;
+  right: 6px;
+  background: transparent;
+  border: none;
+  color: rgba(255, 255, 255, 0.5);
+  padding: 8px 10px;
+  border-radius: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 3;
+  transition: color 0.15s ease;
+}
+
+.auth-input-right-btn:hover {
+  color: #ffffff;
+}
+
+.auth-error-feedback {
+  color: #f87171;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-top: 4px;
+  display: block;
+}
+
+.auth-submit-btn {
+  width: 100%;
+  background: #2563EB !important;
+  border: none !important;
+  color: #ffffff !important;
+  font-weight: 600 !important;
+  font-size: 0.95rem !important;
+  padding: 12px 0 !important;
+  border-radius: 9999px !important;
+  box-shadow: 0 4px 18px rgba(37, 99, 235, 0.45) !important;
+  transition: all 0.2s ease !important;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  background: #1D4ED8 !important;
+  box-shadow: 0 6px 24px rgba(37, 99, 235, 0.6) !important;
+  transform: translateY(-1px);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+}
+
+.auth-divider-line {
+  height: 1px;
+  background: rgba(255, 255, 255, 0.14);
+}
+
+.auth-footer-text {
+  color: rgba(255, 255, 255, 0.62);
+  font-size: 0.84rem;
+  white-space: nowrap;
+}
+
+.auth-footer-link {
+  color: #38BDF8 !important;
+  font-weight: 600;
+  text-decoration: none;
+  transition: color 0.15s ease;
+}
+
+.auth-footer-link:hover {
+  color: #7DD3FC !important;
+  text-decoration: underline;
+}
+
+.auth-back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.55);
+  font-size: 0.85rem;
+  text-decoration: none;
+  transition: color 0.15s ease;
+  margin-bottom: 12px;
+}
+
+.auth-back-link:hover {
+  color: #ffffff;
 }

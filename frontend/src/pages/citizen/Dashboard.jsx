@@ -7,7 +7,17 @@ import { api } from '../../services/api';
 const Dashboard = () => {
   const [stats, setStats] = useState({ total: 0, pending: 0, inProgress: 0, resolved: 0 });
   const [recentComplaints, setRecentComplaints] = useState([]);
-  const [user, setUser] = useState({ fullName: 'Citizen' });
+  const [user, setUser] = useState(() => {
+    try {
+      const stored = localStorage.getItem('user');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        const name = (parsed.full_name || parsed.fullName || parsed.name || parsed.first_name || parsed.username || '').trim();
+        return { fullName: name };
+      }
+    } catch (_e) {}
+    return { fullName: '' };
+  });
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +25,9 @@ const Dashboard = () => {
       try {
         setLoading(true);
         const profile = await api.getProfile();
-        setUser(profile);
+        if (profile) {
+          setUser(profile);
+        }
         
         const dashboardStats = await api.getDashboardStats();
         setStats(dashboardStats);
@@ -36,12 +48,26 @@ const Dashboard = () => {
     switch(status) {
       case 'Pending': return <Badge bg="warning" text="dark">Pending</Badge>;
       case 'In Progress': return <Badge bg="info">In Progress</Badge>;
-      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Citizen Confirmation</Badge>;
+      case 'Awaiting Authority Verification':
+      case 'Awaiting Citizen Confirmation': return <Badge bg="primary">Awaiting Authority Verification</Badge>;
       case 'Resolved': return <Badge bg="success">Resolved</Badge>;
       case 'Rejected': return <Badge bg="danger">Rejected</Badge>;
       default: return <Badge bg="secondary">{status}</Badge>;
     }
   };
+
+  // Dynamic citizen name with graceful fallback to 'Citizen'
+  const citizenName = (
+    user?.fullName ||
+    user?.full_name ||
+    user?.name ||
+    user?.first_name ||
+    ''
+  ).trim();
+
+  const greetingName = citizenName && citizenName.toLowerCase() !== 'user'
+    ? citizenName
+    : 'Citizen';
 
   if (loading) {
     return (
@@ -55,7 +81,7 @@ const Dashboard = () => {
     <div>
       <div className="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-          <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Welcome Back, Citizen</h2>
+          <h2 className="mb-1 text-white fw-bold fs-3 fs-sm-2">Welcome Back, {greetingName}</h2>
           <p className="text-secondary mb-0">Track your complaints and stay updated on their progress.</p>
         </div>
         <Button as={Link} to="/dashboard/citizen/report" variant="primary" className="d-inline-flex align-items-center text-nowrap flex-shrink-0">

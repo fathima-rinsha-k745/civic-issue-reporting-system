@@ -1,0 +1,1843 @@
+{
+  "complaints": [
+    {
+      "model": "issues.complaint",
+      "pk": 52,
+      "fields": {
+        "citizen": 54,
+        "category": "Pothole",
+        "description": "Broken road pavement near a school\n\nThe road pavement is broken and the asphalt is severely cracked right in front of the elementary school, posing a risk to children and school buses.",
+        "location": "Kowdiar, Thiruvananthapuram",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/broken_road_pavement_1791646603662.jpg",
+        "status": "Pending",
+        "department": 25,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.872Z",
+        "updated_at": "2026-10-11T05:14:06.304Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 45,
+      "fields": {
+        "citizen": 49,
+        "category": "Garbage",
+        "description": "Garbage overflow",
+        "location": "Main St",
+        "latitude": null,
+        "longitude": null,
+        "image": "",
+        "status": "In Progress",
+        "department": 24,
+        "assigned_staff": 32,
+        "created_at": "2026-10-11T05:05:31.125Z",
+        "updated_at": "2026-10-14T11:18:13.362Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 47,
+      "fields": {
+        "citizen": 54,
+        "category": "Pothole",
+        "description": "Large pothole on a main road\n\nA large, deep pothole has formed in the middle of the main road. It is causing severe traffic slowdowns and is highly dangerous for two-wheelers.",
+        "location": "Kowdiar, Thiruvananthapuram",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/pothole_main_road_1791646500118.jpg",
+        "status": "In Progress",
+        "department": 25,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.855Z",
+        "updated_at": "2026-10-11T05:14:06.302Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 48,
+      "fields": {
+        "citizen": 54,
+        "category": "Water Leakage",
+        "description": "Water leakage from a public pipeline\n\nThere is a continuous spray of water leaking from a broken public pipeline onto the street, wasting hundreds of liters of water.",
+        "location": "Kozhikode Beach Road",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/water_leakage_1791646514843.jpg",
+        "status": "Pending",
+        "department": 26,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.862Z",
+        "updated_at": "2026-10-11T05:14:06.302Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 49,
+      "fields": {
+        "citizen": 54,
+        "category": "Broken Streetlight",
+        "description": "Streetlight not working near a residential street\n\nThe streetlight pole has been damaged and the light is not functioning. The street is completely dark at night, raising safety concerns.",
+        "location": "Pattom, Thiruvananthapuram",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/broken_streetlight_1791646546008.jpg",
+        "status": "Resolved",
+        "department": 27,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.862Z",
+        "updated_at": "2026-10-11T05:14:06.304Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 50,
+      "fields": {
+        "citizen": 54,
+        "category": "Drain Blockage",
+        "description": "Blocked drainage causing water accumulation\n\nThe street drainage is completely blocked with debris and plastics. Dirty water is accumulating around it and might overflow soon.",
+        "location": "Marine Drive, Kochi",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/blocked_drainage_1791646562215.jpg",
+        "status": "In Progress",
+        "department": 28,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.868Z",
+        "updated_at": "2026-10-11T05:14:06.304Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 58,
+      "fields": {
+        "citizen": 49,
+        "category": "Garbage",
+        "description": "Garbage pile near market gate",
+        "location": "Market Gate, Ernakulam",
+        "latitude": null,
+        "longitude": null,
+        "image": "",
+        "status": "In Progress",
+        "department": 24,
+        "assigned_staff": 26,
+        "created_at": "2026-10-14T09:06:40.570Z",
+        "updated_at": "2026-10-14T13:31:16.178Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 54,
+      "fields": {
+        "citizen": 49,
+        "category": "Pothole",
+        "description": "Pothole on MG Road near Metro Pillar 42",
+        "location": "MG Road, Kochi, Kerala",
+        "latitude": "9.931234",
+        "longitude": "76.267301",
+        "image": "",
+        "status": "Resolved",
+        "department": 24,
+        "assigned_staff": null,
+        "created_at": "2026-10-13T06:07:19.821Z",
+        "updated_at": "2026-10-13T06:07:21.851Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 46,
+      "fields": {
+        "citizen": 54,
+        "category": "Garbage",
+        "description": "Garbage overflowing near a residential area\n\nThere is a massive overflow of garbage at the main bin located near the residential society. The smell is unbearable and it's attracting stray animals.",
+        "location": "MG Road, Ernakulam",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/garbage_overflow_1791646486020.jpg",
+        "status": "Pending",
+        "department": 24,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.854Z",
+        "updated_at": "2026-10-11T05:14:06.289Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 55,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "waste bin overflow",
+        "location": "ma college , kothamangalam",
+        "latitude": "10.052477",
+        "longitude": "76.620333",
+        "image": "",
+        "status": "In Progress",
+        "department": 24,
+        "assigned_staff": null,
+        "created_at": "2026-10-13T06:12:57.719Z",
+        "updated_at": "2026-10-13T06:14:00.157Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 56,
+      "fields": {
+        "citizen": 49,
+        "category": "Pothole",
+        "description": "Pothole on MG Road near Metro Pillar 42",
+        "location": "MG Road, Kochi, Kerala",
+        "latitude": "9.931234",
+        "longitude": "76.267301",
+        "image": "",
+        "status": "Resolved",
+        "department": 24,
+        "assigned_staff": null,
+        "created_at": "2026-10-13T06:29:46.189Z",
+        "updated_at": "2026-10-13T06:29:48.187Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 51,
+      "fields": {
+        "citizen": 54,
+        "category": "Public Property Damage",
+        "description": "Damaged public park bench\n\nA wooden bench in the public park has been severely damaged and broken, making it unusable for visitors.",
+        "location": "Swaraj Round, Thrissur",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/damaged_park_bench_1791646577422.jpg",
+        "status": "Pending",
+        "department": 29,
+        "assigned_staff": null,
+        "created_at": "2026-10-11T05:14:01.872Z",
+        "updated_at": "2026-10-11T05:14:06.304Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 60,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "drainage issue",
+        "location": "ma college , kothamangalam",
+        "latitude": "10.053000",
+        "longitude": "76.618482",
+        "image": "",
+        "status": "Resolved",
+        "department": 28,
+        "assigned_staff": 44,
+        "created_at": "2026-10-14T18:30:11.540Z",
+        "updated_at": "2026-10-14T19:05:09.170Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 53,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "overfolowing bin",
+        "location": "perinthalmanna",
+        "latitude": null,
+        "longitude": null,
+        "image": "complaints/Overflowing_Bins_on_a_Quiet_Residential_Street_NLNI19X.png",
+        "status": "In Progress",
+        "department": 24,
+        "assigned_staff": null,
+        "created_at": "2026-10-13T03:28:50.480Z",
+        "updated_at": "2026-10-15T01:03:59.219Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 59,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "yguhjbk/lk.giulyvjvj road",
+        "location": "ma college , kothamangalam",
+        "latitude": "10.053136",
+        "longitude": "76.618470",
+        "image": "",
+        "status": "In Progress",
+        "department": 25,
+        "assigned_staff": 35,
+        "created_at": "2026-10-14T13:59:30.835Z",
+        "updated_at": "2026-10-14T14:35:48.169Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 57,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "tyfuyguhlj;klbkv,hb,n.",
+        "location": "Perinthalmanna Nursing home, Calicut-Malappuram-Palakkad Road, Perinthalmanna, Malappuram, Kerala, 679322, India",
+        "latitude": "10.977139",
+        "longitude": "76.222769",
+        "image": "",
+        "status": "Resolved",
+        "department": 28,
+        "assigned_staff": 44,
+        "created_at": "2026-10-13T06:34:10.066Z",
+        "updated_at": "2026-10-14T16:27:23.625Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    },
+    {
+      "model": "issues.complaint",
+      "pk": 61,
+      "fields": {
+        "citizen": 54,
+        "category": "Other",
+        "description": "waste issue",
+        "location": "ma college , kothamangalam",
+        "latitude": "10.052325",
+        "longitude": "76.619366",
+        "image": "",
+        "status": "Resolved",
+        "department": 24,
+        "assigned_staff": 32,
+        "created_at": "2026-10-15T03:22:34.364Z",
+        "updated_at": "2026-10-15T03:28:19.527Z",
+        "rejection_reason": null,
+        "rejected_by": null,
+        "rejected_at": null,
+        "verified_by": null,
+        "verified_at": null,
+        "verification_remarks": null
+      }
+    }
+  ],
+  "completions": [
+    {
+      "model": "issues.complaintcompletion",
+      "pk": 4,
+      "fields": {
+        "complaint": 61,
+        "submitted_by": 65,
+        "completion_remarks": "work completed",
+        "completion_image": "",
+        "submitted_at": "2026-10-15T03:26:32.091Z",
+        "verified_by": null,
+        "verification_status": "Pending",
+        "verification_remarks": null,
+        "verified_at": null,
+        "citizen_response": "Confirmed",
+        "citizen_remarks": "Citizen confirmed resolution.",
+        "responded_at": "2026-10-15T03:28:19.527Z"
+      }
+    },
+    {
+      "model": "issues.complaintcompletion",
+      "pk": 3,
+      "fields": {
+        "complaint": 60,
+        "submitted_by": 77,
+        "completion_remarks": "work completed",
+        "completion_image": "",
+        "submitted_at": "2026-10-14T19:04:21.183Z",
+        "verified_by": null,
+        "verification_status": "Pending",
+        "verification_remarks": null,
+        "verified_at": null,
+        "citizen_response": "Confirmed",
+        "citizen_remarks": "Citizen confirmed resolution.",
+        "responded_at": "2026-10-14T19:05:09.170Z"
+      }
+    },
+    {
+      "model": "issues.complaintcompletion",
+      "pk": 2,
+      "fields": {
+        "complaint": 57,
+        "submitted_by": 77,
+        "completion_remarks": "hjmnbjvhhmb,n.,m/,/",
+        "completion_image": "",
+        "submitted_at": "2026-10-14T16:26:51.377Z",
+        "verified_by": null,
+        "verification_status": "Pending",
+        "verification_remarks": null,
+        "verified_at": null,
+        "citizen_response": "Confirmed",
+        "citizen_remarks": "Citizen confirmed resolution.",
+        "responded_at": "2026-10-14T16:27:23.626Z"
+      }
+    },
+    {
+      "model": "issues.complaintcompletion",
+      "pk": 1,
+      "fields": {
+        "complaint": 59,
+        "submitted_by": 65,
+        "completion_remarks": "resolved , please check",
+        "completion_image": "",
+        "submitted_at": "2026-10-14T14:01:57.624Z",
+        "verified_by": null,
+        "verification_status": "Pending",
+        "verification_remarks": null,
+        "verified_at": null,
+        "citizen_response": "Confirmed",
+        "citizen_remarks": "Citizen confirmed resolution.",
+        "responded_at": "2026-10-14T14:02:32.001Z"
+      }
+    }
+  ],
+  "feedbacks": [],
+  "assignments": [
+    {
+      "model": "issues.complaintassignment",
+      "pk": 16,
+      "fields": {
+        "complaint": 61,
+        "staff": 32,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-15T03:24:25.277Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 15,
+      "fields": {
+        "complaint": 61,
+        "staff": 34,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-15T03:23:44.444Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 14,
+      "fields": {
+        "complaint": 61,
+        "staff": 33,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-15T03:23:44.437Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 13,
+      "fields": {
+        "complaint": 60,
+        "staff": 45,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T18:31:22.722Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 12,
+      "fields": {
+        "complaint": 60,
+        "staff": 44,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T18:31:22.722Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 11,
+      "fields": {
+        "complaint": 57,
+        "staff": 45,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T16:25:08.573Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 10,
+      "fields": {
+        "complaint": 57,
+        "staff": 44,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T16:25:08.570Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 9,
+      "fields": {
+        "complaint": 59,
+        "staff": 36,
+        "assigned_by": 50,
+        "assigned_at": "2026-10-14T14:35:48.166Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 8,
+      "fields": {
+        "complaint": 59,
+        "staff": 35,
+        "assigned_by": 50,
+        "assigned_at": "2026-10-14T14:35:48.163Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 7,
+      "fields": {
+        "complaint": 59,
+        "staff": 32,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T14:00:58.218Z",
+        "is_active": false
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 6,
+      "fields": {
+        "complaint": 58,
+        "staff": 34,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T11:47:59.777Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 5,
+      "fields": {
+        "complaint": 45,
+        "staff": 33,
+        "assigned_by": 50,
+        "assigned_at": "2026-10-14T11:18:13.355Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 4,
+      "fields": {
+        "complaint": 45,
+        "staff": 32,
+        "assigned_by": 50,
+        "assigned_at": "2026-10-14T11:18:13.351Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 3,
+      "fields": {
+        "complaint": 58,
+        "staff": 33,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T10:03:56.531Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 2,
+      "fields": {
+        "complaint": 58,
+        "staff": 32,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T10:03:56.524Z",
+        "is_active": true
+      }
+    },
+    {
+      "model": "issues.complaintassignment",
+      "pk": 1,
+      "fields": {
+        "complaint": 58,
+        "staff": 26,
+        "assigned_by": 55,
+        "assigned_at": "2026-10-14T10:03:56.499Z",
+        "is_active": true
+      }
+    }
+  ],
+  "history": [
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 78,
+      "fields": {
+        "complaint": 45,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 49,
+        "updated_at": "2026-10-11T05:05:31.125Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 79,
+      "fields": {
+        "complaint": 45,
+        "status": "Pending",
+        "remarks": "Assigned to Sanitation",
+        "updated_by": 50,
+        "updated_at": "2026-10-11T05:05:31.632Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 80,
+      "fields": {
+        "complaint": 46,
+        "status": "Pending",
+        "remarks": "Complaint automatically submitted to the system.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.855Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 81,
+      "fields": {
+        "complaint": 47,
+        "status": "Pending",
+        "remarks": "Complaint received and verified.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.855Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 82,
+      "fields": {
+        "complaint": 47,
+        "status": "In Progress",
+        "remarks": "Staff has been assigned and repair materials are being transported.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.855Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 83,
+      "fields": {
+        "complaint": 48,
+        "status": "Pending",
+        "remarks": "Complaint automatically submitted to the system.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.862Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 84,
+      "fields": {
+        "complaint": 49,
+        "status": "Pending",
+        "remarks": "Complaint logged.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.862Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 85,
+      "fields": {
+        "complaint": 49,
+        "status": "In Progress",
+        "remarks": "Technician dispatched to the location.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.862Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 86,
+      "fields": {
+        "complaint": 49,
+        "status": "Resolved",
+        "remarks": "The broken post has been removed and a new temporary light installed.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.862Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 87,
+      "fields": {
+        "complaint": 50,
+        "status": "Pending",
+        "remarks": "Complaint noted.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.869Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 88,
+      "fields": {
+        "complaint": 50,
+        "status": "In Progress",
+        "remarks": "Cleaning team is currently at the location clearing the blockage.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.869Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 89,
+      "fields": {
+        "complaint": 51,
+        "status": "Pending",
+        "remarks": "Complaint automatically submitted to the system.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.872Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 90,
+      "fields": {
+        "complaint": 52,
+        "status": "Pending",
+        "remarks": "Complaint automatically submitted to the system.",
+        "updated_by": null,
+        "updated_at": "2026-10-11T05:14:01.872Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 91,
+      "fields": {
+        "complaint": 53,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-13T03:28:50.501Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 92,
+      "fields": {
+        "complaint": 53,
+        "status": "Pending",
+        "remarks": "Assigned to Sanitation",
+        "updated_by": 55,
+        "updated_at": "2026-10-13T03:29:38.802Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 93,
+      "fields": {
+        "complaint": 54,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 49,
+        "updated_at": "2026-10-13T06:07:19.821Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 94,
+      "fields": {
+        "complaint": 54,
+        "status": "In Progress",
+        "remarks": "Assigned to team",
+        "updated_by": 50,
+        "updated_at": "2026-10-13T06:07:20.826Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 95,
+      "fields": {
+        "complaint": 54,
+        "status": "Resolved",
+        "remarks": "Repairs finished",
+        "updated_by": 57,
+        "updated_at": "2026-10-13T06:07:21.860Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 96,
+      "fields": {
+        "complaint": 55,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-13T06:12:57.719Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 97,
+      "fields": {
+        "complaint": 55,
+        "status": "In Progress",
+        "remarks": "Assigned to Sanitation",
+        "updated_by": 55,
+        "updated_at": "2026-10-13T06:14:00.175Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 98,
+      "fields": {
+        "complaint": 56,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 49,
+        "updated_at": "2026-10-13T06:29:46.199Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 99,
+      "fields": {
+        "complaint": 56,
+        "status": "In Progress",
+        "remarks": "Assigned to team",
+        "updated_by": 50,
+        "updated_at": "2026-10-13T06:29:47.199Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 100,
+      "fields": {
+        "complaint": 56,
+        "status": "Resolved",
+        "remarks": "Repairs finished",
+        "updated_by": 57,
+        "updated_at": "2026-10-13T06:29:48.187Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 101,
+      "fields": {
+        "complaint": 57,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-13T06:34:10.080Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 102,
+      "fields": {
+        "complaint": 58,
+        "status": "In Progress",
+        "remarks": "Anjali dispatched sanitation crew.",
+        "updated_by": 65,
+        "updated_at": "2026-10-14T09:07:25.809Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 105,
+      "fields": {
+        "complaint": 45,
+        "status": "In Progress",
+        "remarks": "Testing multi-staff assignment",
+        "updated_by": 50,
+        "updated_at": "2026-10-14T11:18:13.362Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 104,
+      "fields": {
+        "complaint": 58,
+        "status": "In Progress",
+        "remarks": "Assigned to Sanitation Department with 3 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T10:03:56.547Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 106,
+      "fields": {
+        "complaint": 58,
+        "status": "In Progress",
+        "remarks": "Assigned to Sanitation Department with 4 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T11:47:59.789Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 103,
+      "fields": {
+        "complaint": 58,
+        "status": "In Progress",
+        "remarks": "Suresh confirmed garbage cleared and bins sanitized.",
+        "updated_by": 66,
+        "updated_at": "2026-10-14T09:07:27.327Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 108,
+      "fields": {
+        "complaint": 59,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-14T13:59:30.858Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 109,
+      "fields": {
+        "complaint": 59,
+        "status": "In Progress",
+        "remarks": "Assigned to Sanitation with 0 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T14:00:16.040Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 110,
+      "fields": {
+        "complaint": 59,
+        "status": "In Progress",
+        "remarks": "Assigned to Sanitation Department with 1 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T14:00:58.247Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 111,
+      "fields": {
+        "complaint": 59,
+        "status": "Awaiting Citizen Confirmation",
+        "remarks": "resolved , please check",
+        "updated_by": 65,
+        "updated_at": "2026-10-14T14:01:57.632Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 112,
+      "fields": {
+        "complaint": 59,
+        "status": "Resolved",
+        "remarks": "Citizen confirmed resolution.",
+        "updated_by": 54,
+        "updated_at": "2026-10-14T14:02:32.001Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 113,
+      "fields": {
+        "complaint": 59,
+        "status": "In Progress",
+        "remarks": "Assigned to Roads / Public Works with 2 staff members.",
+        "updated_by": 50,
+        "updated_at": "2026-10-14T14:35:48.176Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 114,
+      "fields": {
+        "complaint": 57,
+        "status": "In Progress",
+        "remarks": "Assigned to Drainage Department with 2 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T16:25:08.580Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 115,
+      "fields": {
+        "complaint": 57,
+        "status": "Awaiting Citizen Confirmation",
+        "remarks": "hjmnbjvhhmb,n.,m/,/",
+        "updated_by": 77,
+        "updated_at": "2026-10-14T16:26:51.380Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 116,
+      "fields": {
+        "complaint": 57,
+        "status": "Resolved",
+        "remarks": "Citizen confirmed resolution.",
+        "updated_by": 54,
+        "updated_at": "2026-10-14T16:27:23.628Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 117,
+      "fields": {
+        "complaint": 60,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-14T18:30:11.564Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 118,
+      "fields": {
+        "complaint": 60,
+        "status": "Pending",
+        "remarks": "Assigned to Drainage Department with 2 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-14T18:31:22.744Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 119,
+      "fields": {
+        "complaint": 60,
+        "status": "In Progress",
+        "remarks": "Work started by Amal Dev.",
+        "updated_by": 77,
+        "updated_at": "2026-10-14T19:03:25.340Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 120,
+      "fields": {
+        "complaint": 60,
+        "status": "Awaiting Citizen Confirmation",
+        "remarks": "work completed",
+        "updated_by": 77,
+        "updated_at": "2026-10-14T19:04:21.190Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 121,
+      "fields": {
+        "complaint": 60,
+        "status": "Resolved",
+        "remarks": "Citizen confirmed resolution.",
+        "updated_by": 54,
+        "updated_at": "2026-10-14T19:05:09.170Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 122,
+      "fields": {
+        "complaint": 53,
+        "status": "In Progress",
+        "remarks": "Work started by Anjali Nair.",
+        "updated_by": 65,
+        "updated_at": "2026-10-15T01:03:59.219Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 123,
+      "fields": {
+        "complaint": 61,
+        "status": "Pending",
+        "remarks": "Complaint Submitted",
+        "updated_by": 54,
+        "updated_at": "2026-10-15T03:22:34.391Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 124,
+      "fields": {
+        "complaint": 61,
+        "status": "Pending",
+        "remarks": "Assigned to Sanitation Department with 2 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-15T03:23:44.459Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 125,
+      "fields": {
+        "complaint": 61,
+        "status": "Pending",
+        "remarks": "Assigned to Sanitation Department with 3 staff member(s).",
+        "updated_by": 55,
+        "updated_at": "2026-10-15T03:24:25.312Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 126,
+      "fields": {
+        "complaint": 61,
+        "status": "In Progress",
+        "remarks": "Work started by Anjali Nair.",
+        "updated_by": 65,
+        "updated_at": "2026-10-15T03:26:08.483Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 127,
+      "fields": {
+        "complaint": 61,
+        "status": "Awaiting Citizen Confirmation",
+        "remarks": "work completed",
+        "updated_by": 65,
+        "updated_at": "2026-10-15T03:26:32.098Z"
+      }
+    },
+    {
+      "model": "issues.complaintstatushistory",
+      "pk": 128,
+      "fields": {
+        "complaint": 61,
+        "status": "Resolved",
+        "remarks": "Citizen confirmed resolution.",
+        "updated_by": 54,
+        "updated_at": "2026-10-15T03:28:19.527Z"
+      }
+    }
+  ],
+  "notifications": [
+    {
+      "model": "issues.notification",
+      "pk": 52,
+      "fields": {
+        "user": 52,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:28:19.572Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 51,
+      "fields": {
+        "user": 50,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:28:19.570Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 50,
+      "fields": {
+        "user": 55,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": true,
+        "created_at": "2026-10-15T03:28:19.562Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 48,
+      "fields": {
+        "user": 67,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:28:19.541Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 47,
+      "fields": {
+        "user": 65,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:28:19.541Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 49,
+      "fields": {
+        "user": 66,
+        "title": "Complaint #61 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #61 (Other) is resolved.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:28:19.541Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 46,
+      "fields": {
+        "user": 54,
+        "title": "Please Confirm Your Complaint Resolution",
+        "message": "The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:26:32.102Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 45,
+      "fields": {
+        "user": 54,
+        "title": "Work Started on Complaint #61",
+        "message": "Department staff (Anjali Nair) has started working on your complaint.",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:26:08.490Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 44,
+      "fields": {
+        "user": 67,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #61 (Other).",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:24:25.286Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 43,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #61 (Other).",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:24:25.284Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 42,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #61 (Other).",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:24:25.277Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 41,
+      "fields": {
+        "user": 67,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #61 (Other).",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:23:44.444Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 40,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #61 (Other).",
+        "complaint": 61,
+        "is_read": false,
+        "created_at": "2026-10-15T03:23:44.437Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 39,
+      "fields": {
+        "user": 54,
+        "title": "Work Started on Complaint #53",
+        "message": "Department staff (Anjali Nair) has started working on your complaint.",
+        "complaint": 53,
+        "is_read": false,
+        "created_at": "2026-10-15T01:03:59.234Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 38,
+      "fields": {
+        "user": 52,
+        "title": "Complaint #60 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #60 (Other) is resolved.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:05:09.197Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 35,
+      "fields": {
+        "user": 78,
+        "title": "Complaint #60 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #60 (Other) is resolved.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:05:09.186Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 36,
+      "fields": {
+        "user": 55,
+        "title": "Complaint #60 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #60 (Other) is resolved.",
+        "complaint": 60,
+        "is_read": true,
+        "created_at": "2026-10-14T19:05:09.186Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 37,
+      "fields": {
+        "user": 50,
+        "title": "Complaint #60 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #60 (Other) is resolved.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:05:09.186Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 34,
+      "fields": {
+        "user": 77,
+        "title": "Complaint #60 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #60 (Other) is resolved.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:05:09.186Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 33,
+      "fields": {
+        "user": 54,
+        "title": "Please Confirm Your Complaint Resolution",
+        "message": "The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:04:21.190Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 32,
+      "fields": {
+        "user": 54,
+        "title": "Work Started on Complaint #60",
+        "message": "Department staff (Amal Dev) has started working on your complaint.",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T19:03:25.348Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 31,
+      "fields": {
+        "user": 78,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #60 (Other).",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T18:31:22.730Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 30,
+      "fields": {
+        "user": 77,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #60 (Other).",
+        "complaint": 60,
+        "is_read": false,
+        "created_at": "2026-10-14T18:31:22.722Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 29,
+      "fields": {
+        "user": 52,
+        "title": "Complaint #57 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #57 (Other) is resolved.",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:27:23.649Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 28,
+      "fields": {
+        "user": 50,
+        "title": "Complaint #57 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #57 (Other) is resolved.",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:27:23.649Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 27,
+      "fields": {
+        "user": 55,
+        "title": "Complaint #57 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #57 (Other) is resolved.",
+        "complaint": 57,
+        "is_read": true,
+        "created_at": "2026-10-14T16:27:23.645Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 26,
+      "fields": {
+        "user": 77,
+        "title": "Complaint #57 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #57 (Other) is resolved.",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:27:23.637Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 25,
+      "fields": {
+        "user": 78,
+        "title": "Complaint #57 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #57 (Other) is resolved.",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:27:23.637Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 24,
+      "fields": {
+        "user": 54,
+        "title": "Please Confirm Your Complaint Resolution",
+        "message": "The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed.",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:26:51.383Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 23,
+      "fields": {
+        "user": 78,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #57 (Other).",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:25:08.573Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 22,
+      "fields": {
+        "user": 77,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #57 (Other).",
+        "complaint": 57,
+        "is_read": false,
+        "created_at": "2026-10-14T16:25:08.570Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 21,
+      "fields": {
+        "user": 69,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #59 (Other).",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:35:48.167Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 20,
+      "fields": {
+        "user": 68,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #59 (Other).",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:35:48.164Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 19,
+      "fields": {
+        "user": 52,
+        "title": "Complaint #59 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #59 (Other) is resolved.",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:02:32.035Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 18,
+      "fields": {
+        "user": 50,
+        "title": "Complaint #59 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #59 (Other) is resolved.",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:02:32.035Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 17,
+      "fields": {
+        "user": 55,
+        "title": "Complaint #59 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #59 (Other) is resolved.",
+        "complaint": 59,
+        "is_read": true,
+        "created_at": "2026-10-14T14:02:32.035Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 16,
+      "fields": {
+        "user": 65,
+        "title": "Complaint #59 Confirmed Resolved",
+        "message": "The citizen has confirmed that Complaint #59 (Other) is resolved.",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:02:32.027Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 15,
+      "fields": {
+        "user": 54,
+        "title": "Please Confirm Your Complaint Resolution",
+        "message": "The department staff have reported that work on your complaint has been completed. Please review the completion remarks and confirm whether the issue has actually been fixed.",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:01:57.636Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 14,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #59 (Other).",
+        "complaint": 59,
+        "is_read": false,
+        "created_at": "2026-10-14T14:00:58.220Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 13,
+      "fields": {
+        "user": 67,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:59:01.288Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 11,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:59:01.272Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 12,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:59:01.272Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 10,
+      "fields": {
+        "user": 59,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:59:01.272Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 9,
+      "fields": {
+        "user": 67,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:47:59.779Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 8,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:47:59.773Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 7,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:47:59.768Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 6,
+      "fields": {
+        "user": 59,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T11:47:59.750Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 5,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #45 (Garbage).",
+        "complaint": 45,
+        "is_read": false,
+        "created_at": "2026-10-14T11:18:13.355Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 4,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #45 (Garbage).",
+        "complaint": 45,
+        "is_read": false,
+        "created_at": "2026-10-14T11:18:13.355Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 3,
+      "fields": {
+        "user": 66,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T10:03:56.531Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 2,
+      "fields": {
+        "user": 65,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T10:03:56.524Z"
+      }
+    },
+    {
+      "model": "issues.notification",
+      "pk": 1,
+      "fields": {
+        "user": 59,
+        "title": "New Complaint Assigned",
+        "message": "You have been assigned to Complaint #58 (Garbage).",
+        "complaint": 58,
+        "is_read": false,
+        "created_at": "2026-10-14T10:03:56.517Z"
+      }
+    }
+  ]
+}

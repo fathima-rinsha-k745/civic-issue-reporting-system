@@ -10,10 +10,12 @@ const Layout = () => {
     '/about',
     '/services',
     '/contact',
+    '/login',
     '/citizen/login',
     '/authority/login',
     '/staff/login',
-    '/register'
+    '/register',
+    '/citizen/register'
   ].includes(location.pathname);
 
   return (

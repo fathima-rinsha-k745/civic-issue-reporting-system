@@ -7,27 +7,47 @@ const fetch = (url, options = {}) => {
 };
 
 const mapComplaint = (c) => {
-  const mappedHistory = (c.status_history || []).map(h => ({
-    ...h,
-    date: h.date || (h.updated_at ? h.updated_at.split('T')[0] : 'N/A'),
-    updated_by_name: h.updated_by_name || 'System',
-    updated_by_role: h.updated_by_role || null,
-    action_label: h.action_label || null
-  }));
+  const rawCitizen = (c.citizen_name || c.citizen_full_name || '').trim();
+  const citizenName = (rawCitizen && rawCitizen !== 'Citizen One')
+    ? rawCitizen
+    : (c.citizen_email && c.citizen_email !== 'citizen@example.com' ? c.citizen_email : (rawCitizen || 'Citizen'));
+
+  const mappedHistory = (c.status_history || []).map(h => {
+    let actorName = h.updated_by_name || 'System';
+    if (actorName === 'Authority One') {
+      actorName = 'Municipal Authority';
+    } else if (actorName === 'Citizen One' || h.updated_by_role === 'CITIZEN') {
+      actorName = citizenName;
+    }
+    return {
+      ...h,
+      date: h.date || (h.updated_at ? h.updated_at.split('T')[0] : 'N/A'),
+      updated_by_name: actorName,
+      updated_by_role: h.updated_by_role || null,
+      action_label: h.action_label || null
+    };
+  });
   return {
     ...c,
+    citizen_name: citizenName,
     submittedDate: c.created_at ? c.created_at.split('T')[0] : 'N/A',
     lastUpdated: c.updated_at ? c.updated_at.split('T')[0] : 'N/A',
     photo: c.image,
     department: c.department_name || (typeof c.department === 'string' ? c.department : 'Unassigned'),
     assigned_staff_members: c.assigned_staff_members || [],
     assigned_staff_ids: c.assigned_staff_ids || [],
+    is_assigned_to_current_user: Boolean(c.is_assigned_to_current_user),
+    completion_photo: c.completion_photo || (c.latest_completion?.completion_photo) || (c.latest_completion?.completion_image) || null,
     latest_completion: c.latest_completion || null,
     completions: c.completions || [],
+    verified_by_name: (c.verified_by_name === 'Authority One' ? 'Municipal Authority' : c.verified_by_name) || (c.latest_completion?.verified_by_name === 'Authority One' ? 'Municipal Authority' : c.latest_completion?.verified_by_name) || null,
+    verified_at_formatted: c.verified_at_formatted || (c.latest_completion?.verified_at_formatted) || null,
+    verification_remarks: c.verification_remarks || (c.latest_completion?.verification_remarks) || null,
+    feedback: c.feedback || null,
     status_history: mappedHistory,
     history: mappedHistory,
     rejection_reason: c.rejection_reason || null,
-    rejected_by_name: c.rejected_by_name || null,
+    rejected_by_name: (c.rejected_by_name === 'Authority One' ? 'Municipal Authority' : c.rejected_by_name) || null,
     rejected_at_formatted: c.rejected_at_formatted || null
   };
 };
@@ -133,19 +153,49 @@ export const api = {
       body: formData,
     });
     if (!response.ok) {
-      let errorMessage = 'Failed to submit complaint';
+      if (response.status === 401 || response.status === 403) {
+        try {
+          localStorage.removeItem('user');
+        } catch (_e) {}
+        throw new Error('Your session has expired or you are not logged in. Please log in again to submit your complaint.');
+      }
+
+      let errorMessage = `Failed to submit complaint (Error ${response.status})`;
       try {
-        const errData = await response.json();
-        // Extract the first error message if it's an object
-        if (typeof errData === 'object' && errData !== null) {
-          const firstKey = Object.keys(errData)[0];
-          errorMessage = `${firstKey}: ${errData[firstKey]}`;
-        } else if (errData.detail) {
-          errorMessage = errData.detail;
-        }
-      } catch (e) {
         const text = await response.text();
-        console.error('Submit error:', text);
+        try {
+          const errData = JSON.parse(text);
+          if (typeof errData === 'object' && errData !== null) {
+            if (errData.error) {
+              errorMessage = errData.error;
+            } else if (errData.detail) {
+              errorMessage = errData.detail;
+            } else {
+              const firstKey = Object.keys(errData)[0];
+              const val = errData[firstKey];
+              if (Array.isArray(val)) {
+                errorMessage = `${firstKey}: ${val.join(', ')}`;
+              } else if (typeof val === 'object') {
+                errorMessage = `${firstKey}: ${JSON.stringify(val)}`;
+              } else {
+                errorMessage = `${firstKey}: ${val}`;
+              }
+            }
+          }
+        } catch (_parseErr) {
+          if (text && (text.includes('<!DOCTYPE') || text.includes('<html'))) {
+            const match = text.match(/<pre class="exception_value">([^<]+)<\/pre>/i) ||
+                          text.match(/<title>([^<]+)<\/title>/i) ||
+                          text.match(/<th>Exception Value:<\/th>\s*<td><pre>([^<]+)<\/pre><\/td>/i);
+            if (match && match[1]) {
+              errorMessage = `Server Error (${response.status}): ${match[1].trim()}`;
+            }
+          } else if (text && text.trim().length > 0) {
+            errorMessage = text.slice(0, 200);
+          }
+        }
+      } catch (_streamErr) {
+        console.error('Error reading response body:', _streamErr);
       }
       throw new Error(errorMessage);
     }
@@ -161,22 +211,44 @@ export const api = {
         const data = await response.json();
         // Update local storage with fresh data
         const localUser = JSON.parse(localStorage.getItem('user') || '{}');
-        localStorage.setItem('user', JSON.stringify({ ...localUser, email: data.email, full_name: data.full_name, role: data.role, department: data.department }));
+        const resolvedName = (data.full_name || data.fullName || data.name || data.first_name || data.username || localUser.full_name || '').trim();
+        localStorage.setItem('user', JSON.stringify({ 
+          ...localUser, 
+          id: data.id || data.user_id, 
+          user_id: data.user_id || data.id, 
+          staff_id: data.staff_id, 
+          email: data.email, 
+          full_name: resolvedName, 
+          role: data.role, 
+          department: data.department 
+        }));
         return {
-          fullName: data.full_name,
+          id: data.id || data.user_id,
+          user_id: data.user_id || data.id,
+          staff_id: data.staff_id,
+          fullName: resolvedName,
           email: data.email,
           role: data.role,
           department: data.department
         };
+      } else if (response.status === 401 || response.status === 403) {
+        try {
+          localStorage.removeItem('user');
+        } catch (_e) {}
+        return null;
       }
     } catch (e) {
       console.error(e);
     }
     // Fallback to local storage
     const user = JSON.parse(localStorage.getItem('user') || '{}');
+    const fallbackName = (user.full_name || user.fullName || user.name || user.first_name || user.username || '').trim();
     return {
-      fullName: user.full_name || 'User',
-      email: user.email || 'user@example.com',
+      id: user.id || user.user_id,
+      user_id: user.user_id || user.id,
+      staff_id: user.staff_id,
+      fullName: fallbackName,
+      email: user.email || '',
       role: user.role || 'CITIZEN',
       department: user.department || null
     };
@@ -331,9 +403,35 @@ export const api = {
     return respData.complaint ? mapComplaint(respData.complaint) : mapComplaint(respData);
   },
 
-  // Staff mark work as completed
+  // Staff mark work as completed (requires completion_remarks and completion photo)
   submitCompletion: async (id, data) => {
-    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/complete/`, {
+    let options = {};
+    if (data instanceof FormData) {
+      options = {
+        method: 'POST',
+        body: data,
+      };
+    } else {
+      const formData = new FormData();
+      if (data.completion_remarks) formData.append('completion_remarks', data.completion_remarks);
+      if (data.completion_image) formData.append('completion_image', data.completion_image);
+      options = {
+        method: 'POST',
+        body: formData,
+      };
+    }
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/complete/`, options);
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to submit completion details');
+    }
+    const respData = await response.json();
+    return respData.complaint ? mapComplaint(respData.complaint) : respData;
+  },
+
+  // Authority verify complaint (Approve or Reject)
+  verifyComplaint: async (id, data) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/verify/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -342,10 +440,33 @@ export const api = {
     });
     if (!response.ok) {
       const err = await response.json().catch(() => ({}));
-      throw new Error(err.error || err.detail || 'Failed to submit completion remarks');
+      throw new Error(err.error || err.detail || 'Failed to verify complaint');
     }
     const respData = await response.json();
     return respData.complaint ? mapComplaint(respData.complaint) : respData;
+  },
+
+  // Citizen submit or update optional feedback on resolved complaint
+  submitFeedback: async (id, data) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/feedback/`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    });
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}));
+      throw new Error(err.error || err.detail || 'Failed to submit feedback');
+    }
+    return await response.json();
+  },
+
+  // Citizen or Authority fetch feedback for complaint
+  getFeedback: async (id) => {
+    const response = await fetch(`${API_BASE_URL}/api/complaints/${id}/feedback/`);
+    if (!response.ok) return null;
+    return await response.json();
   },
 
   // Citizen confirm resolution

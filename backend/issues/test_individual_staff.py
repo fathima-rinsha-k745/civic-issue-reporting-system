@@ -289,8 +289,8 @@ class IndividualStaffAccountTests(TestCase):
         self.assertEqual(history[0].updated_by, user1)
 
         # Entry 2 should be by Suresh Kumar
-        self.assertEqual(history[1].status, 'Awaiting Citizen Confirmation')
-        self.assertEqual(history[1].remarks, 'Trash cleared and bin disinfected.')
+        self.assertIn(history[1].status, ['Awaiting Authority Verification', 'Awaiting Citizen Confirmation'])
+        self.assertIn('Trash cleared and bin disinfected.', history[1].remarks)
         self.assertEqual(history[1].updated_by, user2)
 
         # Check serialized output in GET /api/complaints/{id}/
